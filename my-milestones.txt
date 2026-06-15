@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 08:43:28 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"projects","resource":"my-milestones","count":2,"total":2,"data":[{"id":"MILE-1001","project":"Customer Portal Rollout","milestone":"Design sign-off","due":"2026-06-15","completed":false},{"id":"MILE-1002","project":"Warehouse Automation","milestone":"Warehouse pilot","due":"2026-06-20","completed":true}]}}

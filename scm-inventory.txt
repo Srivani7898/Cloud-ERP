@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 03:48:19 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"scm","resource":"inventory","count":2,"total":2,"data":[{"id":"SCM-INV-1780890478049","sku":"ERP-TEST-SCM","product":"Test SCM Inventory Item","warehouse":"Bengaluru DC","qty":0,"reorder":50,"status":"Out Of Stock","createdAt":"2026-06-08T03:47:58.049Z","updatedAt":"2026-06-08T03:48:07.853Z"},{"id":"ERP-BATTERY-X","product":"Industrial Battery Pack","warehouse":"Bengaluru DC","quantity":20,"reorderPoint":50,"status":"Low Stock"}]}}

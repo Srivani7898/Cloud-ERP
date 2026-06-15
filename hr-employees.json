@@ -1,0 +1,1 @@
+{"success":true,"data":{"module":"hr","resource":"employees","count":2,"total":2,"data":[{"id":"EMP-1001","name":"Anika Rao","department":"Finance","title":"Senior Analyst","status":"Active","location":"Bengaluru"},{"id":"EMP-1002","name":"Rohan Mehta","department":"HR","title":"People Partner","status":"Active","location":"Mumbai"}]}}

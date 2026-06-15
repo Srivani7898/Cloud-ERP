@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sat, 06 Jun 2026 14:59:54 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"id":"EMP-1001","name":"Anika Rao","department":"Finance","title":"Senior Analyst","status":"On Leave","location":"Bengaluru HQ","updatedAt":"2026-06-06T14:59:18.593Z"}}

@@ -1,0 +1,1 @@
+{"success":true,"data":{"id":"HR-EMP-1780756936789","name":"Test Employee","department":"Finance","title":"ERP Analyst","status":"Active","location":"Hyderabad","createdAt":"2026-06-06T14:42:16.789Z","updatedAt":"2026-06-06T14:42:16.789Z"}}

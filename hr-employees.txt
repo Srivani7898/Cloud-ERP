@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sun, 07 Jun 2026 12:54:48 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"hr","resource":"employees","count":2,"total":2,"data":[{"id":"EMP-1001","name":"Anika Rao","department":"Finance","title":"Senior Analyst","status":"Active","location":"Bengaluru"},{"id":"EMP-1002","name":"Rohan Mehta","department":"HR","title":"People Partner","status":"Active","location":"Mumbai"}]}}

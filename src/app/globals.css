@@ -1,0 +1,580 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --muted: 214 32% 91%;
+  --muted-foreground: 215 16% 47%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 221 83% 53%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+  --radius: 0.5rem;
+}
+
+/* Keep long module sidebars usable on laptop-height screens. */
+aside {
+  max-height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+aside nav {
+  min-height: 0;
+  overflow-y: visible;
+  padding-bottom: 10rem;
+  scrollbar-width: thin;
+}
+
+aside a,
+aside button {
+  scroll-margin-bottom: 8rem;
+}
+
+/* Forecast has the longest left menu; keep every item reachable on 768px-high screens. */
+aside:has(a[href="/forecast/analytics"]) {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow-y: auto !important;
+  padding-top: 2rem !important;
+  padding-bottom: 8rem !important;
+}
+
+aside:has(a[href="/forecast/analytics"]) > div {
+  margin-bottom: 1rem !important;
+}
+
+aside:has(a[href="/forecast/analytics"]) nav {
+  margin-top: 1.25rem !important;
+  padding-bottom: 12rem !important;
+}
+
+aside:has(a[href="/forecast/analytics"]) nav a {
+  min-height: 42px !important;
+  padding-top: 0.55rem !important;
+  padding-bottom: 0.55rem !important;
+}
+
+.dark {
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
+  --card: 222 47% 14%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222 47% 14%;
+  --popover-foreground: 210 40% 98%;
+  --muted: 217 33% 18%;
+  --muted-foreground: 215 20% 65%;
+  --border: 217 33% 22%;
+  --input: 217 33% 22%;
+  --ring: 221 83% 53%;
+}
+
+* {
+  @apply border-border;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply min-h-screen bg-background text-foreground antialiased;
+  letter-spacing: 0;
+}
+
+::selection {
+  background: rgba(37, 99, 235, 0.28);
+}
+
+.enterprise-grid {
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.aurora-auth {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% -20%, rgba(37, 99, 235, 0.28), transparent 34%),
+    linear-gradient(135deg, #020617 0%, #07111f 42%, #0f172a 100%);
+}
+
+.aurora-auth::before {
+  content: "";
+  position: absolute;
+  inset: -35% -20%;
+  z-index: -2;
+  background:
+    conic-gradient(from 120deg at 50% 50%, transparent 0deg, rgba(37, 99, 235, 0.45) 54deg, rgba(6, 182, 212, 0.42) 108deg, rgba(139, 92, 246, 0.5) 168deg, transparent 250deg, transparent 360deg);
+  filter: blur(70px);
+  opacity: 0.7;
+  transform: rotate(-8deg) scale(1.08);
+  animation: aurora-drift 18s ease-in-out infinite alternate;
+}
+
+.aurora-auth::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    radial-gradient(circle at 50% 0%, rgba(248, 250, 252, 0.08), transparent 38%);
+  background-size: 56px 56px, 56px 56px, 100% 100%;
+  mask-image: linear-gradient(to bottom, black, rgba(0, 0, 0, 0.86), transparent 92%);
+}
+
+.auth-card-premium {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.16);
+  background:
+    linear-gradient(145deg, rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.62)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03));
+  box-shadow:
+    0 32px 120px -48px rgba(37, 99, 235, 0.9),
+    0 24px 80px -44px rgba(6, 182, 212, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.auth-card-premium::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent),
+    radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.16), transparent 34%);
+  opacity: 0.8;
+}
+
+.auth-card-premium > * {
+  position: relative;
+  z-index: 1;
+}
+
+.auth-brand-mark {
+  box-shadow:
+    0 16px 44px -18px rgba(37, 99, 235, 0.95),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.auth-enter {
+  animation: auth-enter 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes aurora-drift {
+  0% {
+    transform: translate3d(-2%, -1%, 0) rotate(-8deg) scale(1.08);
+  }
+  100% {
+    transform: translate3d(2%, 2%, 0) rotate(7deg) scale(1.14);
+  }
+}
+
+@keyframes auth-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-auth::before,
+  .auth-enter {
+    animation: none;
+  }
+}
+
+nextjs-portal {
+  display: none !important;
+}
+/* Master UI Theme: Enterprise AI Cloud ERP */
+:root {
+  --erp-bg: #030712;
+  --erp-bg-2: #050816;
+  --erp-surface: #0F172A;
+  --erp-violet: #7C3AED;
+  --erp-purple: #A855F7;
+  --erp-pink: #EC4899;
+  --erp-cyan: #06B6D4;
+  --erp-blue: #3B82F6;
+  --erp-heading: #FFFFFF;
+  --erp-secondary: #CBD5E1;
+  --erp-card: rgba(255, 255, 255, 0.04);
+  --erp-border: rgba(255, 255, 255, 0.08);
+}
+
+body {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(124, 58, 237, 0.28), transparent 30%),
+    radial-gradient(circle at 82% 18%, rgba(236, 72, 153, 0.20), transparent 34%),
+    radial-gradient(circle at 48% 82%, rgba(6, 182, 212, 0.16), transparent 34%),
+    linear-gradient(135deg, #030712 0%, #050816 42%, #0F172A 100%) !important;
+  color: var(--erp-heading);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 14%, rgba(124, 58, 237, 0.34), transparent 30%),
+    radial-gradient(circle at 78% 18%, rgba(236, 72, 153, 0.20), transparent 32%),
+    radial-gradient(circle at 50% 82%, rgba(6, 182, 212, 0.16), transparent 32%),
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: auto, auto, auto, 72px 72px, 72px 72px;
+}
+
+section[id] {
+  scroll-margin-top: 130px;
+}
+
+/* Retheme common hardcoded module surfaces without touching every route file. */
+.bg-\[\#020617\],
+.bg-\[\#050816\],
+.bg-\[\#0F0F0F\],
+.bg-\[\#0F172A\],
+.auth-aurora-bg,
+.bg-slate-950 {
+  background:
+    radial-gradient(circle at 18% 14%, rgba(124, 58, 237, 0.30), transparent 30%),
+    radial-gradient(circle at 78% 18%, rgba(236, 72, 153, 0.18), transparent 32%),
+    radial-gradient(circle at 50% 82%, rgba(6, 182, 212, 0.14), transparent 32%),
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(135deg, #030712 0%, #050816 42%, #0F172A 100%) !important;
+  background-size: auto, auto, auto, 72px 72px, 72px 72px, auto !important;
+}
+
+.auth-aurora-bg::before,
+.auth-aurora-bg::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.auth-aurora-bg::before {
+  z-index: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.34), transparent 30%),
+    radial-gradient(circle at 80% 24%, rgba(236, 72, 153, 0.20), transparent 34%),
+    radial-gradient(circle at 50% 82%, rgba(6, 182, 212, 0.16), transparent 32%);
+}
+
+.auth-aurora-bg::after {
+  z-index: 0;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.052) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.052) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+body:has(input[type="password"]) main,
+body:has(input[type="password"]) section {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.34), transparent 30%),
+    radial-gradient(circle at 80% 24%, rgba(236, 72, 153, 0.20), transparent 34%),
+    radial-gradient(circle at 50% 82%, rgba(6, 182, 212, 0.16), transparent 32%),
+    linear-gradient(rgba(255, 255, 255, 0.052) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.052) 1px, transparent 1px),
+    linear-gradient(135deg, #030712 0%, #050816 42%, #0F172A 100%) !important;
+  background-size: auto, auto, auto, 72px 72px, 72px 72px, auto !important;
+}
+
+.password-eye-field {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.password-eye-input {
+  padding-right: 2.75rem !important;
+  min-width: 0 !important;
+}
+
+.password-eye-toggle {
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  border-radius: 0.5rem;
+  color: rgba(203, 213, 225, 0.9);
+  transition: color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.password-eye-floating {
+  position: absolute !important;
+  top: auto !important;
+  right: auto !important;
+}
+
+.password-eye-toggle:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-50%) scale(1.04);
+}
+
+.bg-slate-900,
+.bg-slate-900\/70,
+.bg-slate-900\/75,
+.bg-slate-900\/80,
+.bg-slate-900\/90,
+.bg-slate-950\/60,
+.bg-slate-950\/70,
+.bg-slate-950\/80,
+.bg-\[\#1a120d\]\/70,
+.bg-\[\#F8F4E3\]\/\[0\.035\],
+.bg-\[\#F8F4E3\]\/\[0\.055\],
+.bg-\[\#F8F4E3\]\/\[0\.06\] {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: blur(20px);
+}
+
+.border-slate-700,
+.border-slate-800,
+.border-white\/10,
+.border-\[\#D4AF37\]\/15,
+.border-\[\#D4AF37\]\/18,
+.border-\[\#D4AF37\]\/20,
+.border-\[\#D4AF37\]\/25,
+.border-\[\#D4AF37\]\/30 {
+  border-color: var(--erp-border) !important;
+}
+
+.text-cyan-200,
+.text-cyan-300,
+.text-cyan-400,
+.text-blue-200,
+.text-blue-300,
+.text-blue-400,
+.text-violet-300,
+.text-violet-400,
+.text-\[\#D4AF37\] {
+  color: var(--erp-cyan) !important;
+}
+
+.text-\[\#F8F4E3\],
+.text-white {
+  color: var(--erp-heading) !important;
+}
+
+.text-slate-300,
+.text-slate-400,
+.text-\[\#F8F4E3\]\/55,
+.text-\[\#F8F4E3\]\/60,
+.text-\[\#F8F4E3\]\/70,
+.text-\[\#F8F4E3\]\/72 {
+  color: var(--erp-secondary) !important;
+}
+
+.bg-blue-600,
+.bg-blue-500,
+.bg-cyan-500,
+.bg-violet-500,
+.bg-purple-500,
+.bg-gradient-to-r.from-\[\#B7410E\].to-\[\#D4AF37\],
+.bg-gradient-to-r.from-blue-600,
+.bg-gradient-to-br.from-blue-500,
+.from-\[\#B7410E\] {
+  background-image: linear-gradient(135deg, #7C3AED, #A855F7, #EC4899) !important;
+  background-color: #7C3AED !important;
+}
+
+.hover\:bg-blue-500:hover {
+  background-color: #00B4D8 !important;
+}
+
+.shadow-blue-950\/20,
+.shadow-blue-950\/30,
+.shadow-blue-950\/40,
+.shadow-\[\#B7410E\]\/20,
+.shadow-\[\#B7410E\]\/30,
+.shadow-\[\#B7410E\]\/35 {
+  --tw-shadow-color: rgba(183, 65, 14, 0.28) !important;
+}
+
+.ring-\[\#D4AF37\]\/30 {
+  --tw-ring-color: rgba(0, 180, 216, 0.38) !important;
+}
+
+.bg-emerald-500,
+.bg-emerald-400,
+.bg-green-500,
+.bg-green-400,
+.text-emerald-300,
+.text-emerald-400,
+.text-green-300,
+.text-green-400 {
+  color: #00FF66 !important;
+}
+
+.bg-emerald-500,
+.bg-emerald-400,
+.bg-green-500,
+.bg-green-400 {
+  background-color: #00FF66 !important;
+}
+
+.from-blue-500,
+.from-blue-600,
+.via-cyan-400,
+.via-cyan-500,
+.to-violet-500,
+.to-violet-600,
+.to-cyan-400 {
+  --tw-gradient-from: #9D4EDD var(--tw-gradient-from-position) !important;
+  --tw-gradient-via: #00B4D8 var(--tw-gradient-via-position) !important;
+  --tw-gradient-to: #00FF66 var(--tw-gradient-to-position) !important;
+}
+
+.border-blue-400,
+.border-cyan-400,
+.hover\:border-cyan-400:hover,
+.hover\:border-cyan-300:hover {
+  border-color: #00B4D8 !important;
+}
+
+.bg-blue-500\/15,
+.bg-blue-600\/15,
+.bg-cyan-500\/15,
+.bg-cyan-400\/15,
+.bg-violet-500\/15,
+.bg-purple-500\/15,
+.bg-pink-500\/15,
+.bg-\[\#D4AF37\]\/10,
+.bg-\[\#B7410E\]\/25 {
+  background-color: rgba(157, 78, 221, 0.16) !important;
+}
+
+.border-blue-500,
+.border-cyan-500,
+.border-violet-500,
+.border-purple-500,
+.border-pink-500,
+.ring-blue-500,
+.ring-cyan-500,
+.ring-violet-500 {
+  border-color: #00B4D8 !important;
+  --tw-ring-color: rgba(0, 180, 216, 0.42) !important;
+}
+
+.shadow-blue-500\/20,
+.shadow-blue-600\/20,
+.shadow-cyan-500\/20,
+.shadow-violet-500\/20,
+.shadow-pink-500\/20 {
+  --tw-shadow-color: rgba(255, 42, 133, 0.24) !important;
+}
+
+.divide-slate-800 > :not([hidden]) ~ :not([hidden]),
+.divide-slate-700 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(0, 180, 216, 0.18) !important;
+}
+
+button.bg-blue-600,
+a.bg-blue-600,
+.bg-blue-600.text-white {
+  background-image: linear-gradient(135deg, #7C3AED, #A855F7, #EC4899) !important;
+  color: #F3F1F8 !important;
+}
+
+button[class*="bg-blue-"],
+a[class*="bg-blue-"],
+button[class*="bg-gradient"],
+a[class*="bg-gradient"],
+button[type="submit"] {
+  background-image: linear-gradient(135deg, #7C3AED 0%, #A855F7 45%, #EC4899 100%) !important;
+  background-color: #7C3AED !important;
+  border-color: rgba(236, 72, 153, 0.42) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 14px 34px rgba(124, 58, 237, 0.24), 0 0 26px rgba(236, 72, 153, 0.18) !important;
+}
+
+button[class*="bg-blue-"]:hover,
+a[class*="bg-blue-"]:hover,
+button[class*="bg-gradient"]:hover,
+a[class*="bg-gradient"]:hover,
+button[type="submit"]:hover {
+  filter: brightness(1.08) saturate(1.08);
+}
+
+button[class*="border"],
+a[class*="border"] {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(20px);
+}
+
+.text-\[\#0F0F0F\] {
+  color: #F3F1F8 !important;
+}
+/* Password eye toggle: force icon inside password input blocks */
+.password-eye-field {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+.password-eye-input {
+  padding-right: 3rem !important;
+}
+
+.password-eye-toggle {
+  position: absolute !important;
+  right: 0.75rem !important;
+  top: 50% !important;
+  z-index: 50 !important;
+  display: inline-flex !important;
+  height: 2rem !important;
+  width: 2rem !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transform: translateY(-50%) !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: transparent !important;
+  color: rgba(248, 250, 252, 0.82) !important;
+  box-shadow: none !important;
+}
+
+.password-eye-toggle:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+select option,
+select optgroup {
+  background-color: #111827;
+  color: #f8fafc;
+}
+
+select option:checked,
+select option:hover {
+  background-color: #334155;
+  color: #ffffff;
+}

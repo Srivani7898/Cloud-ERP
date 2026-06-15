@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sun, 07 Jun 2026 14:13:49 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"hr","resource":"reports","count":2,"total":2,"data":[{"id":"HR-REP-1780839808310","name":"Monthly Workforce Report","type":"Workforce Summary","period":"June 2026","owner":"HR CoE","status":"Published","createdAt":"2026-06-07T13:43:28.499Z","updatedAt":"2026-06-07T13:43:36.448Z"},{"id":"HR-RPT-1","name":"Headcount movement","period":"June 2026","status":"Ready"}]}}

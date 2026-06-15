@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sun, 07 Jun 2026 17:30:24 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"payroll","resource":"reports","count":3,"total":3,"data":[{"id":"PAY-REP-1780853398676","name":"Monthly Payroll Register","type":"Payroll Register","period":"June 2026","owner":"Payroll CoE","status":"Approved","grossPayroll":6240000,"deductions":912000,"netPayroll":5328000,"createdAt":"2026-06-07T17:29:58.676Z","updatedAt":"2026-06-07T17:30:06.080Z"},{"id":"PAY-REP-1780852695312","name":"Monthly Payroll Register","type":"Payroll Register","period":"June 2026","owner":"Payroll CoE","status":"Approved","grossPayroll":6240000,"deductions":912000,"netPayroll":5328000,"createdAt":"2026-06-07T17:18:15.312Z","updatedAt":"2026-06-07T17:18:18.217Z"},{"id":"PAY-RPT-1","name":"Payroll variance report","period":"June 2026","status":"Ready"}]}}

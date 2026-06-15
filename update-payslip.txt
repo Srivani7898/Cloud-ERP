@@ -1,0 +1,1 @@
+{"success":true,"data":{"id":"PAY-PAY-1780759116432","employee":"Test Employee","period":"JUN-2026","gross":8400,"deductions":1120,"net":7300,"status":"Released","createdAt":"2026-06-06T15:18:36.432Z","updatedAt":"2026-06-06T15:21:20.044Z"}}

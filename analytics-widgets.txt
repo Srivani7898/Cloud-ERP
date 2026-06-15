@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 11:34:53 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"analytics","resource":"widgets","count":2,"total":2,"data":[{"id":"BI-WDG-1","name":"Revenue vs Forecast","type":"Line Chart","source":"Finance","status":"Active"},{"id":"BI-WDG-2","name":"Workforce Cost","type":"KPI Card","source":"HR + Payroll","status":"Active"}]}}

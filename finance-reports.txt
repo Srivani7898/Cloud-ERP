@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sun, 07 Jun 2026 12:31:15 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"finance","resource":"reports","count":1,"total":1,"data":[{"id":"FIN-RPT-1","name":"Finance close report","period":"FY2026-Q2","status":"Ready","format":"PDF"}]}}

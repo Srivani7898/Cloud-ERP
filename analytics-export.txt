@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 10:42:32 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"analytics","resource":"export","count":2,"total":2,"data":[{"id":"BI-EXP-1","report":"Executive ERP Performance","format":"PDF","status":"Generated","generatedAt":"2026-06-08T10:00:00.000Z"},{"id":"BI-EXP-2","report":"Cross Module Variance","format":"Excel","status":"Generated","generatedAt":"2026-06-08T10:02:00.000Z"}]}}

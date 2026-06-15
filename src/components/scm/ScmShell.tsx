@@ -1,0 +1,62 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { AlertTriangle, BarChart3, ClipboardList, FileText, LayoutDashboard, LogOut, Package, PackagePlus, ReceiptText, RefreshCcw, ShieldCheck, Truck, Warehouse } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
+import { cn } from "@/lib/utils";
+
+const nav = [
+  { href: "/scm/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/scm/inventory", label: "Inventory", icon: Package },
+  { href: "/scm/products", label: "Products", icon: PackagePlus },
+  { href: "/scm/vendors", label: "Vendors", icon: Truck },
+  { href: "/scm/purchase-orders", label: "Purchase Orders", icon: ClipboardList },
+  { href: "/scm/goods-receipts", label: "Goods Receipts", icon: ReceiptText },
+  { href: "/scm/stock-transfers", label: "Stock Transfers", icon: RefreshCcw },
+  { href: "/scm/warehouses", label: "Warehouses", icon: Warehouse },
+  { href: "/scm/reorder-alerts", label: "Reorder Alerts", icon: AlertTriangle },
+  { href: "/scm/reports", label: "Reports", icon: FileText },
+  { href: "/scm/audit-logs", label: "Audit Logs", icon: ShieldCheck }
+];
+
+export function ScmShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  return (
+    <div className="min-h-screen bg-slate-100 text-slate-950 dark:bg-slate-950 dark:text-slate-50">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-slate-200 bg-white/85 p-4 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/85 xl:block">
+        <Link href="/scm/dashboard" className="flex items-center gap-3 px-2 py-3 font-semibold">
+          <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 via-cyan-500 to-violet-500 text-white"><BarChart3 className="h-5 w-5" /></span>
+          <span>Supply Chain Dashboard</span>
+        </Link>
+        <div className="mt-5 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-white/[0.06]">
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">SCM tenant</p>
+          <p className="mt-2 font-semibold">Northstar Manufacturing</p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">3 warehouses · Global inventory</p>
+        </div>
+        <nav className="mt-6 space-y-1">
+          {nav.map((item) => {
+            const Icon = item.icon;
+            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            return <Link key={item.href} href={item.href} className={cn("flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/10", active && "bg-blue-600 text-white hover:bg-blue-600 dark:text-white")}><Icon className="h-4 w-4" />{item.label}</Link>;
+          })}
+        </nav>
+      </aside>
+      <div className="xl:pl-72">
+        <header className="sticky top-0 z-20 flex min-h-16 flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white/85 px-4 py-3 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/85 sm:px-6">
+          <div><p className="text-xs uppercase tracking-[0.18em] text-blue-600 dark:text-cyan-300">Supply Chain & Inventory</p><h1 className="text-lg font-semibold tracking-normal">Enterprise inventory command center</h1></div>
+          <div className="flex items-center gap-2"><ThemeToggle /><Button asChild variant="outline" size="sm"><Link href="/auth/logout"><LogOut className="h-4 w-4" />Sign out</Link></Button></div>
+          <nav className="flex w-full gap-2 overflow-x-auto pb-1 xl:hidden">
+            {nav.map((item) => {
+              const Icon = item.icon;
+              const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+              return <Link key={item.href} href={item.href} className={cn("flex shrink-0 items-center gap-2 rounded-md border px-3 py-2 text-xs font-medium", active ? "border-blue-600 bg-blue-600 text-white" : "border-slate-200 bg-white dark:border-white/10 dark:bg-white/[0.06]")}><Icon className="h-3.5 w-3.5" />{item.label}</Link>;
+            })}
+          </nav>
+        </header>
+        <main className="px-4 py-6 sm:px-6 lg:px-8">{children}</main>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 05:11:37 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"forecast","resource":"reports","count":2,"total":2,"data":[{"id":"FOR-REP-1780895471690","name":"AI Demand Forecast Report","type":"Demand Forecast","period":"July 2026","owner":"AI Forecast CoE","model":"LSTM","status":"Approved","accuracy":92,"forecastDemand":1240,"confidence":91,"createdAt":"2026-06-08T05:11:11.690Z","updatedAt":"2026-06-08T05:11:17.722Z"},{"id":"FOR-RPT-1","name":"Forecast accuracy report","status":"Ready"}]}}

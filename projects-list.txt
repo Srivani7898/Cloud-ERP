@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 08:21:13 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"projects","resource":"projects","count":3,"total":3,"data":[{"id":"PRO-PRO-1780906852138","name":"Test ERP Rollout","methodology":"Agile","owner":"Ankita Rao","status":"At Risk","progress":75,"budget":275000,"risk":"High","createdAt":"2026-06-08T08:20:52.138Z","updatedAt":"2026-06-08T08:21:01.090Z"},{"id":"proj-1001","name":"Customer Portal Rollout","status":"In progress","progress":68,"budget":393000},{"id":"proj-1002","name":"Warehouse Automation","status":"On track","progress":52,"budget":280000}]}}

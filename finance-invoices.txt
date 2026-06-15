@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sat, 06 Jun 2026 16:10:05 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"finance","resource":"invoices","count":4,"total":4,"data":[{"id":"FIN-INV-1780758359888","customer":"Test Customer","status":"Paid","total":45000,"currency":"USD","dueDate":"2026-07-15","aiRisk":0,"createdAt":"2026-06-06T15:05:59.888Z","updatedAt":"2026-06-06T16:09:49.068Z"},{"id":"INV-10492","customer":"Apex Retail Group","status":"Overdue","dueDate":"2026-05-24","total":128400,"currency":"USD","aiRisk":82},{"id":"INV-10491","customer":"HelioGrid Energy","status":"Approved","dueDate":"2026-06-02","total":94200,"currency":"USD","aiRisk":24},{"id":"INV-10490","customer":"Orion Logistics","status":"Paid","dueDate":"2026-05-28","total":221900,"currency":"USD","aiRisk":9}]}}

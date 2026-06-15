@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sun, 07 Jun 2026 12:27:55 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"finance","resource":"ledger","count":2,"total":2,"data":[{"id":"LED-9001","account":"Cash and Equivalents","debit":128400,"credit":0,"source":"INV-10492","postedAt":"2026-06-07T12:23:31.482Z"},{"id":"LED-9002","account":"Revenue","debit":0,"credit":128400,"source":"INV-10492","postedAt":"2026-06-07T12:23:31.482Z"}]}}

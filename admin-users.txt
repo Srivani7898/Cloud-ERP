@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sat, 06 Jun 2026 15:54:32 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"admin","resource":"users","count":1,"total":1,"data":[{"id":"ADM-USE-1780761201830","name":"Test Admin User","email":"test.admin@cloud.com","role":"super_admin","status":"Active","tenant":"Northstar Manufacturing","createdAt":"2026-06-06T15:53:21.830Z","updatedAt":"2026-06-06T15:54:23.228Z"}]}}

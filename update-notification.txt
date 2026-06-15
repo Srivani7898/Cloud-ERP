@@ -1,0 +1,1 @@
+{"success":true,"data":{"id":"NOT-INB-1780760534436","title":"Test approval alert","channel":"In-App","severity":"Normal","status":"Read","message":"Finance approval requires action.","createdAt":"2026-06-06T15:42:14.436Z","updatedAt":"2026-06-06T15:42:57.001Z"}}

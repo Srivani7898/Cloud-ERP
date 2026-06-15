@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sun, 07 Jun 2026 12:23:32 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"finance","resource":"payments","count":2,"total":2,"data":[{"id":"PAY-7781","vendor":"CloudOps Global","status":"Scheduled","amount":48200,"method":"ACH","date":"2026-06-10"},{"id":"PAY-7780","vendor":"Northstar Logistics","status":"Released","amount":72800,"method":"Wire","date":"2026-06-04"}]}}

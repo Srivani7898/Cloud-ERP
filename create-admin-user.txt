@@ -1,0 +1,1 @@
+{"success":true,"data":{"id":"ADM-USE-1780761201830","name":"Test Admin User","email":"test.admin@cloud.com","role":"tenant_admin","status":"Active","tenant":"Northstar Manufacturing","createdAt":"2026-06-06T15:53:21.830Z","updatedAt":"2026-06-06T15:53:21.830Z"}}

@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 04:11:36 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"scm","resource":"vendors","count":3,"total":3,"data":[{"id":"SCM-VEN-1780891875837","name":"Test Gobal Vendor","contact":"Ravi Kumar","email":"vendor@test.com","region":"India","rating":4.5,"status":"Active","createdAt":"2026-06-08T04:11:15.837Z","updatedAt":"2026-06-08T04:11:15.837Z"},{"id":"SCM-VEN-1780891823337","name":"Test Global Vendor","contact":"Ravi Kumar","email":"vendor@gmail.com","region":"India","rating":4.5,"status":"Active","createdAt":"2026-06-08T04:10:23.337Z","updatedAt":"2026-06-08T04:10:23.337Z"},{"id":"VEN-1001","name":"VoltEdge Supplies","rating":4.7,"status":"Preferred"}]}}

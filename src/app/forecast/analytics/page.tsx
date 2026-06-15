@@ -1,0 +1,9 @@
+"use client";
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useForecastStore } from "@/store/forecast-store";
+
+export default function ForecastAnalyticsPage() {
+  const { products, models } = useForecastStore();
+  return <div className="space-y-6"><div><h2 className="text-2xl font-semibold">Forecast analytics</h2><p className="text-sm text-slate-500">Executive analytics for demand, revenue exposure, and model accuracy.</p></div><section className="grid gap-4 xl:grid-cols-2"><Card className="border-slate-200 dark:border-white/10 dark:bg-white/[0.06]"><CardHeader><CardTitle>Revenue impact by product</CardTitle><CardDescription>Forecasted business impact.</CardDescription></CardHeader><CardContent className="space-y-4">{products.map((product) => <div key={product.id}><div className="mb-2 flex justify-between text-sm"><span>{product.name}</span><span>${Math.round(product.revenueImpact / 1000)}K</span></div><div className="h-3 rounded-full bg-slate-200 dark:bg-white/10"><div className="h-3 rounded-full bg-gradient-to-r from-blue-600 via-cyan-400 to-violet-500" style={{ width: `${product.serviceLevel}%` }} /></div></div>)}</CardContent></Card><Card className="border-slate-200 dark:border-white/10 dark:bg-white/[0.06]"><CardHeader><CardTitle>Model accuracy</CardTitle><CardDescription>Accuracy by ML model.</CardDescription></CardHeader><CardContent className="space-y-4">{models.map((model) => <div key={model.id}><div className="mb-2 flex justify-between text-sm"><span>{model.name}</span><span>{model.accuracy}%</span></div><div className="h-3 rounded-full bg-slate-200 dark:bg-white/10"><div className="h-3 rounded-full bg-emerald-500" style={{ width: `${model.accuracy}%` }} /></div></div>)}</CardContent></Card></section></div>;
+}

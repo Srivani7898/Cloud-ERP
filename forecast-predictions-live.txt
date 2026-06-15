@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sat, 06 Jun 2026 17:23:42 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"forecast","resource":"predictions","count":2,"total":2,"data":[{"id":"FOR-PRE-1780760013229","sku":"ERP-FORECAST-TEST","product":"AI Demand Test Item","model":"LSTM","forecastDemand":1240,"confidence":96,"period":"July 2026","status":"Approved","createdAt":"2026-06-06T15:33:33.229Z","updatedAt":"2026-06-06T15:34:54.086Z"},{"id":"PRED-1001","sku":"ERP-BATTERY-X","horizon":"30d","forecastQty":510,"confidence":91}]}}

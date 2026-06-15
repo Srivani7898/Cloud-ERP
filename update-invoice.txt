@@ -1,0 +1,1 @@
+{"success":true,"data":{"id":"FIN-INV-1780758359888","customer":"Test Customer","status":"Approved","total":45000,"currency":"USD","dueDate":"2026-07-15","aiRisk":9,"createdAt":"2026-06-06T15:05:59.888Z","updatedAt":"2026-06-06T15:08:54.526Z"}}

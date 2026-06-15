@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Tue, 09 Jun 2026 04:12:56 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"audit","resource":"dashboard","count":1,"total":1,"data":[{"id":"AUD-DASH-1","name":"Enterprise security evidence center","complianceScore":96,"verifiedEvents":19324,"highRisks":3,"tamperStatus":"Verified","status":"Live"}]}}

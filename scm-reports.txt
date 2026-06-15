@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 04:43:07 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"scm","resource":"reports","count":2,"total":2,"data":[{"id":"SCM-REP-1780893752914","name":"Inventory Health Report","type":"Inventory Position","period":"June 2026","owner":"SCM CoE","status":"Approved","inventoryValue":4280000,"openPOs":18,"lowStockItems":7,"createdAt":"2026-06-08T04:42:32.914Z","updatedAt":"2026-06-08T04:42:51.175Z"},{"id":"SCM-RPT-1","name":"Inventory health report","status":"Ready"}]}}

@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 14:52:58 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"notifications","resource":"rules","count":2,"total":2,"data":[{"id":"RULE-1","event":"finance.invoice.approval_pending","channel":"Email + In-App","priority":"High","status":"Enabled"},{"id":"RULE-2","event":"scm.reorder.low_stock","channel":"Webhook + In-App","priority":"Critical","status":"Enabled"}]}}

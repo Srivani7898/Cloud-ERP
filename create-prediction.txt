@@ -1,0 +1,1 @@
+{"success":true,"data":{"id":"FOR-PRE-1780760013229","sku":"ERP-FORECAST-TEST","product":"AI Demand Test Item","model":"LSTM","forecastDemand":1240,"confidence":91,"period":"July 2026","status":"Generated","createdAt":"2026-06-06T15:33:33.229Z","updatedAt":"2026-06-06T15:33:33.229Z"}}

@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 10:35:22 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"analytics","resource":"kpis","count":2,"total":2,"data":[{"id":"BI-KPI-1","metric":"ERP Revenue","value":48200000,"unit":"USD","trend":"+12.4%","status":"Healthy"},{"id":"BI-KPI-2","metric":"Operating Margin","value":28.6,"unit":"%","trend":"+2.1%","status":"Healthy"}]}}

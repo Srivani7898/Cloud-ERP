@@ -1,0 +1,1 @@
+{"success":true,"data":{"id":"AUD-LOG-1780760707800","actor":"Test Admin","action":"Updated payroll policy","module":"Payroll","severity":"Medium","hash":"sha256-test-001","verified":true,"createdAt":"2026-06-06T15:45:07.800Z","updatedAt":"2026-06-06T15:45:07.800Z"}}

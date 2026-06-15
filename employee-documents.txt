@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sat, 06 Jun 2026 15:49:43 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"employee","resource":"documents","count":2,"total":2,"data":[{"id":"EMP-DOC-1780760919673","employee":"Anika Rao","type":"Offer Letter","title":"Offer Letter - Anika Rao","status":"Downloaded","downloadable":true,"createdAt":"2026-06-06T15:48:39.673Z","updatedAt":"2026-06-06T15:49:36.396Z","downloadedAt":"2026-06-06T15:45:00.000Z"},{"id":"DOC-1","name":"Offer Letter","type":"PDF","status":"Available"}]}}

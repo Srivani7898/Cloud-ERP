@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 09:05:11 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"projects","resource":"timeline","count":3,"total":3,"data":[{"id":"TL-1001","projectId":"proj-1001","phase":"Discovery","event":"Stakeholder workshops completed","date":"2026-06-03","status":"Completed"},{"id":"TL-1002","projectId":"proj-1001","phase":"Design","event":"Solution design review","date":"2026-06-15","status":"In Progress"},{"id":"TL-1003","projectId":"proj-1002","phase":"Pilot","event":"Warehouse automation pilot","date":"2026-06-20","status":"Planned"}]}}

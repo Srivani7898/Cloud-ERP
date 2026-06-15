@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sun, 07 Jun 2026 13:16:15 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"hr","resource":"departments","count":3,"total":3,"data":[{"id":"HR-DEP-1780838150069","name":"Finance Operation","head":"Ankita Rao","employees":42,"budget":2400000,"status":"Active","createdAt":"2026-06-07T13:15:50.282Z","updatedAt":"2026-06-07T13:16:07.390Z"},{"id":"DEP-FIN","name":"Finance","head":"Avery Stone","employees":42},{"id":"DEP-HR","name":"Human Resources","head":"Rohan Mehta","employees":18}]}}

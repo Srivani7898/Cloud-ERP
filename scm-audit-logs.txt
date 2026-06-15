@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 04:47:52 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"scm","resource":"audit-logs","count":1,"total":1,"data":[{"id":"SCM-AUD-1","action":"Auto reorder generated","createdAt":"2026-06-07T12:23:31.482Z"}]}}

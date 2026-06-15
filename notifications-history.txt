@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 15:02:50 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"notifications","resource":"history","count":2,"total":2,"data":[{"id":"HIST-1","notification":"Invoice approval reminder","channel":"Email","recipient":"finance.manager@northstar.example","status":"Delivered","sentAt":"2026-06-08T14:05:00.000Z"},{"id":"HIST-2","notification":"Low stock alert","channel":"Webhook","recipient":"scm-ops-webhook","status":"Delivered","sentAt":"2026-06-08T14:08:00.000Z"}]}}

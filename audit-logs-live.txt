@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sat, 06 Jun 2026 17:10:17 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"audit","resource":"logs","count":2,"total":2,"data":[{"id":"AUD-LOG-1780760707800","actor":"Test Admin","action":"Updated payroll policy","module":"Payroll","severity":"High","hash":"sha256-test-001","verified":true,"createdAt":"2026-06-06T15:45:07.800Z","updatedAt":"2026-06-06T17:10:00.904Z"},{"id":"AUD-98431","actor":"avery@northstar.example","action":"Finance role granted","hash":"9f2c-a81","status":"Verified","verified":true,"updatedAt":"2026-06-06T17:10:04.701Z","severity":"High"}]}}

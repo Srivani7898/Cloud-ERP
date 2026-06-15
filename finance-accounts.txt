@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sun, 07 Jun 2026 12:25:51 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"finance","resource":"accounts","count":2,"total":2,"data":[{"id":"ACC-1000","name":"Cash and Equivalents","type":"Asset","balance":1280000,"currency":"USD"},{"id":"ACC-2200","name":"Accounts Payable","type":"Liability","balance":426000,"currency":"USD"}]}}

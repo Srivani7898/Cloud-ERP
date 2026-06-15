@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sat, 06 Jun 2026 16:19:52 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"hr","resource":"employees","count":4,"total":4,"data":[{"id":"HR-EMP-1780756936789","name":"Test Employee","department":"Finance","title":"ERP Analyst","status":"On Leave","location":"Hyderabad","createdAt":"2026-06-06T14:42:16.789Z","updatedAt":"2026-06-06T16:19:45.058Z"},{"id":"HR-EMP-1780756845975","name":"Test Employee","department":"Finance","title":"ERP Analyst","status":"Active","location":"Hyderabad","createdAt":"2026-06-06T14:40:45.975Z","updatedAt":"2026-06-06T14:40:45.975Z"},{"id":"EMP-1001","name":"Anika Rao","department":"Finance","title":"Senior Analyst","status":"On Leave","location":"Bengaluru HQ","updatedAt":"2026-06-06T14:59:18.593Z"},{"id":"EMP-1002","name":"Rohan Mehta","department":"HR","title":"People Partner","status":"Active","location":"Mumbai"}]}}

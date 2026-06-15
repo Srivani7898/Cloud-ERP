@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 08:48:08 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"projects","resource":"resources","count":1,"total":1,"data":[{"id":"RES-1","projectId":"proj-1001","name":"Anika Rao","role":"Project Manager","allocation":85}]}}

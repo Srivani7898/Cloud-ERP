@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sun, 07 Jun 2026 12:36:53 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"finance","resource":"currency","count":2,"total":2,"data":[{"id":"USD-INR","base":"USD","quote":"INR","rate":83.42,"updatedAt":"2026-06-07T12:23:31.482Z"},{"id":"USD-EUR","base":"USD","quote":"EUR","rate":0.92,"updatedAt":"2026-06-07T12:23:31.482Z"}]}}

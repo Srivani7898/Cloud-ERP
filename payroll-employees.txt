@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sun, 07 Jun 2026 16:43:22 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"payroll","resource":"employees","count":2,"total":2,"data":[{"id":"NG-2003","code":"NG-2003","name":"Test Payroll Employee","department":"Finance","designation":"Finance Analyst","payType":"Monthly","baseSalary":8400,"salary":8400,"taxRegion":"India","taxCode":"IN-NEW","bank":"Verified","status":"On Hold","createdAt":"2026-06-07T16:26:27.268Z","updatedAt":"2026-06-07T16:36:22.296Z"},{"id":"NG-2003","code":"NG-2003","name":"Test Payroll Employee","department":"Finance","designation":"Finance Analyst","payType":"Monthly","baseSalary":8400,"salary":8400,"taxRegion":"India","taxCode":"IN-NEW","bank":"Verified","status":"On Hold","createdAt":"2026-06-07T16:14:19.665Z","updatedAt":"2026-06-07T16:21:56.289Z"}]}}

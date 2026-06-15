@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Sun, 07 Jun 2026 16:45:51 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"payroll","resource":"payslips","count":2,"total":2,"data":[{"id":"PAY-PAY-1780850720305","employee":"Test Payroll Employee","period":"JUN-2026","gross":8400,"deductions":1120,"net":7280,"status":"Released","createdAt":"2026-06-07T16:45:20.305Z","updatedAt":"2026-06-07T16:45:27.511Z"},{"id":"PS-MAY-1001","employeeId":"EMP-1001","month":"May 2026","net":7280,"status":"Generated"}]}}

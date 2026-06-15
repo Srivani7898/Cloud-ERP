@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 05:04:17 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"forecast","resource":"models","count":1,"total":1,"data":[{"id":"MODEL-LSTM-1","name":"LSTM demand model","accuracy":92,"status":"Healthy"}]}}

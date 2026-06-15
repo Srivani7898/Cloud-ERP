@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Tue, 09 Jun 2026 04:31:11 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"audit","resource":"logs","count":1,"total":1,"data":[{"id":"AUD-LOG-1780978824588","actor":"Test Admin","action":": Updated payroll approval threshold","module":"Finance","severity":"High","verified":true,"hash":"sha256-19eaa9c3450","timestamp":"2026-06-09T04:20:24.272Z","createdAt":"2026-06-09T04:20:24.588Z","updatedAt":"2026-06-09T04:20:29.862Z"}]}}

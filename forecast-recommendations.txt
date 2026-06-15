@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 05:02:31 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"forecast","resource":"recommendations","count":1,"total":1,"data":[{"id":"REC-1","action":"Increase safety stock","sku":"ERP-BATTERY-X","priority":"High"}]}}

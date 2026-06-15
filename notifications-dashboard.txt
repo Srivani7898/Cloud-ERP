@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+content-type: application/json
+Date: Mon, 08 Jun 2026 14:31:46 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"success":true,"data":{"module":"notifications","resource":"dashboard","count":1,"total":1,"data":[{"id":"NOT-DASH-1","name":"Notification operations center","deliveredToday":18420,"failedToday":42,"retryQueue":16,"status":"Live"}]}}
