@@ -56,6 +56,8 @@ type Props = {
   actions?: Action[];
   enableExport?: boolean;
   exportFormat?: "csv" | "pdf";
+
+  onCreate?: (record: Record<string, unknown>) => void;
 };
 
 const toneClasses = {
@@ -103,24 +105,24 @@ function downloadPdf(row: Record<string, unknown>, title: string) {
   const owner = text(row.owner, "Finance CoE");
   const status = text(row.status, "Ready");
   const type =
-  text(row.type) ||
-  (title.includes("audit")
-    ? "Audit Logs"
-    : "Financial Report");
+    text(row.type) ||
+    (title.includes("audit")
+      ? "Audit Logs"
+      : "Financial Report");
   console.log("PDF TYPE =", type);
   console.log("ROW =", row);
   let reportContent = "";
   let summaryCards = "";
 
-switch (type) {
-  case "Income Statement":
-  summaryCards = `
+  switch (type) {
+    case "Income Statement":
+      summaryCards = `
     <div class="card"><div class="label">Revenue</div><div class="value">$4.82M</div></div>
     <div class="card"><div class="label">Expenses</div><div class="value">$3.31M</div></div>
     <div class="card"><div class="label">Net Profit</div><div class="value">$1.51M</div></div>
     <div class="card"><div class="label">Growth</div><div class="value">11.8%</div></div>
 `   ;
-    reportContent = `
+      reportContent = `
       <div class="section-title">Income Statement</div>
       <table>
         <tr><th>Item</th><th>Amount</th></tr>
@@ -129,16 +131,16 @@ switch (type) {
         <tr><td>Net Profit</td><td>$1,510,000</td></tr>
       </table>
     `;
-    break;
+      break;
 
-  case "Balance Sheet":
-    summaryCards = `
+    case "Balance Sheet":
+      summaryCards = `
     <div class="card"><div class="label">Assets</div><div class="value">$8.2M</div></div>
     <div class="card"><div class="label">Liabilities</div><div class="value">$3.1M</div></div>
     <div class="card"><div class="label">Equity</div><div class="value">$5.1M</div></div>
     <div class="card"><div class="label">Debt Ratio</div><div class="value">37%</div></div>
     `;
-    reportContent = `
+      reportContent = `
       <div class="section-title">Balance Sheet</div>
       <table>
         <tr><th>Category</th><th>Amount</th></tr>
@@ -147,16 +149,16 @@ switch (type) {
         <tr><td>Equity</td><td>$5,100,000</td></tr>
       </table>
     `;
-    break;
+      break;
 
-  case "Cash Flow":
-    summaryCards = `
+    case "Cash Flow":
+      summaryCards = `
       <div class="card"><div class="label">Operating</div><div class="value">$1.2M</div></div>
       <div class="card"><div class="label">Investing</div><div class="value">-$450K</div></div>
       <div class="card"><div class="label">Financing</div><div class="value">$300K</div></div>
       <div class="card"><div class="label">Net Cash</div><div class="value">$1.05M</div></div>
       `;
-    reportContent = `
+      reportContent = `
       <div class="section-title">Cash Flow Statement</div>
       <table>
         <tr><th>Activity</th><th>Amount</th></tr>
@@ -165,16 +167,16 @@ switch (type) {
         <tr><td>Financing</td><td>$300,000</td></tr>
       </table>
     `;
-    break;
+      break;
 
-  case "Variance":
-    summaryCards = `
+    case "Variance":
+      summaryCards = `
       <div class="card"><div class="label">Budget</div><div class="value">$800K</div></div>
       <div class="card"><div class="label">Actual</div><div class="value">$795K</div></div>
       <div class="card"><div class="label">Variance</div><div class="value">-0.6%</div></div>
       <div class="card"><div class="label">Forecast</div><div class="value">Stable</div></div>
       `;
-    reportContent = `
+      reportContent = `
       <div class="section-title">Variance Analysis</div>
       <table>
         <tr><th>Department</th><th>Budget</th><th>Actual</th><th>Variance</th></tr>
@@ -182,10 +184,10 @@ switch (type) {
         <tr><td>HR</td><td>$300,000</td><td>$325,000</td><td>+8%</td></tr>
       </table>
     `;
-    break;
+      break;
 
-   case "Audit Logs":
-  summaryCards = `
+    case "Audit Logs":
+      summaryCards = `
     <div class="card">
       <div class="label">Actor</div>
       <div class="value">${text(row.actor, "Finance Manager")}</div>
@@ -207,7 +209,7 @@ switch (type) {
     </div>
   `;
 
-  reportContent = `
+      reportContent = `
     <div class="section-title">Audit Activity Summary</div>
 
     <table>
@@ -228,9 +230,9 @@ switch (type) {
       </tr>
     </table>
   `;
-  break;
+      break;
 
-  reportContent = `
+      reportContent = `
     <div class="section-title">Audit Activity Summary</div>
 
     <table>
@@ -275,11 +277,11 @@ switch (type) {
       </tr>
     </table>
   `;
-  break;
+      break;
 
-  default:
-    reportContent = "<p>No report content available.</p>";
-}
+    default:
+      reportContent = "<p>No report content available.</p>";
+  }
   const generatedAt = new Date().toLocaleString();
 
   const html = `<!doctype html>
@@ -477,15 +479,16 @@ export function LiveCrudResource({
   actions = [],
   enableExport = false,
   exportFormat = "csv",
+  onCreate,
 }: Props) {
   const initialForm = useMemo(
-  () =>
-    fields.reduce<Record<string, string>>((acc, field) => {
-      acc[field.key] = "";
-      return acc;
-    }, {}),
-  [fields],
-);
+    () =>
+      fields.reduce<Record<string, string>>((acc, field) => {
+        acc[field.key] = "";
+        return acc;
+      }, {}),
+    [fields],
+  );
 
   const [rows, setRows] = useState<Record<string, unknown>[]>([]);
   const [form, setForm] = useState(initialForm);
@@ -551,11 +554,17 @@ export function LiveCrudResource({
 
       setForm(
         fields.reduce<Record<string, string>>((acc, field) => {
-        acc[field.key] = "";
-         return acc;
+          acc[field.key] = "";
+          return acc;
         }, {})
       );
 
+      if (onCreate) {
+        onCreate({
+          ...body,
+          ...defaultCreate,
+        });
+      }
       setMessage(`${title} record created and synced with the backend API.`);
       await loadRows();
     } catch (error) {
@@ -687,9 +696,9 @@ export function LiveCrudResource({
                 >
                   <option value="">Select Type</option>
 
-                   {(field.options ?? []).map((option) => (
+                  {(field.options ?? []).map((option) => (
                     <option key={option} value={option}>
-                     {option}
+                      {option}
                     </option>
                   ))}
                 </select>
@@ -699,7 +708,7 @@ export function LiveCrudResource({
                   type={field.type ?? "text"}
                   value={form[field.key]}
                   onChange={(event) => setForm((current) => ({ ...current, [field.key]: event.target.value }))}
-                   className="h-12 w-full rounded-xl
+                  className="h-12 w-full rounded-xl
                     border border-slate-300 dark:border-white/10
                     bg-white dark:bg-slate-950/60
                     text-slate-900 dark:text-white
@@ -741,37 +750,37 @@ export function LiveCrudResource({
           <div className="overflow-x-auto">
             <table className="w-full min-w-[980px] text-left">
               <thead>
-              <tr className="border-b border-slate-200 dark:border-white/10 text-xs uppercase tracking-[0.24em] text-slate-700 dark:text-blue-200">
-               {columns.map((column) => (
-                 <th
-                   key={column.key}
-                   className="whitespace-nowrap px-4 py-4"
+                <tr className="border-b border-slate-200 dark:border-white/10 text-xs uppercase tracking-[0.24em] text-slate-700 dark:text-blue-200">
+                  {columns.map((column) => (
+                    <th
+                      key={column.key}
+                      className="whitespace-nowrap px-4 py-4"
                     >
-                 {column.label}
-                  </th>
+                      {column.label}
+                    </th>
                   ))}
 
-                 <th className="w-[420px] px-4 py-4 text-center">
-                 Actions
+                  <th className="w-[420px] px-4 py-4 text-center">
+                    Actions
                   </th>
-                  </tr>
+                </tr>
               </thead>
               <tbody>
                 {rows.map((row, index) => {
                   const id = text(row.id);
-
                   return (
                     <tr
                       key={id}
-                      className={`border-b border-white/10 text-slate-900 dark:text-white${index % 2 ? "bg-white/[0.03]" : ""}`}
+                      className={`border-b border-white/10 text-slate-900 dark:text-white ${index % 2 ? "bg-white/[0.03]" : ""
+                        }`}
                     >
                       {columns.map((column) => (
                         <td
                           key={column.key}
                           className="px-4 py-5 whitespace-nowrap"
-                   >
+                        >
                           {renderCell(row, column)}
-                          </td>
+                        </td>
                       ))}
                       <td className="w-[420px] px-4 py-5">
                         <div className="flex flex-nowrap justify-center gap-2">

@@ -9,7 +9,7 @@ export type Employee = {
   email: string;
   title: string;
   department: string;
-  managerId?: string;
+  manager?: string;
   location: string;
   joinedAt: string;
   status: EmploymentStatus;

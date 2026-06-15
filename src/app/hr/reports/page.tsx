@@ -17,10 +17,10 @@ type HrReport = {
 const reportTypes = ["Workforce Summary", "Attendance", "Leave", "Onboarding", "Compliance"];
 
 const defaultReport = {
-  name: "Monthly Workforce Report",
+  name: "",
   type: "Workforce Summary",
-  period: "June 2026",
-  owner: "HR CoE",
+  period: "",
+  owner: "",
 };
 
 function fieldValue(report: HrReport, key: keyof HrReport, fallback = "Not set") {
@@ -43,6 +43,515 @@ function buildHrReportHtml(report: HrReport) {
   const status = fieldValue(report, "status", "Ready");
   const generatedOn = formatDate(report.updatedAt ?? report.createdAt);
 
+  let reportContent = "";
+  let reportTable = "";
+
+  switch (report.type) {
+
+    case "Workforce Summary":
+
+      reportContent = `
+      <div class="section-title">Workforce Summary</div>
+      <p class="note">
+        Overall workforce strength remains healthy with strong employee coverage.
+      </p>
+    `;
+
+      reportTable = `
+<table>
+  <thead>
+    <tr>
+      <th>KPI</th>
+      <th>Current</th>
+      <th>Target</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>Total Employees</td>
+      <td>248</td>
+      <td>260</td>
+    </tr>
+
+    <tr>
+      <td>Active Employees</td>
+      <td>238</td>
+      <td>250</td>
+    </tr>
+
+    <tr>
+      <td>Attrition Rate</td>
+      <td>4.2%</td>
+      <td>&lt;5%</td>
+    </tr>
+
+    <tr>
+      <td>Open Positions</td>
+      <td>12</td>
+      <td>10</td>
+    </tr>
+
+    <tr>
+      <td>Internal Promotions</td>
+      <td>8</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>New Hires</td>
+      <td>14</td>
+      <td>12</td>
+    </tr>
+
+      <tr>
+        <td>Employees On Leave</td>
+        <td>9</td>
+        <td>10</td>
+      </tr>
+
+      <tr>
+        <td>Average Tenure</td>
+        <td>4.8 Years</td>
+        <td>4.5 Years</td>
+      </tr>
+
+        <tr>
+          <td>Training Completion</td>
+          <td>92%</td>
+          <td>90%</td>
+        </tr>
+          </tbody>
+        </table>
+
+        <div class="section-title">Workforce Insights</div>
+
+          <p class="note">
+          The organization continues to maintain a stable workforce with a healthy balance
+          between recruitment, retention, and internal career progression. Employee
+          turnover remains within acceptable thresholds while hiring initiatives are
+          focused on critical business functions. Internal promotion activity indicates
+          effective succession planning and leadership development across departments.
+          Training completion rates remain above target, demonstrating a strong commitment
+          to workforce development and compliance readiness.
+          </p>
+
+          <div class="section-title">Management Recommendations</div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Focus Area</th>
+                <th>Recommendation</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>Recruitment</td>
+              <td>Prioritize hiring for Engineering and Finance positions.</td>
+            </tr>
+            <tr>
+              <td>Retention</td>
+              <td>Continue employee engagement and recognition programs.</td>
+            </tr>
+            <tr>
+              <td>Training</td>
+              <td>Expand certification and technical learning initiatives.</td>
+            </tr>
+              <tr>
+                <td>Succession Planning</td>
+                <td>Increase leadership development opportunities.</td>
+              </tr>
+            </tbody>
+          </table>
+        `;
+      break;
+
+    case "Attendance":
+
+  reportContent = `
+  <div class="section-title">Attendance Report</div>
+
+  <p class="note">
+    Attendance performance remains healthy across all business units.
+    Employee presence rates continue to exceed organizational targets while
+    late arrivals and unplanned absences remain within acceptable thresholds.
+    Remote work participation remains stable and workforce productivity indicators
+    show positive operational efficiency.
+  </p>
+`;
+
+  reportTable = `
+  <table>
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>Present</td>
+        <td>95%</td>
+      </tr>
+
+      <tr>
+        <td>Remote</td>
+        <td>18%</td>
+      </tr>
+
+      <tr>
+        <td>Work From Office</td>
+        <td>77%</td>
+      </tr>
+
+      <tr>
+        <td>Late Arrivals</td>
+        <td>5%</td>
+      </tr>
+
+      <tr>
+        <td>Absent</td>
+        <td>2%</td>
+      </tr>
+
+      <tr>
+        <td>Average Working Hours</td>
+        <td>8.4 Hours</td>
+      </tr>
+
+      <tr>
+        <td>Overtime Hours</td>
+        <td>126 Hours</td>
+      </tr>
+
+      <tr>
+        <td>Attendance Compliance</td>
+        <td>96.8%</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Attendance Insights</div>
+
+  <p class="note">
+    Attendance levels remain consistently above organizational targets.
+    Remote work participation continues to support workforce flexibility,
+    while overtime utilization remains within acceptable operational limits.
+    Late arrivals and absenteeism remain low, indicating strong employee engagement
+    and effective attendance governance practices.
+  </p>
+
+  <div class="section-title">Attendance Recommendations</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Area</th>
+        <th>Recommendation</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>Punctuality</td>
+        <td>Continue monitoring late arrival trends.</td>
+      </tr>
+
+      <tr>
+        <td>Remote Work</td>
+        <td>Maintain hybrid work policy controls.</td>
+      </tr>
+
+      <tr>
+        <td>Productivity</td>
+        <td>Track overtime utilization monthly.</td>
+      </tr>
+
+      <tr>
+        <td>Compliance</td>
+        <td>Maintain attendance compliance above 95%.</td>
+      </tr>
+
+      <tr>
+        <td>Employee Wellbeing</td>
+        <td>Monitor attendance patterns to identify potential burnout risks.</td>
+      </tr>
+    </tbody>
+  </table>
+`;
+  break;
+
+    case "Leave":
+
+     reportContent = `
+        <div class="section-title">Leave Report</div>
+
+        <p class="note">
+        Leave utilization remains within approved workforce planning thresholds.
+        The majority of leave requests continue to be approved while maintaining
+        operational continuity. Pending requests are being reviewed in accordance
+        with company policy and workforce availability requirements.
+        </p>
+        `;
+
+      reportTable = `
+        <table>
+          <thead>
+            <tr>
+              <th>Leave Type</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Approved</td>
+              <td>18</td>
+            </tr>
+
+            <tr>
+              <td>Pending</td>
+              <td>7</td>
+            </tr>
+
+            <tr>
+              <td>Rejected</td>
+              <td>2</td>
+            </tr>
+
+            <tr>
+              <td>Sick Leave</td>
+              <td>12</td>
+            </tr>
+
+            <tr>
+              <td>Annual Leave</td>
+              <td>9</td>
+            </tr>
+
+            <tr>
+              <td>Emergency Leave</td>
+              <td>4</td>
+            </tr>
+
+              <tr>
+                <td>Maternity/Paternity Leave</td>
+                <td>2</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="section-title">Leave Insights</div>
+
+          <p class="note">
+          Leave demand remains stable across departments with no significant workforce
+          capacity risks identified. Sick leave utilization remains within historical
+          averages while annual leave requests are aligned with seasonal workforce planning.
+          Overall leave approval rates indicate effective leave management and resource allocation.
+          </p>
+
+        <div class="section-title">Leave Recommendations</div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Focus Area</th>
+              <th>Recommendation</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Planning</td>
+              <td>Encourage employees to submit leave requests in advance.</td>
+            </tr>
+
+            <tr>
+              <td>Coverage</td>
+              <td>Ensure backup resources are identified during peak leave periods.</td>
+            </tr>
+
+            <tr>
+              <td>Wellbeing</td>
+              <td>Promote work-life balance through planned leave utilization.</td>
+            </tr>
+
+            <tr>
+              <td>Compliance</td>
+              <td>Maintain adherence to organizational leave approval policies.</td>
+            </tr>
+          </tbody>
+        </table>
+        `;
+      break;
+
+    case "Onboarding":
+
+      reportContent = `
+
+        <div class="section-title">Onboarding Report</div>
+        <p class="note">
+          New employee onboarding activities are progressing according to established HR timelines.
+          Most onboarding milestones have been completed successfully, ensuring new hires are equipped
+          with the necessary tools, access rights, training resources, and organizational guidance
+          required for productive workforce integration.
+        </p>
+      `;
+
+      reportTable = `
+
+        <table>
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Create Employee ID</td><td>Completed</td></tr>
+            <tr><td>Issue Laptop</td><td>Pending</td></tr>
+            <tr><td>Create Email</td><td>Completed</td></tr>
+            <tr><td>Background Verification</td><td>Completed</td></tr>
+            <tr><td>IT Access Provisioning</td><td>Completed</td></tr>
+            <tr><td>Manager Introduction</td><td>Completed</td></tr>
+            <tr><td>Policy Orientation</td><td>Completed</td></tr>
+            <tr><td>Benefits Enrollment</td><td>In Progress</td></tr>
+            <tr><td>Training Assignment</td><td>Completed</td></tr>
+          </tbody>
+        </table>
+
+        <div class="section-title">Onboarding Insights</div>
+
+        <p class="note">
+          Employee onboarding completion rates remain strong across all departments.
+          Most new hires complete mandatory onboarding activities within the expected
+          timeline, reducing operational delays and improving workforce readiness.
+          Collaboration between HR Operations, IT Services, and department managers
+          continues to streamline the employee integration process.
+        </p>
+
+        <div class="section-title">Onboarding Recommendations</div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Focus Area</th>
+              <th>Recommendation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Equipment Readiness</td>
+              <td>Ensure all employee devices are provisioned before joining dates.</td>
+            </tr>
+            <tr>
+              <td>Training</td>
+              <td>Expand role-specific onboarding and compliance training programs.</td>
+            </tr>
+            <tr>
+              <td>Employee Engagement</td>
+              <td>Schedule structured manager check-ins during the first 30 days.</td>
+            </tr>
+            <tr>
+              <td>Documentation</td>
+              <td>Digitize onboarding forms and automate approval workflows.</td>
+            </tr>
+            <tr>
+              <td>Compliance</td>
+              <td>Track onboarding completion metrics through monthly audits.</td>
+            </tr>
+            <tr>
+              <td>Mentorship</td>
+              <td>Assign onboarding mentors to improve employee integration and retention.</td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+        break;
+
+
+   case "Compliance":
+
+      reportContent = `
+
+        <div class="section-title">Compliance Report</div>
+        <p class="note">
+          Organizational compliance activities continue to meet internal governance standards and regulatory requirements.
+          Employee training completion rates remain high, policy acknowledgements are actively monitored,
+          and compliance audits indicate strong adherence to corporate controls and operational procedures.
+        </p>
+        `;
+
+      reportTable = `
+
+        <table>
+          <thead>
+            <tr>
+              <th>Compliance Item</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Code of Conduct Training</td><td>Completed</td></tr>
+            <tr><td>Security Awareness Training</td><td>Completed</td></tr>
+            <tr><td>Policy Acknowledgement</td><td>Pending</td></tr>
+            <tr><td>Risk Assessment Review</td><td>Completed</td></tr>
+            <tr><td>Internal Audit Completion</td><td>Completed</td></tr>
+            <tr><td>Vendor Security Review</td><td>Completed</td></tr>
+            <tr><td>Data Privacy Compliance</td><td>Completed</td></tr>
+            <tr><td>Regulatory Documentation</td><td>Completed</td></tr>
+            <tr><td>Annual Ethics Certification</td><td>In Progress</td></tr>
+          </tbody>
+        </table>
+
+        <div class="section-title">Compliance Insights</div>
+
+        <p class="note">
+          Compliance performance remains strong across all monitored categories.
+          Training completion rates exceed organizational targets and internal audits
+          have identified no material control deficiencies. Ongoing policy acknowledgement
+          tracking and periodic risk assessments continue to strengthen governance practices
+          and regulatory readiness.
+        </p>
+
+        <div class="section-title">Compliance Recommendations</div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Focus Area</th>
+              <th>Recommendation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Training</td>
+              <td>Maintain mandatory compliance training completion above 95%.</td>
+            </tr>
+            <tr>
+              <td>Policy Management</td>
+              <td>Track pending policy acknowledgements through automated reminders.</td>
+            </tr>
+            <tr>
+              <td>Audit Readiness</td>
+              <td>Conduct quarterly internal compliance reviews and control assessments.</td>
+            </tr>
+            <tr>
+              <td>Data Protection</td>
+              <td>Strengthen employee awareness of privacy and information security requirements.</td>
+            </tr>
+            <tr>
+              <td>Risk Management</td>
+              <td>Review compliance risks and mitigation plans on a monthly basis.</td>
+            </tr>
+          </tbody>
+        </table>
+        `;
+        break;
+
+        }
+
   return `<!doctype html>
 <html>
 <head>
@@ -56,13 +565,14 @@ function buildHrReportHtml(report: HrReport) {
       color: #172033;
       background: #f6f8fb;
     }
-    .sheet {
+      .sheet {
       background: #ffffff;
       border: 1px solid #d9e2ef;
       box-shadow: 0 18px 50px rgba(15, 23, 42, 0.12);
       min-height: 960px;
       padding: 36px;
       position: relative;
+      box-sizing: border-box;
     }
     .topbar {
       height: 8px;
@@ -137,44 +647,52 @@ function buildHrReportHtml(report: HrReport) {
       margin-top: 16px;
     }
     .signatures {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      margin-top: 64px;
-    }
-    .signature {
-      border-top: 1px solid #94a3b8;
-      padding-top: 10px;
-      color: #334155;
-      font-size: 12px;
-    }
-    .footer {
-      position: absolute;
-      bottom: 28px;
-      left: 36px;
-      right: 36px;
       display: flex;
       justify-content: space-between;
-      color: #94a3b8;
-      font-size: 11px;
-      border-top: 1px solid #e2e8f0;
-      padding-top: 14px;
+      align-items: flex-start;
+      gap: 60px;
+      margin-top: 70px;
     }
+      .signature {
+        width: 48%;
+        border-top: 1px solid #94a3b8;
+        padding-top: 12px;
+        color: #334155;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+        .signature strong {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 14px;
+      }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 50px;
+        padding-top: 14px;
+        border-top: 1px solid #d6e0ef;
+        color: #7b8ba8;
+        font-size: 12px;
+      }
     @media print {
       body { background: #ffffff; }
       .sheet { box-shadow: none; border: 0; }
     }
-  </style>
-</head>
-<body>
-  <main class="sheet">
-    <div class="topbar"></div>
-    <section class="header">
-      <div>
-        <div class="brand">NORTHSTAR MANUFACTURING · HUMAN RESOURCES</div>
-        <h1>${name}</h1>
-        <div class="subtitle">Enterprise HR report prepared for leadership review, workforce governance, and operational planning.</div>
-      </div>
+    </style>
+  </head>
+  <body>
+      <main class="sheet">
+        <div class="topbar"></div>
+        <section class="header">
+          <div>
+            <div class="brand">NORTHSTAR MANUFACTURING · HUMAN RESOURCES</div>
+            <h1>${name}</h1>
+            <div class="subtitle">Enterprise HR report prepared for leadership review, workforce governance, and operational planning.</div>
+          </div>
       <div class="badge">${status}</div>
     </section>
 
@@ -185,53 +703,31 @@ function buildHrReportHtml(report: HrReport) {
       <div class="metric"><span>Generated</span><strong>${generatedOn}</strong></div>
     </section>
 
-    <div class="section-title">Executive Summary</div>
-    <p class="note">
-      Workforce health remains stable for the selected period. HR operations show strong employee coverage,
-      controlled leave exposure, and steady onboarding progress. Items requiring follow-up include role backfills,
-      manager approval timelines, and department capacity planning.
-    </p>
+    ${reportContent}
 
-    <div class="section-title">Workforce KPI Snapshot</div>
-    <table>
-      <thead>
-        <tr><th>KPI</th><th>Current</th><th>Target</th><th>Status</th><th>Business Note</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Total Employees</td><td>248</td><td>260</td><td>On Track</td><td>Hiring pipeline is active for critical roles.</td></tr>
-        <tr><td>Attendance Compliance</td><td>96.8%</td><td>95%</td><td>Healthy</td><td>Daily attendance controls are above target.</td></tr>
-        <tr><td>Leave Utilization</td><td>12.4%</td><td>15%</td><td>Controlled</td><td>No material capacity risk identified.</td></tr>
-        <tr><td>Onboarding Completion</td><td>91%</td><td>90%</td><td>Healthy</td><td>New hire checklist completion remains strong.</td></tr>
-      </tbody>
-    </table>
+    ${reportTable}
 
-    <div class="section-title">Department View</div>
-    <table>
-      <thead>
-        <tr><th>Department</th><th>Head</th><th>Employees</th><th>Open Roles</th><th>Risk</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Finance</td><td>Avery Stone</td><td>42</td><td>3</td><td>Medium</td></tr>
-        <tr><td>Human Resources</td><td>Rohan Mehta</td><td>18</td><td>1</td><td>Low</td></tr>
-        <tr><td>Engineering</td><td>Maya Chen</td><td>112</td><td>7</td><td>Medium</td></tr>
-        <tr><td>Operations</td><td>Omar Haddad</td><td>64</td><td>4</td><td>Low</td></tr>
-      </tbody>
-    </table>
+      <div class="signatures">
+      <div class="signature">
+        <strong>${owner}</strong>
+        <div>Prepared by</div>
+      </div>
 
-    <div class="signatures">
-      <div class="signature"><strong>${owner}</strong><br />Prepared by</div>
-      <div class="signature"><strong>Chief People Officer</strong><br />Reviewed and approved</div>
+      <div class="signature">
+        <strong>Chief People Officer</strong>
+        <div>Reviewed and approved</div>
+      </div>
     </div>
 
-    <div class="footer">
-      <span>Confidential HR report · Tenant scoped</span>
-      <span>Report ID: ${fieldValue(report, "id", "HR-RPT-DRAFT")}</span>
-    </div>
-  </main>
-  <script>window.onload = () => setTimeout(() => window.print(), 250);</script>
-</body>
-</html>`;
-}
+      <div class="footer">
+        <div>Confidential HR report · Tenant scoped</div>
+        <div>Report ID: ${fieldValue(report, "id", "HR-RPT-DRAFT")}</div>
+      </div>
+          </main>
+          <script>window.onload = () => setTimeout(() => window.print(), 250);</script>
+        </body>
+        </html>`;
+        }
 
 export default function HrReportsPage() {
   const [reports, setReports] = useState<HrReport[]>([]);
@@ -273,7 +769,7 @@ export default function HrReportsPage() {
       const response = await fetch("/api/hr/reports", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, status: "Draft" }),
+        body: JSON.stringify({ ...form, status: "Ready" }),
       });
       const json = await response.json();
       if (json?.success) {
@@ -359,7 +855,7 @@ export default function HrReportsPage() {
               value={form.name}
               onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
               className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300"
-              placeholder="Monthly Workforce Report"
+              placeholder="Enter Report Name"
             />
           </label>
           <label className="space-y-2">
@@ -415,7 +911,7 @@ export default function HrReportsPage() {
                 <th className="px-4 py-4">Period</th>
                 <th className="px-4 py-4">Owner</th>
                 <th className="px-4 py-4">Status</th>
-                <th className="px-4 py-4 text-right">Actions</th>
+                <th className="px-4 py-4 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -427,7 +923,9 @@ export default function HrReportsPage() {
                   </td>
                   <td className="px-4 py-5">{fieldValue(report, "type")}</td>
                   <td className="px-4 py-5">{fieldValue(report, "period")}</td>
-                  <td className="px-4 py-5">{fieldValue(report, "owner")}</td>
+                  <td className="px-4 py-5 whitespace-nowrap">
+                    {fieldValue(report, "owner")}
+                  </td>
                   <td className="px-4 py-5">
                     <span className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-sm font-semibold text-cyan-100">
                       {fieldValue(report, "status", "Ready")}
@@ -435,6 +933,7 @@ export default function HrReportsPage() {
                   </td>
                   <td className="px-4 py-5">
                     <div className="flex flex-nowrap justify-end gap-3">
+
                       <button
                         onClick={() => updateReport(report, "Published")}
                         className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-emerald-300/20 bg-emerald-400/15 px-4 py-3 font-semibold text-emerald-100 transition hover:bg-emerald-400/25"
@@ -442,6 +941,15 @@ export default function HrReportsPage() {
                         <CheckCircle2 className="h-4 w-4" />
                         Publish
                       </button>
+
+                      <button
+                        onClick={() => updateReport(report, "Draft")}
+                        className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-amber-300/20 bg-amber-400/15 px-4 py-3 font-semibold text-amber-100 transition hover:bg-amber-400/25"
+                      >
+                        <FileText className="h-4 w-4" />
+                        Draft
+                      </button>
+
                       <button
                         onClick={() => downloadPdf(report)}
                         className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-violet-300/20 bg-violet-400/15 px-4 py-3 font-semibold text-violet-100 transition hover:bg-violet-400/25"
@@ -449,6 +957,7 @@ export default function HrReportsPage() {
                         <Download className="h-4 w-4" />
                         PDF
                       </button>
+
                       <button
                         onClick={() => deleteReport(report)}
                         className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-rose-300/20 bg-rose-400/15 px-4 py-3 font-semibold text-rose-100 transition hover:bg-rose-400/25"
@@ -456,6 +965,7 @@ export default function HrReportsPage() {
                         <Trash2 className="h-4 w-4" />
                         Delete
                       </button>
+
                     </div>
                   </td>
                 </tr>

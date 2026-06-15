@@ -1,4 +1,7 @@
+"use client";
+
 import { LiveCrudResource } from "@/components/shared/LiveCrudResource";
+import { useHrStore } from "@/store/hr-store";
 
 export default function HRDepartmentsPage() {
   return (
@@ -9,10 +12,10 @@ export default function HRDepartmentsPage() {
       title="Departments"
       description="Create and manage department ownership, workforce size, and budget through the HR departments API."
       fields={[
-        { key: "name", label: "Department", required: true, placeholder: "Finance Operations" },
-        { key: "head", label: "Head", required: true, placeholder: "Anika Rao" },
-        { key: "employees", label: "Employees", type: "number", defaultValue: "42" },
-        { key: "budget", label: "Budget", type: "number", defaultValue: "2400000" },
+        { key: "name", label: "Department", required: true, placeholder: "Enter Department" },
+        { key: "head", label: "Head", required: true, placeholder: "Enter Head" },
+        { key: "employees", label: "Employees", type: "number", placeholder: "Enter Employees" },
+        { key: "budget", label: "Budget", type: "number", placeholder: "Enter Budget" },
       ]}
       columns={[
         { key: "id", label: "Department ID" },
@@ -22,7 +25,18 @@ export default function HRDepartmentsPage() {
         { key: "budget", label: "Budget", format: "currency" },
         { key: "status", label: "Status", format: "status" },
       ]}
-      defaultCreate={{ status: "Active" }}
+      defaultCreate={{ status: "Created" }}
+
+      onCreate={(record) => {
+        useHrStore.getState().addDepartment({
+          name: String(record.name),
+          head: String(record.head),
+          employees: Number(record.employees),
+          budget: Number(record.budget),
+          status: "Created",
+        });
+      }}
+
       actions={[
         { label: "Activate", patch: { status: "Active" }, tone: "green" },
         { label: "Review", patch: { status: "Review" }, tone: "amber" },

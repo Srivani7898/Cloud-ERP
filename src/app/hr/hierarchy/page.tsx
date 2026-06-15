@@ -14,13 +14,57 @@ export default function HierarchyPage() {
         {departments.map((dept) => (
           <Card key={dept.id} className="border-slate-200 dark:border-white/10 dark:bg-white/[0.06]">
             <CardHeader><CardTitle>{dept.name}</CardTitle><CardDescription>Headed by {dept.head}</CardDescription></CardHeader>
-            <CardContent className="space-y-3">
-              {employees.filter((employee) => employee.department === dept.name).map((employee) => (
-                <div key={employee.id} className="rounded-md border border-slate-200 p-3 dark:border-white/10">
-                  <p className="font-medium">{employee.name}</p>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">{employee.title}</p>
-                </div>
-              ))}
+            <CardContent>
+              <div className="mb-4 space-y-1">
+                <p className="text-sm">
+                  <span className="font-semibold">Planned Employees:</span>{" "}
+                  {dept.employees}
+                </p>
+
+                <p className="text-sm">
+                  <span className="font-semibold">Assigned Employees:</span>{" "}
+                  {
+                    employees.filter(
+                      (employee) => employee.department === dept.name
+                    ).length
+                  }
+                </p>
+              </div>
+
+              <div className="overflow-hidden rounded-lg border border-slate-200 dark:border-white/10">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-200 dark:border-white/10">
+                      <th className="px-4 py-2 text-left">Employee</th>
+                      <th className="px-4 py-2 text-left">Designation</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {employees.filter(
+                      (employee) => employee.department === dept.name
+                    ).length > 0 ? (
+                      employees
+                        .filter((employee) => employee.department === dept.name)
+                        .map((employee) => (
+                          <tr
+                            key={employee.id}
+                            className="border-b border-slate-200 dark:border-white/10"
+                          >
+                            <td className="px-4 py-2">{employee.name}</td>
+                            <td className="px-4 py-2">{employee.title}</td>
+                          </tr>
+                        ))
+                    ) : (
+                      <tr>
+                        <td className="px-4 py-3 text-slate-500" colSpan={2}>
+                          No employees assigned yet
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </CardContent>
           </Card>
         ))}

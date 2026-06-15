@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useHrStore } from "@/store/hr-store";
 import {
   BadgeCheck,
   ChevronDown,
@@ -38,9 +39,11 @@ type Employee = {
 
 const emptyEmployee = {
   name: "",
+  email: "",
   department: "Finance",
   title: "",
-  location: "Bengaluru",
+  location: "",
+  manager: "",
 };
 
 const statusStyles: Record<string, string> = {
@@ -57,6 +60,8 @@ export default function HREmployeesPage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [departmentOpen, setDepartmentOpen] = useState(false);
+
+  const addEmployeeToStore = useHrStore((state) => state.addEmployee);
 
   const metrics = useMemo(() => {
     const departments = new Set(employees.map((employee) => employee.department).filter(Boolean));
@@ -104,8 +109,8 @@ export default function HREmployeesPage() {
           name: form.name.trim(),
           department: form.department,
           title: form.title.trim() || "Employee",
-          status: "Active",
-          location: form.location.trim() || "Bengaluru",
+          status: "Created",
+          location: form.location.trim() || "Not specified",
         }),
       });
       const payload = await response.json();
@@ -113,6 +118,17 @@ export default function HREmployeesPage() {
       if (!response.ok || !payload.success) {
         throw new Error(payload.error || "Unable to create employee.");
       }
+
+
+      addEmployeeToStore({
+        name: form.name,
+        email: form.email,
+        department: form.department,
+        title: form.title || "Employee",
+        location: form.location,
+        manager: form.manager,
+        joinedAt: new Date().toISOString().split("T")[0],
+      });
 
       setForm(emptyEmployee);
       setMessage("Employee created and synced with the HR backend API.");
@@ -228,21 +244,45 @@ export default function HREmployeesPage() {
           <Plus className="hidden h-6 w-6 text-cyan-300 sm:block" />
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr_1fr_1fr_auto]">
+       <div className="grid gap-4 lg:grid-cols-[1.3fr_1.5fr_1fr_1.6fr_1.8fr_1.4fr_auto]">
           <label className="space-y-2">
-            <span className="text-sm font-semibold text-white">Full name</span>
-           <input
-            autoComplete="off"
-            value={form.location}
-            onChange={(event) =>
-            setForm((current) => ({
-            ...current,
-            location: event.target.value,
-            }))
-          }
-          className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
-          placeholder="Hyderabad"
-          />
+            <span className="text-sm font-semibold text-white">
+              Full name
+            </span>
+
+            <input
+              required
+              autoComplete="off"
+              value={form.name}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  name: event.target.value,
+                }))
+              }
+              className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
+              placeholder="Enter the name"
+            />
+          </label>
+
+          <label className="space-y-2">
+            <span className="text-sm font-semibold text-white">
+              Email
+            </span>
+
+            <input
+              type="email"
+              autoComplete="off"
+              value={form.email}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  email: event.target.value,
+                }))
+              }
+              className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
+              placeholder="Enter email address"
+            />
           </label>
 
           <label className="relative space-y-2">
@@ -265,9 +305,8 @@ export default function HREmployeesPage() {
                       setForm((current) => ({ ...current, department }));
                       setDepartmentOpen(false);
                     }}
-                    className={`block w-full px-4 py-3 text-left text-sm font-semibold transition hover:bg-cyan-400/10 hover:text-cyan-100 ${
-                      form.department === department ? "bg-cyan-400/15 text-cyan-100" : "text-white"
-                    }`}
+                    className={`block w-full px-4 py-3 text-left text-sm font-semibold transition hover:bg-cyan-400/10 hover:text-cyan-100 ${form.department === department ? "bg-cyan-400/15 text-cyan-100" : "text-white"
+                      }`}
                   >
                     {department}
                   </button>
@@ -279,20 +318,41 @@ export default function HREmployeesPage() {
           <label className="space-y-2">
             <span className="text-sm font-semibold text-white">Title</span>
             <input
+              autoComplete="off"
               value={form.title}
               onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
               className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
-              placeholder="ERP Analyst"
+              placeholder="Enter the title"
             />
           </label>
 
           <label className="space-y-2">
             <span className="text-sm font-semibold text-white">Location</span>
             <input
+              autoComplete="off"
               value={form.location}
               onChange={(event) => setForm((current) => ({ ...current, location: event.target.value }))}
               className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
-              placeholder="Enter the name"
+              placeholder="Enter the Location"
+            />
+          </label>
+
+          <label className="space-y-2">
+            <span className="text-sm font-semibold text-white">
+              Manager
+            </span>
+
+            <input
+              autoComplete="off"
+              value={form.manager}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  manager: event.target.value,
+                }))
+              }
+              className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
+              placeholder="Enter Manager Name"
             />
           </label>
 
@@ -336,7 +396,7 @@ export default function HREmployeesPage() {
                   <th className="px-4 py-4">Title</th>
                   <th className="px-4 py-4">Location</th>
                   <th className="px-4 py-4">Status</th>
-                  <th className="px-4 py-4 text-right">Actions</th>
+                  <th className="px-4 py-4 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -349,20 +409,20 @@ export default function HREmployeesPage() {
                       className={`border-b border-white/10 text-white ${index % 2 ? "bg-white/[0.03]" : ""}`}
                     >
                       <td className="px-4 py-5 whitespace-nowrap">
-                      <div className="font-semibold whitespace-nowrap">
-                      {employee.name}
-                      </div>
+                        <div className="font-semibold whitespace-nowrap">
+                          {employee.name}
+                        </div>
                       </td>
                       <td className="px-4 py-5 whitespace-nowrap">
-                      {employee.department}
+                        {employee.department}
                       </td>
 
                       <td className="px-4 py-5 whitespace-nowrap">
-                       {employee.title ?? "Employee"}
-                        </td>
+                        {employee.title ?? "Employee"}
+                      </td>
 
                       <td className="px-4 py-5 whitespace-nowrap">
-                      {employee.location ?? "Not set"}
+                        {employee.location ?? "Not set"}
                       </td>
 
                       <td className="px-4 py-5">
@@ -371,7 +431,7 @@ export default function HREmployeesPage() {
                         </span>
                       </td>
                       <td className="px-4 py-5">
-                        <div className="flex flex-wrap justify-end gap-2">
+                        <div className="flex flex-wrap justify-center gap-2">
                           <button
                             type="button"
                             onClick={() => updateEmployee(employee.id, { status: "Active" })}
