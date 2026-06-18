@@ -2,7 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Building2, CalendarCheck, FileBarChart, GitFork, LayoutDashboard, LogOut, Settings, UserPlus, UsersRound } from "lucide-react";
+import {
+  Building2,
+  CalendarCheck,
+  FileBarChart,
+  GitFork,
+  LayoutDashboard,
+  LogOut,
+  Settings,
+  UserPlus,
+  UsersRound,
+  CheckSquare,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { cn } from "@/lib/utils";
@@ -15,8 +26,14 @@ const nav = [
   { href: "/hr/departments", label: "Departments", icon: Building2 },
   { href: "/hr/hierarchy", label: "Hierarchy", icon: GitFork },
   { href: "/hr/onboarding", label: "Onboarding", icon: UserPlus },
+   {
+    href: "/hr/tasks",
+    label: "Tasks",
+    icon: CheckSquare,
+  },
   { href: "/hr/reports", label: "Reports", icon: FileBarChart },
-  { href: "/hr/settings", label: "Settings", icon: Settings }
+  { href: "/hr/settings", label: "Settings", icon: Settings }, // <-- comma added
+
 ];
 
 export function HrShell({ children }: { children: React.ReactNode }) {

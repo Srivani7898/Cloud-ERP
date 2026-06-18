@@ -14,6 +14,9 @@ export type Employee = {
   joinedAt: string;
   status: EmploymentStatus;
   performanceScore: number;
+
+  annualLeaveBalance: number;
+  sickLeaveBalance: number;
 };
 
 export type AttendanceRecord = {

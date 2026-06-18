@@ -15,7 +15,25 @@ export function HrTable({ title, description, headers, rows }: { title: string; 
             </th>)}</tr>
           </thead>
           <tbody className="divide-y divide-slate-200 dark:divide-white/10">
-            {rows.map((row, index) => <tr key={index} className="transition hover:bg-slate-50 dark:hover:bg-white/[0.04]">{row.map((cell, cellIndex) => <td key={cellIndex} className="px-3 py-4">{cell}</td>)}</tr>)}
+            {rows.map((row, index) => (
+              <tr
+                key={index}
+                className="transition hover:bg-slate-50 dark:hover:bg-white/[0.04]"
+              >
+                {row.map((cell, cellIndex) => (
+                  <td
+                    key={cellIndex}
+                    className={`px-3 py-4 ${
+                      headers[cellIndex] === "Actions"
+                        ? "text-center"
+                        : ""
+                    }`}
+                  >
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </CardContent>

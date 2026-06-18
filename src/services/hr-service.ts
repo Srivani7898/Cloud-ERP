@@ -1,12 +1,64 @@
 import type { AttendanceRecord, Department, Employee, LeaveRequest, OnboardingTask } from "@/types/hr";
 
 export const employees: Employee[] = [
-  { id: "emp-1001", employeeCode: "NS-1001", name: "Anika Rao", email: "anika.rao@northstar.example", title: "HR Business Partner", department: "People Operations", location: "Bengaluru", joinedAt: "2024-02-12", status: "active", performanceScore: 94 },
-  { id: "emp-1002", employeeCode: "NS-1002", name: "Ethan Clarke", email: "ethan.clarke@northstar.example", title: "Finance Controller", department: "Finance", location: "New York", joinedAt: "2023-08-21", status: "active", performanceScore: 89 },
-  { id: "emp-1003", employeeCode: "NS-1003", name: "Maya Chen", email: "maya.chen@northstar.example", title: "Cloud ERP Architect", department: "Engineering", location: "Singapore", joinedAt: "2025-01-08", status: "onboarding", performanceScore: 91 },
-  { id: "emp-1004", employeeCode: "NS-1004", name: "Omar Haddad", email: "omar.haddad@northstar.example", title: "Supply Chain Lead", department: "Operations", location: "Dubai", joinedAt: "2022-11-03", status: "on_leave", performanceScore: 86 }
-];
+  {
+    id: "emp-1001",
+    employeeCode: "NS-1001",
+    name: "Anika Rao",
+    email: "anika.rao@northstar.example",
+    title: "HR Business Partner",
+    department: "People Operations",
+    location: "Bengaluru",
+    joinedAt: "2024-02-12",
+    status: "active",
+    performanceScore: 94,
+    annualLeaveBalance: 20,
+    sickLeaveBalance: 10
+  },
 
+  {
+    id: "emp-1002",
+    employeeCode: "NS-1002",
+    name: "Ethan Clarke",
+    email: "ethan.clarke@northstar.example",
+    title: "Finance Controller",
+    department: "Finance",
+    location: "New York",
+    joinedAt: "2023-08-21",
+    status: "active",
+    performanceScore: 89,
+    annualLeaveBalance: 18,
+    sickLeaveBalance: 8
+  },
+  {
+    id: "emp-1003",
+    employeeCode: "NS-1003",
+    name: "Maya Chen",
+    email: "maya.chen@northstar.example",
+    title: "Cloud ERP Architect",
+    department: "Engineering",
+    location: "Singapore",
+    joinedAt: "2025-01-08",
+    status: "onboarding",
+    performanceScore: 91,
+    annualLeaveBalance: 15,
+    sickLeaveBalance: 10
+  },
+  {
+    id: "emp-1004",
+    employeeCode: "NS-1004",
+    name: "Omar Haddad",
+    email: "omar.haddad@northstar.example",
+    title: "Supply Chain Lead",
+    department: "Operations",
+    location: "Dubai",
+    joinedAt: "2022-11-03",
+    status: "on_leave",
+    performanceScore: 86,
+    annualLeaveBalance: 20,
+    sickLeaveBalance: 10
+  }
+];
 export const attendance: AttendanceRecord[] = [
   { id: "att-9001", employeeId: "emp-1001", employeeName: "Anika Rao", date: "2026-06-01", checkIn: "09:02", checkOut: "18:08", status: "present" },
   { id: "att-9002", employeeId: "emp-1002", employeeName: "Ethan Clarke", date: "2026-06-01", checkIn: "09:42", checkOut: "18:20", status: "late" },

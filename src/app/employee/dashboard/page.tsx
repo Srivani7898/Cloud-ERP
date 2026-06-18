@@ -13,6 +13,7 @@ import { useHrStore } from "@/store/hr-store";
 import { useAuthStore } from "@/store/auth-store";
 import { formatMoney } from "@/utils/finance";
 import { downloadPayslipPdf, employeeFileName } from "@/utils/pdf";
+import { useNotificationStore } from "@/store/notification-store";
 
 export default function EmployeeDashboardPage() {
   const user = useAuthStore((state) => state.user);
@@ -20,11 +21,72 @@ export default function EmployeeDashboardPage() {
   const allInvoices = useFinanceStore((state) => state.invoices);
   const invoices = allInvoices.slice(0, 3);
   const employeeName = user?.name ?? "Employee";
+  const employees = useHrStore((state) => state.employees);
+  const currentEmployee = employees.find(
+    (emp) => emp.name === employeeName
+  );
+  const presentCount = attendance.filter(
+    (a) => a.status === "present"
+  ).length;
+
+  const remoteCount = attendance.filter(
+    (a) => a.status === "remote"
+  ).length;
+
+  const lateCount = attendance.filter(
+    (a) => a.status === "late"
+  ).length;
+
+  const absentCount = attendance.filter(
+    (a) => a.status === "absent"
+  ).length;
+
+  const notifications = useNotificationStore(
+    (state) => state.notifications
+  );
+
+  const unreadCount = notifications.filter(
+    (notification) =>
+      notification.employeeName === user?.name &&
+      !notification.read
+  ).length;
+
+  const totalAttendance =
+    presentCount +
+    remoteCount +
+    lateCount +
+    absentCount;
+
+  const attendancePercentage =
+    totalAttendance > 0
+      ? Math.round(
+        ((presentCount + remoteCount + lateCount) /
+          totalAttendance) *
+        100
+      )
+      : 0;
+
   const metrics = [
-    { label: "Attendance records", value: attendance.length, icon: CalendarCheck },
-    { label: "Leave requests", value: leaveRequests.length, icon: FileText },
-    { label: "Payslips", value: 3, icon: WalletCards },
-    { label: "Notifications", value: 4, icon: Bell }
+    {
+      label: "Attendance records",
+      value: attendance.length,
+      icon: CalendarCheck,
+    },
+    {
+      label: "Leave requests",
+      value: leaveRequests.length,
+      icon: FileText,
+    },
+    {
+      label: "Payslips",
+      value: 3,
+      icon: WalletCards,
+    },
+    {
+      label: "Unread Notifications",
+      value: unreadCount,
+      icon: Bell,
+    },
   ];
 
   return (
@@ -80,6 +142,91 @@ export default function EmployeeDashboardPage() {
 
       <section className="grid gap-4 md:grid-cols-4">
         {metrics.map((metric) => <Card key={metric.label} className="border-slate-200 dark:border-white/10 dark:bg-white/[0.06]"><CardContent className="p-5"><metric.icon className="h-5 w-5 text-blue-600 dark:text-cyan-300" /><p className="mt-5 text-2xl font-semibold">{metric.value}</p><p className="text-sm text-slate-500 dark:text-slate-400">{metric.label}</p></CardContent></Card>)}
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-4">
+        <Card className="border-green-500/20 bg-green-500/10">
+          <CardContent className="p-5">
+            <p className="text-sm text-slate-300">Present</p>
+            <p className="mt-2 text-4xl font-bold text-green-400">
+              {presentCount}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-cyan-500/20 bg-cyan-500/10">
+          <CardContent className="p-5">
+            <p className="text-sm text-slate-300">Remote</p>
+            <p className="mt-2 text-4xl font-bold text-cyan-400">
+              {remoteCount}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-yellow-500/20 bg-yellow-500/10">
+          <CardContent className="p-5">
+            <p className="text-sm text-slate-300">Late</p>
+            <p className="mt-2 text-4xl font-bold text-yellow-400">
+              {lateCount}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-red-500/20 bg-red-500/10">
+          <CardContent className="p-5">
+            <p className="text-sm text-slate-300">Absent</p>
+            <p className="mt-2 text-4xl font-bold text-red-400">
+              {absentCount}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-cyan-500/20 bg-cyan-500/10">
+          <CardContent className="p-5">
+            <p className="text-sm text-slate-300">
+              Attendance Rate
+            </p>
+
+            <p className="mt-2 text-4xl font-bold text-cyan-400">
+              {attendancePercentage}%
+            </p>
+
+            <div className="mt-4 h-3 overflow-hidden rounded-full bg-slate-700">
+              <div
+                className="h-full rounded-full bg-cyan-400"
+                style={{
+                  width: `${attendancePercentage}%`,
+                }}
+              />
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-2">
+        <Card className="border-emerald-500/20 bg-emerald-500/10">
+          <CardContent className="p-5">
+            <p className="text-sm text-slate-300">
+              Annual Leave Balance
+            </p>
+
+            <p className="mt-2 text-4xl font-bold text-emerald-400">
+              {currentEmployee?.annualLeaveBalance ?? 0}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-cyan-500/20 bg-cyan-500/10">
+          <CardContent className="p-5">
+            <p className="text-sm text-slate-300">
+              Sick Leave Balance
+            </p>
+
+            <p className="mt-2 text-4xl font-bold text-cyan-400">
+              {currentEmployee?.sickLeaveBalance ?? 0}
+            </p>
+          </CardContent>
+        </Card>
       </section>
 
       <section className="grid gap-4 xl:grid-cols-2">

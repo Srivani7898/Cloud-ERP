@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useHrStore } from "@/store/hr-store";
+import Link from "next/link";
 import {
   Activity,
   BarChart3,
@@ -65,14 +67,14 @@ function asText(value: unknown, fallback = "Not set") {
 function getName(row: Record<string, unknown>) {
   return asText(
     row.name ??
-      row.title ??
-      row.customer ??
-      row.product ??
-      row.action ??
-      row.sku ??
-      row.employee ??
-      row.employeeId ??
-      row.id,
+    row.title ??
+    row.customer ??
+    row.product ??
+    row.action ??
+    row.sku ??
+    row.employee ??
+    row.employeeId ??
+    row.id,
   );
 }
 
@@ -94,6 +96,14 @@ function formatValue(value: number) {
 }
 
 export function LiveModuleDashboard({ eyebrow, title, description, moduleKey, resources }: Props) {
+  const pendingAttendanceCount = useHrStore(
+    (state) => state.pendingAttendance.length
+  );
+
+  const pendingLeaveCount = useHrStore(
+    (state) => state.pendingLeaveRequests.length
+  );
+
   const [items, setItems] = useState<ResourceState[]>(
     resources.map((resource) => ({ ...resource, rows: [], count: 0 })),
   );
@@ -131,9 +141,19 @@ export function LiveModuleDashboard({ eyebrow, title, description, moduleKey, re
     );
 
     setItems(loaded);
+
+    if (moduleKey === "hr") {
+      const attendanceResource = loaded.find(
+        (item) => item.resource === "attendance"
+      );
+
+      const leaveResource = loaded.find(
+        (item) => item.resource === "leave"
+      );
+    }
+
     setLoading(false);
   }
-
   useEffect(() => {
     loadDashboard();
   }, []);
@@ -160,31 +180,142 @@ export function LiveModuleDashboard({ eyebrow, title, description, moduleKey, re
 
   return (
     <div className="space-y-8">
-      <section className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-300">{eyebrow}</p>
-          <h1 className="mt-2 flex items-center gap-3 text-3xl font-semibold text-white md:text-4xl">
-            <BarChart3 className="h-8 w-8 text-cyan-300" />
-            {title}
-          </h1>
-          <p className="mt-2 max-w-3xl text-base text-slate-300">{description}</p>
-        </div>
-
-        <button
-          type="button"
-          onClick={loadDashboard}
-          className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 font-semibold text-white shadow-lg shadow-purple-950/20 transition hover:-translate-y-0.5 hover:border-cyan-300/40 hover:bg-white/[0.07]"
-        >
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCcw className="h-4 w-4" />}
-          Refresh live data
-        </button>
-      </section>
 
       {message ? (
         <div className="rounded-2xl border border-cyan-300/20 bg-cyan-400/10 px-5 py-4 text-cyan-100">
           {message}
         </div>
       ) : null}
+
+      {moduleKey === "hr" && (
+        <section className="grid gap-4 md:grid-cols-2">
+          <Link href="/hr/attendance/daily" className="block">
+            <div className="rounded-2xl border border-yellow-500/30 bg-yellow-500/10 p-5 cursor-pointer hover:bg-yellow-500/20 transition">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-white">
+                  Pending Attendance Approvals
+                </h3>
+
+                {pendingAttendanceCount > 0 && (
+                  <span className="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full font-bold">
+                    {pendingAttendanceCount}
+                  </span>
+                )}
+              </div>
+
+              <p className="text-3xl font-bold text-yellow-400 mt-2">
+                {pendingAttendanceCount}
+              </p>
+
+              <p className="text-sm text-slate-300 mt-1">
+                Click to review attendance requests
+              </p>
+            </div>
+          </Link>
+
+          <Link href="/hr/leave/approvals" className="block">
+            <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-5 cursor-pointer hover:bg-red-500/20 transition">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-white">
+                  Pending Leave Approvals
+                </h3>
+
+                {pendingLeaveCount > 0 && (
+                  <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                    {pendingLeaveCount}
+                  </span>
+                )}
+              </div>
+              <p className="text-3xl font-bold text-red-400 mt-2">
+                {pendingLeaveCount}
+              </p>
+
+              <p className="text-sm text-slate-300 mt-1">
+                Click to review leave requests
+              </p>
+            </div>
+          </Link>
+        </section>
+      )}
+
+      {moduleKey === "hr" && (
+        <section className="grid gap-4 md:grid-cols-4">
+          <Link href="/hr/employees">
+            <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/10 p-4 cursor-pointer hover:bg-cyan-500/20 transition">
+              <h3 className="font-semibold text-white">
+                Add Employee
+              </h3>
+            </div>
+          </Link>
+
+          <Link href="/hr/attendance/daily">
+            <div className="rounded-xl border border-yellow-500/20 bg-yellow-500/10 p-4 cursor-pointer hover:bg-yellow-500/20 transition">
+              <h3 className="font-semibold text-white">
+                Attendance Approvals
+              </h3>
+            </div>
+          </Link>
+
+          <Link href="/hr/leave/approvals">
+            <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 cursor-pointer hover:bg-red-500/20 transition">
+              <h3 className="font-semibold text-white">
+                Leave Approvals
+              </h3>
+            </div>
+          </Link>
+
+          <Link href="/hr/departments">
+            <div className="rounded-xl border border-green-500/20 bg-green-500/10 p-4 cursor-pointer hover:bg-green-500/20 transition">
+              <h3 className="font-semibold text-white">
+                Add Department
+              </h3>
+            </div>
+          </Link>
+        </section>
+      )}
+
+      <section className="grid gap-4 md:grid-cols-4">
+        {/* // Live Records
+      // Operational Signal
+      // Healthy Items
+      // Risk Alerts */}
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-3">
+        <div className="rounded-2xl border border-green-500/20 bg-green-500/10 p-5">
+          <h3 className="text-lg font-semibold text-white">
+            Employees
+          </h3>
+
+          <p className="text-3xl font-bold text-green-400 mt-2">
+            {items.find((item) => item.resource === "employees")?.count ?? 0}
+          </p>
+
+          <p className="text-sm text-slate-300 mt-2">
+            Total Employees
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 p-5">
+          <h3 className="text-lg font-semibold text-white">
+            Attendance Records
+          </h3>
+
+          <p className="text-3xl font-bold text-cyan-400 mt-2">
+            {items.find((item) => item.resource === "attendance")?.count ?? 0}
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-purple-500/20 bg-purple-500/10 p-5">
+          <h3 className="text-lg font-semibold text-white">
+            Leave Requests
+          </h3>
+
+          <p className="text-3xl font-bold text-purple-400 mt-2">
+            {items.find((item) => item.resource === "leave")?.count ?? 0}
+          </p>
+        </div>
+      </section>
 
       <section className="grid gap-4 md:grid-cols-4">
         {[

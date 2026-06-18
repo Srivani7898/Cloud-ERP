@@ -16,6 +16,10 @@ import type { AttendanceStatus } from "@/types/hr";
 export default function EmployeeAttendancePage() {
   const user = useAuthStore((state) => state.user);
   const attendance = useHrStore((state) => state.attendance);
+
+  const pendingAttendance = useHrStore(
+    (state) => state.pendingAttendance
+  );
   const addAttendance = useHrStore((state) => state.addAttendance);
   const today = new Date().toISOString().slice(0, 10);
   const currentTime = new Date().toTimeString().slice(0, 5);
@@ -27,9 +31,20 @@ export default function EmployeeAttendancePage() {
     workLocation: "Office"
   });
   const employeeName = user?.name ?? "Employee";
-  const hasMarkedToday = attendance.some((row) => row.date === form.date && row.employeeName === employeeName);
+    const hasMarkedToday =
+      attendance.some(
+        (row) =>
+          row.date === form.date &&
+          row.employeeName === employeeName
+      ) ||
+      pendingAttendance.some(
+        (row) =>
+          row.date === form.date &&
+          row.employeeName === employeeName
+      );
 
   function markAttendance() {
+    console.log("Attendance Submitted");
     addAttendance({
       employeeName,
       date: form.date,
@@ -99,6 +114,22 @@ export default function EmployeeAttendancePage() {
           </div>
         </CardContent>
       </Card>
+        <HrTable
+        title="Pending Attendance Requests"
+        description="Waiting for HR approval."
+        headers={["Date", "Check In", "Check Out", "Status"]}
+        rows={pendingAttendance
+          .filter(
+            (row) => row.employeeName === employeeName
+          )
+          .map((row) => [
+            row.date,
+            row.checkIn,
+            row.checkOut,
+            "Pending Approval",
+          ])}
+      />
+      
       <HrTable
         title="My attendance"
         description="Personal attendance records."

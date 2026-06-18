@@ -2,7 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, CalendarCheck, FileText, LayoutDashboard, LogOut, ReceiptText, UserRound, WalletCards } from "lucide-react";
+import {
+  Bell,
+  CalendarCheck,
+  FileText,
+  LayoutDashboard,
+  LogOut,
+  ReceiptText,
+  UserRound,
+  WalletCards,
+  CheckSquare
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { cn } from "@/lib/utils";
@@ -13,6 +23,9 @@ const nav = [
   { href: "/employee/profile", label: "Profile", icon: UserRound },
   { href: "/employee/attendance", label: "Attendance", icon: CalendarCheck },
   { href: "/employee/leave", label: "Leave", icon: CalendarCheck },
+
+  { href: "/employee/tasks", label: "Tasks", icon: CheckSquare },
+
   { href: "/employee/payslips", label: "Payslips", icon: WalletCards },
   { href: "/employee/invoices", label: "Invoices", icon: ReceiptText },
   { href: "/employee/documents", label: "Documents", icon: FileText },
