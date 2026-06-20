@@ -26,13 +26,21 @@ export type PayrollRun = {
 
 export type PayrollPayslip = {
   id: string;
+
   employeeId: string;
   employeeName: string;
+
+  employeeCode: string;
+  department: string;
+  designation: string;
+
   period: string;
+
   grossPay: number;
   tax: number;
   deductions: number;
   netPay: number;
+
   generatedAt: string;
 };
 

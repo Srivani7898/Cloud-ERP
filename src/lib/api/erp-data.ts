@@ -10,9 +10,38 @@ const now = () => new Date().toISOString();
 const seed: ErpDatabase = {
   finance: {
     invoices: [
-      { id: "INV-10492", customer: "Apex Retail Group", status: "Overdue", dueDate: "2026-05-24", total: 128400, currency: "USD", aiRisk: 82 },
-      { id: "INV-10491", customer: "HelioGrid Energy", status: "Approved", dueDate: "2026-06-02", total: 94200, currency: "USD", aiRisk: 24 },
-      { id: "INV-10490", customer: "Orion Logistics", status: "Paid", dueDate: "2026-05-28", total: 221900, currency: "USD", aiRisk: 9 },
+      {
+        id: "INV-10492",
+        customer: "Apex Retail Group",
+        status: "Overdue",
+        dueDate: "2026-05-24",
+        total: 128400,
+        currency: "USD",
+        aiRisk: 82,
+        assignedTo: ""
+      },
+
+      {
+        id: "INV-10491",
+        customer: "HelioGrid Energy",
+        status: "Approved",
+        dueDate: "2026-06-02",
+        total: 94200,
+        currency: "USD",
+        aiRisk: 24,
+        assignedTo: ""
+      },
+
+      {
+        id: "INV-10490",
+        customer: "Orion Logistics",
+        status: "Paid",
+        dueDate: "2026-05-28",
+        total: 221900,
+        currency: "USD",
+        aiRisk: 9,
+        assignedTo: ""
+      }
     ],
     payments: [
       { id: "PAY-7781", vendor: "CloudOps Global", status: "Scheduled", amount: 48200, method: "ACH", date: "2026-06-10" },

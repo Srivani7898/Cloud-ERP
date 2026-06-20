@@ -82,14 +82,60 @@ export const usePayrollStore = create<PayrollState>()(
         set((state) => ({
           payslips: [
             ...state.employees.map((employee) => {
-              const deductions = Math.round(employee.baseSalary * 0.17);
-              return { id: `PS-${employee.employeeCode}-${period}`, employeeId: employee.id, employeeName: employee.name, period, grossPay: employee.baseSalary, tax: Math.round(employee.baseSalary * 0.09), deductions, netPay: employee.baseSalary - deductions, generatedAt: new Date().toISOString().slice(0, 10) };
+              const deductions = Math.round(
+                employee.baseSalary * 0.17
+              );
+
+              return {
+                id: `PS-${employee.employeeCode}-${period}`,
+
+                employeeId: employee.id,
+
+                employeeName: employee.name,
+
+                employeeCode: employee.employeeCode,
+
+                department: employee.department,
+
+                designation: employee.designation,
+
+                period,
+
+                grossPay: employee.baseSalary,
+
+                tax: Math.round(
+                  employee.baseSalary * 0.09
+                ),
+
+                deductions,
+
+                netPay:
+                  employee.baseSalary - deductions,
+
+                generatedAt: new Date()
+                  .toISOString()
+                  .slice(0, 10),
+              };
             }),
-            ...state.payslips
+
+            ...state.payslips,
           ],
-          history: [{ id: `HIS-${Date.now()}`, action: "Payslips generated", actor: "Payroll Manager", timestamp: stamp(), entity: period }, ...state.history]
-        }))
+
+          history: [
+            {
+              id: `HIS-${Date.now()}`,
+              action: "Payslips generated",
+              actor: "Payroll Manager",
+              timestamp: stamp(),
+              entity: period,
+            },
+
+            ...state.history,
+          ],
+        })),
     }),
-    { name: "cloud-erp-payroll" }
+    {
+      name: "cloud-erp-payroll",
+    }
   )
 );

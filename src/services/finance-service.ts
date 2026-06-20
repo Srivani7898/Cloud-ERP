@@ -8,10 +8,57 @@ export const financeKpis: FinanceKpi[] = [
 ];
 
 export const invoices: Invoice[] = [
-  { id: "INV-10492", customer: "Apex Retail Group", status: "overdue", dueDate: "2026-05-24", total: { amount: 128400, currency: "USD" }, riskScore: 82 },
-  { id: "INV-10491", customer: "HelioGrid Energy", status: "approved", dueDate: "2026-06-02", total: { amount: 94200, currency: "USD" }, riskScore: 24 },
-  { id: "INV-10490", customer: "Orion Logistics", status: "paid", dueDate: "2026-05-28", total: { amount: 221900, currency: "USD" }, riskScore: 9 },
-  { id: "INV-10489", customer: "Meridian Health", status: "sent", dueDate: "2026-06-09", total: { amount: 78300, currency: "USD" }, riskScore: 31 }
+  {
+    id: "INV-10492",
+    customer: "Apex Retail Group",
+    status: "overdue",
+    dueDate: "2026-05-24",
+    total: {
+      amount: 128400,
+      currency: "USD"
+    },
+    riskScore: 82,
+    assignedTo: "Anika Rao"
+  },
+
+  {
+    id: "INV-10491",
+    customer: "HelioGrid Energy",
+    status: "approved",
+    dueDate: "2026-06-02",
+    total: {
+      amount: 94200,
+      currency: "USD"
+    },
+    riskScore: 24,
+    assignedTo: "Anika Rao"
+  },
+
+  {
+    id: "INV-10490",
+    customer: "Orion Logistics",
+    status: "paid",
+    dueDate: "2026-05-28",
+    total: {
+      amount: 221900,
+      currency: "USD"
+    },
+    riskScore: 9,
+    assignedTo: "John Smith"
+  },
+
+  {
+    id: "INV-10489",
+    customer: "Meridian Health",
+    status: "sent",
+    dueDate: "2026-06-09",
+    total: {
+      amount: 78300,
+      currency: "USD"
+    },
+    riskScore: 31,
+    assignedTo: "John Smith"
+  }
 ];
 
 export const payments: Payment[] = [

@@ -281,41 +281,43 @@ export function LiveModuleDashboard({ eyebrow, title, description, moduleKey, re
       // Risk Alerts */}
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-2xl border border-green-500/20 bg-green-500/10 p-5">
-          <h3 className="text-lg font-semibold text-white">
-            Employees
-          </h3>
+      {moduleKey === "hr" && (
+        <section className="grid gap-4 md:grid-cols-3">
+          <div className="rounded-2xl border border-green-500/20 bg-green-500/10 p-5">
+            <h3 className="text-lg font-semibold text-white">
+              Employees
+            </h3>
 
-          <p className="text-3xl font-bold text-green-400 mt-2">
-            {items.find((item) => item.resource === "employees")?.count ?? 0}
-          </p>
+            <p className="text-3xl font-bold text-green-400 mt-2">
+              {items.find((item) => item.resource === "employees")?.count ?? 0}
+            </p>
 
-          <p className="text-sm text-slate-300 mt-2">
-            Total Employees
-          </p>
-        </div>
+            <p className="text-sm text-slate-300 mt-2">
+              Total Employees
+            </p>
+          </div>
 
-        <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 p-5">
-          <h3 className="text-lg font-semibold text-white">
-            Attendance Records
-          </h3>
+          <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 p-5">
+            <h3 className="text-lg font-semibold text-white">
+              Attendance Records
+            </h3>
 
-          <p className="text-3xl font-bold text-cyan-400 mt-2">
-            {items.find((item) => item.resource === "attendance")?.count ?? 0}
-          </p>
-        </div>
+            <p className="text-3xl font-bold text-cyan-400 mt-2">
+              {items.find((item) => item.resource === "attendance")?.count ?? 0}
+            </p>
+          </div>
 
-        <div className="rounded-2xl border border-purple-500/20 bg-purple-500/10 p-5">
-          <h3 className="text-lg font-semibold text-white">
-            Leave Requests
-          </h3>
+          <div className="rounded-2xl border border-purple-500/20 bg-purple-500/10 p-5">
+            <h3 className="text-lg font-semibold text-white">
+              Leave Requests
+            </h3>
 
-          <p className="text-3xl font-bold text-purple-400 mt-2">
-            {items.find((item) => item.resource === "leave")?.count ?? 0}
-          </p>
-        </div>
-      </section>
+            <p className="text-3xl font-bold text-purple-400 mt-2">
+              {items.find((item) => item.resource === "leave")?.count ?? 0}
+            </p>
+          </div>
+        </section>
+      )}
 
       <section className="grid gap-4 md:grid-cols-4">
         {[

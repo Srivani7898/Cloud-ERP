@@ -39,9 +39,9 @@ type Payslip = {
 
 const emptyPayslip = {
   employee: "",
-  period: "JUN-2026",
-  gross: "8400",
-  deductions: "1120",
+  period: "",
+  gross: "",
+  deductions: "",
 };
 
 const statusStyles: Record<string, string> = {
@@ -307,7 +307,7 @@ export default function PayrollPayslipsPage() {
               value={form.employee}
               onChange={(event) => setForm((current) => ({ ...current, employee: event.target.value }))}
               className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
-              placeholder="Anika Rao"
+              placeholder="Select Employee"
             />
           </label>
 
@@ -380,14 +380,37 @@ export default function PayrollPayslipsPage() {
             <table className="w-full min-w-[980px] text-left">
               <thead>
                 <tr className="border-b border-white/10 text-xs uppercase tracking-[0.24em] text-blue-200">
-                  <th className="px-4 py-4">Payslip</th>
-                  <th className="px-4 py-4">Employee</th>
-                  <th className="px-4 py-4">Period</th>
-                  <th className="px-4 py-4">Gross</th>
-                  <th className="px-4 py-4">Deductions</th>
-                  <th className="px-4 py-4">Net</th>
-                  <th className="px-4 py-4">Status</th>
-                  <th className="w-[330px] px-4 py-4 text-right">Actions</th>
+                  <th className="px-4 py-4 text-center whitespace-nowrap">
+                    Payslip
+                  </th>
+
+                  <th className="px-4 py-4 text-center whitespace-nowrap">
+                    Employee
+                  </th>
+
+                  <th className="px-4 py-4 text-center whitespace-nowrap">
+                    Period
+                  </th>
+
+                  <th className="px-4 py-4 text-center whitespace-nowrap">
+                    Gross
+                  </th>
+
+                  <th className="px-4 py-4 text-center whitespace-nowrap">
+                    Deductions
+                  </th>
+
+                  <th className="px-4 py-4 text-center whitespace-nowrap">
+                    Net
+                  </th>
+
+                  <th className="px-4 py-4 text-center whitespace-nowrap">
+                    Status
+                  </th>
+
+                  <th className="px-4 py-4 text-center whitespace-nowrap">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -403,13 +426,13 @@ export default function PayrollPayslipsPage() {
                       key={payslip.id}
                       className={`border-b border-white/10 text-white ${index % 2 ? "bg-white/[0.03]" : ""}`}
                     >
-                      <td className="px-4 py-5 font-semibold">{payslip.id}</td>
-                      <td className="px-4 py-5">{employee}</td>
-                      <td className="px-4 py-5">{period}</td>
-                      <td className="px-4 py-5">{money(gross)}</td>
-                      <td className="px-4 py-5">{money(deductions)}</td>
-                      <td className="px-4 py-5 font-semibold text-emerald-200">{money(payslip.net)}</td>
-                      <td className="px-4 py-5">
+                      <td className="px-4 py-5 text-center whitespace-nowrap font-semibold">{payslip.id}</td>
+                      <td className="px-4 py-5 text-center whitespace-nowrap font-semibold">{employee}</td>
+                      <td className="px-4 py-5 text-center whitespace-nowrap font-semibold">{period}</td>
+                      <td className="px-4 py-5 text-center whitespace-nowrap font-semibold">{money(gross)}</td>
+                      <td className="px-4 py-5 text-center whitespace-nowrap font-semibold">{money(deductions)}</td>
+                      <td className="px-4 py-5 text-center whitespace-nowrap font-semibold text-emerald-200">{money(payslip.net)}</td>
+                      <td className="px-4 py-5 text-center whitespace-nowrap">
                         <span className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold ring-1 ${style}`}>
                           {payslip.status}
                         </span>

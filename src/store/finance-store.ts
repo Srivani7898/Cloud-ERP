@@ -5,6 +5,7 @@ import { persist } from "zustand/middleware";
 import { accounts, auditLogs, currencyRates, invoices, journalEntries, ledgerEntries, payments } from "@/services/finance-service";
 import type { Account, AuditLog, CurrencyRate, FinancePeriod, Invoice, JournalEntry, LedgerEntry, Payment } from "@/types/finance";
 
+
 type FinanceState = {
   period: FinancePeriod;
   entity: string;

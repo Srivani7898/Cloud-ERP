@@ -11,6 +11,8 @@ import {
   Trash2,
 } from "lucide-react";
 
+
+
 type ApiEnvelope<T> = {
   success: boolean;
   data?: {
@@ -27,6 +29,7 @@ type Invoice = {
   id: string;
   customer: string;
   status: string;
+  assignedTo?: string;
   dueDate?: string;
   total?: number;
   amount?: number;
@@ -39,8 +42,9 @@ type Invoice = {
 const emptyInvoice = {
   customer: "",
   dueDate: "",
-  total: "0",
+  total: "",
   currency: "USD",
+  assignedTo: "",
 };
 
 const statusStyles: Record<string, string> = {
@@ -116,6 +120,7 @@ export default function FinanceInvoicesPage() {
           dueDate: form.dueDate,
           total: Number(form.total),
           currency: form.currency.toUpperCase(),
+          assignedTo: form.assignedTo,
           aiRisk: 18,
         }),
       });
@@ -192,10 +197,10 @@ export default function FinanceInvoicesPage() {
             <FileText className="h-8 w-8 text-cyan-300" />
             Invoice command center
           </h1>
-          <p className="mt-2 max-w-2xl text-base text-slate-300">
+          {/* <p className="mt-2 max-w-2xl text-base text-slate-300">
             Create, approve, collect, and remove tenant-scoped invoices through
             the live `/api/finance/invoices` backend.
-          </p>
+          </p> */}
         </div>
 
         <button
@@ -247,7 +252,7 @@ export default function FinanceInvoicesPage() {
               value={form.customer}
               onChange={(event) => setForm((current) => ({ ...current, customer: event.target.value }))}
               className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
-              placeholder="Apex Retail Group"
+              placeholder="Enter the customer name or company"
             />
           </label>
 
@@ -284,6 +289,24 @@ export default function FinanceInvoicesPage() {
             />
           </label>
 
+          <label className="space-y-2">
+            <span className="text-sm font-semibold text-white">
+              Assign Employee
+            </span>
+
+            <input
+              value={form.assignedTo}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  assignedTo: event.target.value,
+                }))
+              }
+              className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white"
+              placeholder="Enter assign employee name"
+            />
+          </label>
+
           <button
             type="submit"
             disabled={saving}
@@ -316,16 +339,17 @@ export default function FinanceInvoicesPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[920px] text-left">
-              <thead>
-                <tr className="border-b border-white/10 text-xs uppercase tracking-[0.24em] text-blue-200">
-                  <th className="px-4 py-4">Invoice</th>
-                  <th className="px-4 py-4">Customer</th>
-                  <th className="px-4 py-4">Status</th>
-                  <th className="px-4 py-4">Due date</th>
-                  <th className="px-4 py-4">Total</th>
-                  <th className="px-4 py-4">AI risk</th>
-                  <th className="px-4 py-4 text-center">Actions</th>
+            <table className="min-w-full">
+              <thead className="border-b border-white/10">
+                <tr className="text-center">
+                  <th className="px-4 py-4 text-center whitespace-nowrap">Invoice</th>
+                  <th className="px-4 py-4 text-center whitespace-nowrap">Customer</th>
+                  <th className="px-4 py-4 text-center whitespace-nowrap">Assigned To</th>
+                  <th className="px-4 py-4 text-center whitespace-nowrap">Status</th>
+                  <th className="px-4 py-4 text-center whitespace-nowrap">Due Date</th>
+                  <th className="px-4 py-4 text-center whitespace-nowrap">Total</th>
+                  <th className="px-4 py-4 text-center whitespace-nowrap">AI Risk</th>
+                  <th className="px-4 py-4 text-center whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -338,22 +362,34 @@ export default function FinanceInvoicesPage() {
                       key={invoice.id}
                       className={`border-b border-white/10 text-white ${index % 2 ? "bg-white/[0.03]" : ""}`}
                     >
-                      <td className="px-4 py-5 font-semibold">{invoice.id}</td>
+                      <td className="px-4 py-5 font-semibold whitespace-nowrap">
+                        {invoice.id}
+                      </td>
                       <td className="px-4 py-5">{invoice.customer}</td>
+
+                      <td className="px-4 py-5">
+                        {invoice.assignedTo || "-"}
+                      </td>
+
                       <td className="px-4 py-5">
                         <span className={`rounded-full px-3 py-1 text-xs font-semibold ring-1 ${style}`}>
                           {invoice.status}
                         </span>
                       </td>
-                      <td className="px-4 py-5">{invoice.dueDate ?? "Not set"}</td>
-                      <td className="px-4 py-5">{currency(amount, invoice.currency)}</td>
-                      <td className="px-4 py-5">{invoice.aiRisk ?? 0}/100</td>
+                      <td className="px-4 py-5 whitespace-nowrap">
+                        {invoice.dueDate}
+                      </td>
+                      <td className="px-4 py-5 whitespace-nowrap">
+                        {currency(amount, invoice.currency)}
+                      </td><td className="px-4 py-5 whitespace-nowrap">
+                        {invoice.aiRisk ?? 0}/100
+                      </td>
                       <td className="px-4 py-5">
-                        <div className="flex flex-wrap justify-center gap-2">
+                        <div className="flex items-center justify-center gap-2 whitespace-nowrap">
                           <button
                             type="button"
                             onClick={() => updateInvoice(invoice.id, { status: "Approved", aiRisk: 9 })}
-                            className="inline-flex items-center gap-2 rounded-lg border border-blue-300/20 bg-blue-500/15 px-3 py-2 text-sm font-semibold text-blue-100 transition hover:bg-blue-500/25"
+                            className="inline-flex items-center gap-1 rounded-lg border border-blue-300/20 bg-blue-500/15 px-2 py-2 text-xs font-semibold text-blue-100"
                           >
                             <CheckCircle2 className="h-4 w-4" />
                             Approve
@@ -361,14 +397,14 @@ export default function FinanceInvoicesPage() {
                           <button
                             type="button"
                             onClick={() => updateInvoice(invoice.id, { status: "Paid", aiRisk: 0 })}
-                            className="inline-flex items-center gap-2 rounded-lg border border-emerald-300/20 bg-emerald-500/15 px-3 py-2 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-500/25"
+                            className="inline-flex items-center gap-1 rounded-lg border border-emerald-300/20 bg-emerald-500/15 px-2 py-2 text-xs font-semibold text-emerald-100"
                           >
                             Paid
                           </button>
                           <button
                             type="button"
                             onClick={() => deleteInvoice(invoice.id)}
-                            className="inline-flex items-center gap-2 rounded-lg border border-rose-300/20 bg-rose-500/15 px-3 py-2 text-sm font-semibold text-rose-100 transition hover:bg-rose-500/25"
+                            className="inline-flex items-center gap-1 rounded-lg border border-rose-300/20 bg-rose-500/15 px-2 py-2 text-xs font-semibold text-rose-100"
                           >
                             <Trash2 className="h-4 w-4" />
                             Delete

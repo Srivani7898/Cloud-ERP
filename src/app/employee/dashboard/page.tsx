@@ -13,10 +13,32 @@ import { useHrStore } from "@/store/hr-store";
 import { useAuthStore } from "@/store/auth-store";
 import { formatMoney } from "@/utils/finance";
 import { downloadPayslipPdf, employeeFileName } from "@/utils/pdf";
-import { useNotificationStore } from "@/store/notification-store";
+import { useHrNotificationStore }
+  from "@/store/notification-store";
+import { useTaskStore } from "@/store/task-store";
 
 export default function EmployeeDashboardPage() {
   const user = useAuthStore((state) => state.user);
+  const tasks = useTaskStore(
+    (state) => state.tasks
+  );
+
+  const myTasks = tasks.filter(
+    (task) => task.assignedTo === user?.name
+  );
+
+  const pendingTasks = myTasks.filter(
+    (task) => task.status === "Pending"
+  ).length;
+
+  const inProgressTasks = myTasks.filter(
+    (task) => task.status === "In Progress"
+  ).length;
+
+  const completedTasks = myTasks.filter(
+    (task) => task.status === "Completed"
+  ).length;
+
   const { attendance, leaveRequests } = useHrStore();
   const allInvoices = useFinanceStore((state) => state.invoices);
   const invoices = allInvoices.slice(0, 3);
@@ -41,14 +63,14 @@ export default function EmployeeDashboardPage() {
     (a) => a.status === "absent"
   ).length;
 
-  const notifications = useNotificationStore(
+  const notifications = useHrNotificationStore(
     (state) => state.notifications
   );
 
   const unreadCount = notifications.filter(
-    (notification) =>
-      notification.employeeName === user?.name &&
-      !notification.read
+    (item) =>
+      item.employeeName === user?.name &&
+      !item.read
   ).length;
 
   const totalAttendance =
@@ -199,6 +221,44 @@ export default function EmployeeDashboardPage() {
                 }}
               />
             </div>
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-3">
+        <Card className="border-yellow-500/20 bg-yellow-500/10">
+          <CardContent className="p-5">
+            <p className="text-sm text-slate-300">
+              Pending Tasks
+            </p>
+
+            <p className="mt-2 text-4xl font-bold text-yellow-400">
+              {pendingTasks}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-blue-500/20 bg-blue-500/10">
+          <CardContent className="p-5">
+            <p className="text-sm text-slate-300">
+              In Progress Tasks
+            </p>
+
+            <p className="mt-2 text-4xl font-bold text-blue-400">
+              {inProgressTasks}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-green-500/20 bg-green-500/10">
+          <CardContent className="p-5">
+            <p className="text-sm text-slate-300">
+              Completed Tasks
+            </p>
+
+            <p className="mt-2 text-4xl font-bold text-green-400">
+              {completedTasks}
+            </p>
           </CardContent>
         </Card>
       </section>

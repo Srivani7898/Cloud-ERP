@@ -4,6 +4,8 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { attendance, departments, employees, leaveRequests, onboardingTasks } from "@/services/hr-service";
 import type { AttendanceRecord, Employee, LeaveRequest, OnboardingTask } from "@/types/hr";
+import { useHrNotificationStore }
+  from "@/store/notification-store";
 
 type HrState = {
   employees: Employee[];
@@ -183,20 +185,50 @@ export const useHrStore = create<HrState>()(
 
           if (!record) return state;
 
+          useHrNotificationStore
+            .getState()
+            .addNotification(
+              record.employeeName,
+              "Attendance Approved",
+              `Your attendance for ${record.date} has been approved.`
+            );
+
           return {
-            attendance: [record, ...state.attendance],
-            pendingAttendance: state.pendingAttendance.filter(
-              (item) => item.id !== id
-            ),
+            attendance: [
+              record,
+              ...state.attendance,
+            ],
+
+            pendingAttendance:
+              state.pendingAttendance.filter(
+                (item) => item.id !== id
+              ),
           };
         }),
 
       rejectAttendance: (id) =>
-        set((state) => ({
-          pendingAttendance: state.pendingAttendance.filter(
-            (item) => item.id !== id
-          ),
-        })),
+        set((state) => {
+          const record = state.pendingAttendance.find(
+            (item) => item.id === id
+          );
+
+          if (!record) return state;
+
+          useHrNotificationStore
+            .getState()
+            .addNotification(
+              record.employeeName,
+              "Attendance Rejected",
+              `Your attendance for ${record.date} has been rejected.`
+            );
+
+          return {
+            pendingAttendance:
+              state.pendingAttendance.filter(
+                (item) => item.id !== id
+              ),
+          };
+        }),
 
       applyLeave: (request) =>
         set((state) => {
@@ -225,6 +257,13 @@ export const useHrStore = create<HrState>()(
           );
 
           if (!leave) return state;
+          useHrNotificationStore
+            .getState()
+            .addNotification(
+              leave.employeeName,
+              "Leave Approved",
+              `Your ${leave.type} leave request from ${leave.from} to ${leave.to} has been approved.`
+            );
 
           return {
             leaveRequests: [
@@ -262,6 +301,13 @@ export const useHrStore = create<HrState>()(
           );
 
           if (!leave) return state;
+          useHrNotificationStore
+            .getState()
+            .addNotification(
+              leave.employeeName,
+              "Leave Rejected",
+              `Your ${leave.type} leave request from ${leave.from} to ${leave.to} has been rejected.`
+            );
 
           return {
             leaveRequests: [

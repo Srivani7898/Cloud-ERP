@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useTaskStore } from "@/store/task-store";
-import { useNotificationStore } from "@/store/notification-store";
+import { useHrNotificationStore }
+    from "@/store/notification-store";
 import {
     Select,
     SelectContent,
@@ -16,13 +17,16 @@ export default function HrTasksPage() {
     const addTask = useTaskStore(
         (state) => state.addTask
     );
-    const addNotification =
-        useNotificationStore(
+
+    const addHrNotification =
+        useHrNotificationStore(
             (state) => state.addNotification
         );
+
     const tasks = useTaskStore(
         (state) => state.tasks
     );
+
     console.log("Dashboard Tasks:", tasks);
     const employees = useHrStore(
         (state) => state.employees
@@ -44,15 +48,16 @@ export default function HrTasksPage() {
                 | "Medium"
                 | "High",
         });
-        addNotification({
-            employeeName: form.assignedTo,
-            title: "New Task Assigned",
-            message: `
-                Task: ${form.title}
-                Priority: ${form.priority}
-                Due Date: ${form.dueDate}
-            `,
-        });
+
+        addHrNotification(
+             form.assignedTo,
+            "New Task Assigned",
+            `Task: ${form.title}\n
+            Priority: ${form.priority}\n
+            Due Date: ${form.dueDate}\n
+            Assigned To: ${form.assignedTo}`
+        );
+
         console.log(
             "AFTER ADD",
             useTaskStore.getState().tasks

@@ -1,42 +1,64 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type Notification = {
+export type HrNotification = {
   id: string;
+  employeeName: string;
   title: string;
   message: string;
-  employeeName: string;
   createdAt: string;
   read: boolean;
+
+  category:
+    | "Attendance"
+    | "Leave"
+    | "Task"
+    | "Invoice"
+    | "Payroll";
 };
 
-type NotificationState = {
-  notifications: Notification[];
+type HrNotificationState = {
+  notifications: HrNotification[];
 
   addNotification: (
-    notification: Omit<
-      Notification,
-      "id" | "createdAt" | "read"
-    >
+    employeeName: string,
+    title: string,
+    message: string,
+    category:
+      | "Attendance"
+      | "Leave"
+      | "Task"
+      | "Invoice"
+      | "Payroll"
   ) => void;
 
   markAsRead: (id: string) => void;
+
+  markAllAsRead: () => void;
+
+  deleteNotification: (id: string) => void;
 };
 
-export const useNotificationStore =
-  create<NotificationState>()(
+export const useHrNotificationStore =
+  create<HrNotificationState>()(
     persist(
       (set) => ({
         notifications: [],
 
         addNotification: (
-          notification
+          employeeName,
+          title,
+          message,
+          category
         ) =>
           set((state) => ({
             notifications: [
               {
-                ...notification,
-                id: `NTF-${Date.now()}`,
+                id: Date.now().toString(),
+                employeeName,
+                title,
+                message,
+                category,
                 createdAt:
                   new Date().toLocaleString(),
                 read: false,
@@ -49,18 +71,38 @@ export const useNotificationStore =
           set((state) => ({
             notifications:
               state.notifications.map(
-                (item) =>
-                  item.id === id
+                (notification) =>
+                  notification.id === id
                     ? {
-                        ...item,
+                        ...notification,
                         read: true,
                       }
-                    : item
+                    : notification
+              ),
+          })),
+
+        markAllAsRead: () =>
+          set((state) => ({
+            notifications:
+              state.notifications.map(
+                (notification) => ({
+                  ...notification,
+                  read: true,
+                })
+              ),
+          })),
+
+        deleteNotification: (id) =>
+          set((state) => ({
+            notifications:
+              state.notifications.filter(
+                (notification) =>
+                  notification.id !== id
               ),
           })),
       }),
       {
-        name: "notification-store",
+        name: "hr-notification-store",
       }
     )
   );

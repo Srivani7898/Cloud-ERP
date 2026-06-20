@@ -23,6 +23,7 @@ export type Invoice = {
   dueDate: string;
   total: Money;
   riskScore: number;
+  assignedTo?: string;
 };
 
 export type Payment = {

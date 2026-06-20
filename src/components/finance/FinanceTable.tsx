@@ -23,6 +23,16 @@ export function FinanceTable({
             <tr>{headers.map((header) => <th key={header} className="px-3 py-3 font-medium">{header}</th>)}</tr>
           </thead>
           <tbody className="divide-y divide-slate-200 dark:divide-white/10">
+            {/* <tr>
+              <td className="px-3 py-4 text-red-500">
+                TEST ROW
+              </td>
+              <td>TEST</td>
+              <td>TEST</td>
+              <td>TEST</td>
+              <td>TEST</td>
+            </tr> */}
+
             {rows.map((row, rowIndex) => (
               <tr key={rowIndex} className="transition hover:bg-slate-50 dark:hover:bg-white/[0.04]">
                 {row.map((cell, cellIndex) => <td key={cellIndex} className="px-3 py-4">{cell}</td>)}
