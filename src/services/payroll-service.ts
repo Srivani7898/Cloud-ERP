@@ -13,7 +13,8 @@ export const payrollRuns: PayrollRun[] = [
   { id: "PR-2026-07", period: "July 2026", payDate: "2026-07-31", employees: 4, grossPay: 42200, deductions: 0, netPay: 0, status: "draft" }
 ];
 
-export const payrollPayslips: PayrollPayslip[] = [
+export const payrollPayslips = [];
+ [
   { id: "PS-1001-MAY", employeeId: "pay-emp-1001", employeeName: "Anika Rao", period: "May 2026", grossPay: 8400, tax: 620, deductions: 1120, netPay: 7280, generatedAt: "2026-05-31" },
   { id: "PS-1002-MAY", employeeId: "pay-emp-1002", employeeName: "Ethan Clarke", period: "May 2026", grossPay: 11200, tax: 1450, deductions: 2180, netPay: 9020, generatedAt: "2026-05-31" },
   { id: "PS-1003-MAY", employeeId: "pay-emp-1003", employeeName: "Maya Chen", period: "May 2026", grossPay: 12800, tax: 1380, deductions: 2350, netPay: 10450, generatedAt: "2026-05-31" }

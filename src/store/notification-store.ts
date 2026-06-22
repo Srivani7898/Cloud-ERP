@@ -8,7 +8,6 @@ export type HrNotification = {
   message: string;
   createdAt: string;
   read: boolean;
-
   category:
     | "Attendance"
     | "Leave"
@@ -50,22 +49,37 @@ export const useHrNotificationStore =
           title,
           message,
           category
-        ) =>
-          set((state) => ({
-            notifications: [
-              {
-                id: Date.now().toString(),
-                employeeName,
-                title,
-                message,
-                category,
-                createdAt:
-                  new Date().toLocaleString(),
-                read: false,
-              },
-              ...state.notifications,
-            ],
-          })),
+        ) => {
+          console.log(
+            "NOTIFICATION STORE CALLED:",
+            employeeName,
+            title
+          );
+
+          set((state) => {
+            const newNotification = {
+              id: Date.now().toString(),
+              employeeName: employeeName.trim(),
+              title,
+              message,
+              category,
+              createdAt: new Date().toLocaleString(),
+              read: false,
+            };
+
+            console.log(
+              "ADDING NOTIFICATION:",
+              newNotification
+            );
+
+            return {
+              notifications: [
+                newNotification,
+                ...state.notifications,
+              ],
+            };
+          });
+        },
 
         markAsRead: (id) =>
           set((state) => ({
@@ -103,6 +117,7 @@ export const useHrNotificationStore =
       }),
       {
         name: "hr-notification-store",
+        version: 2,
       }
     )
   );

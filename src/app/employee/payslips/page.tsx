@@ -1,10 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Download, WalletCards } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HrTable } from "@/components/hr/HrTable";
 import { useAuthStore } from "@/store/auth-store";
-import { usePayrollStore } from "@/store/payroll-store";
 import {
   downloadPayslipPdf,
   employeeFileName,
@@ -18,16 +18,55 @@ export default function EmployeePayslipsPage() {
   const employeeName =
     user?.name ?? "Employee";
 
-  const allPayslips = usePayrollStore(
-    (state) => state.payslips
-  );
+  const [allPayslips, setAllPayslips] =
+    useState<any[]>([]);
+
+  useEffect(() => {
+    async function loadPayslips() {
+      try {
+        const response = await fetch(
+          "/api/payroll/payslips",
+          {
+            cache: "no-store",
+          }
+        );
+
+        const payload =
+          await response.json();
+
+        setAllPayslips(
+          payload?.data?.data ?? []
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    loadPayslips();
+  }, []);
 
   const payslips = allPayslips.filter(
     (slip) =>
-      slip.employeeName === employeeName
+      (
+        slip.employee ||
+        slip.employeeName ||
+        ""
+      )
+        .toLowerCase()
+        .trim() ===
+      employeeName
+        .toLowerCase()
+        .trim()
   );
 
-  function money(amount: number) {
+  console.log(
+    "Employee Payslips:",
+    payslips
+  );
+
+  function money(
+    amount: number = 0
+  ) {
     return new Intl.NumberFormat(
       "en-US",
       {
@@ -65,10 +104,12 @@ export default function EmployeePayslipsPage() {
         rows={payslips.map((slip) => [
           slip.id,
           slip.period,
-          money(slip.grossPay),
+          money(slip.gross),
           money(slip.deductions),
-          money(slip.netPay),
-          slip.generatedAt,
+          money(slip.net),
+          new Date(
+            slip.createdAt
+          ).toLocaleDateString(),
 
           <Button
             key={slip.id}
@@ -84,21 +125,43 @@ export default function EmployeePayslipsPage() {
                   employeeName,
 
                   employeeCode:
-                    slip.employeeCode,
+                    slip.employeeCode ||
+                    "EMP-1001",
 
                   department:
-                    slip.department,
+                    slip.department ||
+                    "Engineering",
 
                   designation:
-                    slip.designation,
+                    slip.designation ||
+                    "Software Engineer",
 
                   month: slip.period,
 
-                  payDate:
-                    slip.generatedAt,
+                  payDate: new Date(
+                    slip.createdAt
+                  ).toLocaleDateString(),
+
+                  companyName:
+                    "Cloud ERP Technologies Pvt Ltd",
+
+                  companyAddress:
+                    "Bangalore, Karnataka, India",
+
+                  bankName:
+                    "State Bank of India",
+
+                  accountNumber:
+                    "XXXXXX4587",
+
+                  panNumber:
+                    "ABCDE1234F",
+
+                  uanNumber:
+                    "100245678912",
 
                   gross: money(
-                    slip.grossPay
+                    slip.gross
                   ),
 
                   deductions: money(
@@ -106,28 +169,65 @@ export default function EmployeePayslipsPage() {
                   ),
 
                   net: money(
-                    slip.netPay
+                    slip.net
                   ),
 
                   earnings: [
                     [
                       "Basic Salary",
                       money(
-                        slip.grossPay
+                        slip.gross * 0.6
+                      ),
+                    ],
+                    [
+                      "House Rent Allowance",
+                      money(
+                        slip.gross * 0.2
+                      ),
+                    ],
+                    [
+                      "Special Allowance",
+                      money(
+                        slip.gross * 0.1
+                      ),
+                    ],
+                    [
+                      "Medical Allowance",
+                      money(
+                        slip.gross * 0.05
+                      ),
+                    ],
+                    [
+                      "Travel Allowance",
+                      money(
+                        slip.gross * 0.05
                       ),
                     ],
                   ],
 
                   deductionsBreakup: [
                     [
-                      "Tax",
-                      money(slip.tax),
+                      "Income Tax",
+                      money(
+                        slip.deductions * 0.5
+                      ),
                     ],
                     [
-                      "Other Deductions",
+                      "Provident Fund",
                       money(
-                        slip.deductions -
-                        slip.tax
+                        slip.deductions * 0.3
+                      ),
+                    ],
+                    [
+                      "Professional Tax",
+                      money(
+                        slip.deductions * 0.1
+                      ),
+                    ],
+                    [
+                      "Insurance",
+                      money(
+                        slip.deductions * 0.1
                       ),
                     ],
                   ],

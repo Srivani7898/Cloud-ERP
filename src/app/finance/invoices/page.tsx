@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useHrNotificationStore } from "@/store/notification-store";
 import {
   CheckCircle2,
   FileText,
@@ -69,6 +70,10 @@ export default function FinanceInvoicesPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const addNotification =
+    useHrNotificationStore(
+      (state) => state.addNotification
+    );
 
   const totals = useMemo(() => {
     return invoices.reduce(
@@ -131,6 +136,19 @@ export default function FinanceInvoicesPage() {
       }
 
       setForm(emptyInvoice);
+      if (form.assignedTo?.trim()) {
+        addNotification(
+          form.assignedTo,
+          "Invoice Generated",
+          `A new invoice for ${form.customer} worth ${form.total} ${form.currency} has been generated.`,
+          "Invoice"
+        );
+
+        console.log(
+          "FINANCE INVOICE NOTIFICATION CREATED:",
+          form.assignedTo
+        );
+      }
       setMessage("Invoice draft created and synced with the backend API.");
       await loadInvoices();
     } catch (error) {

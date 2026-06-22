@@ -166,21 +166,32 @@ export function downloadCertificatePdf(filename: string, employeeName: string) {
   URL.revokeObjectURL(url);
 }
 
-export type PayslipPdfData = {
+export type PayslipData = {
   employeeName: string;
   employeeCode: string;
+
   department: string;
   designation: string;
+
   month: string;
   payDate: string;
+
   gross: string;
   deductions: string;
   net: string;
-  earnings: Array<[string, string]>;
-  deductionsBreakup: Array<[string, string]>;
+
+  earnings: [string, string][];
+  deductionsBreakup: [string, string][];
+
+  companyName?: string;
+  companyAddress?: string;
+  bankName?: string;
+  accountNumber?: string;
+  panNumber?: string;
+  uanNumber?: string;
 };
 
-export function downloadPayslipPdf(filename: string, data: PayslipPdfData) {
+export function downloadPayslipPdf(filename: string, data: PayslipData) {
   const text = (x: number, y: number, size: number, value: string) =>
     `BT /F1 ${size} Tf 1 0 0 1 ${x} ${y} Tm (${escapePdfText(value)}) Tj ET`;
   const boldText = (x: number, y: number, size: number, value: string) =>
@@ -190,7 +201,7 @@ export function downloadPayslipPdf(filename: string, data: PayslipPdfData) {
 
   const rows = data.earnings.map((earning, index) => {
     const deduction = data.deductionsBreakup[index] ?? ["", ""];
-    const y = 410 - index * 24;
+    const y = 285 - index * 24;
     return [
       text(74, y, 9, earning[0]),
       text(202, y, 9, earning[1]),
@@ -206,7 +217,7 @@ export function downloadPayslipPdf(filename: string, data: PayslipPdfData) {
     "0 0 612 792 re f",
     "0.18 0.35 0.70 RG",
     "1.5 w",
-    rect(50, 70, 512, 660),
+    rect(50, 40, 512, 690),
     "0.25 0.49 0.92 rg",
     rect(50, 690, 512, 40, true),
     "0.18 0.35 0.70 RG",
@@ -223,10 +234,16 @@ export function downloadPayslipPdf(filename: string, data: PayslipPdfData) {
     line(306, 470, 306, 560),
     line(62, 530, 550, 530),
     line(62, 500, 550, 500),
-    rect(62, 250, 488, 192),
-    line(178, 250, 178, 442),
-    line(278, 250, 278, 442),
-    line(452, 250, 452, 442),
+    rect(62, 380, 488, 62),
+    line(62, 350, 550, 350),
+    line(178, 220, 178, 380),
+    line(278, 220, 278, 380),
+    line(452, 220, 452, 380),
+    line(62, 320, 550, 320),
+    line(62, 296, 550, 296),
+    line(62, 272, 550, 272),
+    line(62, 248, 550, 248),
+    line(62, 224, 550, 224),
     "Q",
     "1 1 1 rg",
     boldText(242, 714, 17, "Salary Slip"),
@@ -234,7 +251,13 @@ export function downloadPayslipPdf(filename: string, data: PayslipPdfData) {
     "0.08 0.12 0.20 rg",
     boldText(230, 650, 10, "Company Information"),
     text(74, 626, 8, "Company Name"),
-    boldText(180, 626, 8, "Northstar Manufacturing"),
+    boldText(
+      180,
+      626,
+      8,
+      data.companyName ??
+      "Northstar Manufacturing"
+    ),
     text(318, 626, 8, "Payslip Month"),
     boldText(430, 626, 8, data.month),
     text(74, 606, 8, "Pay Date"),
@@ -249,35 +272,115 @@ export function downloadPayslipPdf(filename: string, data: PayslipPdfData) {
     text(74, 510, 8, "Designation"),
     boldText(180, 510, 8, data.designation),
     text(318, 510, 8, "Payment Mode"),
+    text(
+      74,
+      455,
+      8,
+      "Bank Name"
+    ),
+
+    boldText(
+      180,
+      455,
+      8,
+      data.bankName ??
+      "HDFC Bank"
+    ),
+
+    text(
+      318,
+      455,
+      8,
+      "Account No"
+    ),
+
+    boldText(
+      430,
+      455,
+      8,
+      data.accountNumber ??
+      "XXXX1234"
+    ),
+
+    text(
+      74,
+      430,
+      8,
+      "PAN"
+    ),
+
+    boldText(
+      180,
+      430,
+      8,
+      data.panNumber ??
+      "ABCDE1234F"
+    ),
+
+    text(
+      318,
+      430,
+      8,
+      "UAN"
+    ),
+
+    boldText(
+      430,
+      430,
+      8,
+      data.uanNumber ??
+      "100200300400"
+    ),
+
     boldText(430, 510, 8, "Bank Transfer"),
     text(74, 480, 8, "Location"),
-    boldText(180, 480, 8, "Bengaluru"),
+    boldText(
+      180,
+      480,
+      8,
+      data.companyAddress ??
+      "Bengaluru"
+    ),
     text(318, 480, 8, "Currency"),
-    boldText(430, 480, 8, "USD"),
-    boldText(260, 450, 10, "Salary Details"),
-    boldText(92, 426, 8, "Earnings"),
-    boldText(204, 426, 8, "Amount"),
-    boldText(340, 426, 8, "Deductions"),
-    boldText(494, 426, 8, "Amount"),
+    boldText(430, 480, 8, "INR"),
+    boldText(250, 395, 11, "Salary Details"),
+    boldText(92, 330, 8, "Earnings"),
+    boldText(204, 330, 8, "Amount"),
+    boldText(340, 330, 8, "Deductions"),
+    boldText(494, 330, 8, "Amount"),
     ...rows,
-    line(62, 286, 550, 286),
-    boldText(74, 268, 9, "Gross Earnings"),
-    boldText(202, 268, 9, data.gross),
-    boldText(320, 268, 9, "Total Deductions"),
-    boldText(492, 268, 9, data.deductions),
+    line(62, 180, 550, 180),
+
+    boldText(74, 160, 9, "Gross Earnings"),
+    boldText(202, 160, 9, data.gross),
+
+    boldText(320, 160, 9, "Total Deductions"),
+    boldText(492, 160, 9, data.deductions),
     "0.88 0.94 1.00 rg",
-    rect(62, 206, 488, 34, true),
+    rect(62, 200, 488, 32, true),
     "0.18 0.35 0.70 RG",
-    rect(62, 206, 488, 34),
+    rect(62, 150, 488, 230),
     "0.08 0.12 0.20 rg",
-    boldText(74, 218, 12, "Net Salary Paid"),
-    boldText(450, 218, 12, data.net),
-    text(74, 176, 8, "This is a system-generated salary slip from Cloud ERP Employee Self-Service."),
-    text(74, 162, 8, "For payroll queries, contact payroll@northstar.example."),
-    text(74, 126, 8, "Employee Signature"),
-    line(74, 120, 188, 120),
-    text(390, 126, 8, "Payroll Authorized"),
-    line(390, 120, 520, 120)
+    boldText(74, 212, 12, "Net Salary Paid"),
+    boldText(450, 212, 12, data.net),
+    text(
+      74,
+      115,
+      8,
+      `Generated by ${data.companyName ?? "Northstar Manufacturing"}`
+    ),
+
+    text(
+      74,
+      100,
+      8,
+      "For payroll queries, contact payroll@northstar.example."
+    ),
+    text(74, 60, 8, "Employee Signature"),
+    line(74, 54, 188, 54),
+
+    text(390, 60, 8, "Payroll Authorized"),
+    line(390, 54, 520, 54),
   ].join("\n");
 
   const objects = [

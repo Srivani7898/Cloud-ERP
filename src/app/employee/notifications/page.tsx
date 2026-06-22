@@ -13,6 +13,20 @@ export default function EmployeeNotificationsPage() {
     (state) => state.notifications
   );
 
+  console.log("Logged User:", user?.name);
+
+  console.log(
+    "Notification Employee Names:",
+    notifications.map(
+      (item) => item.employeeName
+    )
+  );
+
+  console.log(
+    "All Notifications:",
+    notifications
+  );
+
   const markAsRead = useHrNotificationStore(
     (state) => state.markAsRead
   );
@@ -29,20 +43,87 @@ export default function EmployeeNotificationsPage() {
     "all" | "read" | "unread"
   >("all");
 
-  const employeeNotifications = notifications.filter(
-    (item) => item.employeeName === user?.name
+  console.log("Logged User:", user?.name);
+
+  console.log(
+    "Notification Employee Names:",
+    notifications.map(
+      (item) => item.employeeName
+    )
   );
 
-  const visibleNotifications =
-    employeeNotifications.filter((item) => {
-      if (filter === "read") return item.read;
-      if (filter === "unread") return !item.read;
-      return true;
-    });
+  console.log(
+    "Notifications Length:",
+    notifications.length
+  );
 
-  const unreadCount = employeeNotifications.filter(
-    (item) => !item.read
-  ).length;
+  // TEMPORARY TEST
+  // Show all notifications without filtering
+  const loggedUser = user?.name?.trim().toLowerCase();
+  console.log(
+    "LOGGED USER EXACT:",
+    JSON.stringify(loggedUser)
+  );
+
+  notifications.forEach((item) => {
+    console.log(
+      "NOTIFICATION USER:",
+      JSON.stringify(
+        item.employeeName?.trim().toLowerCase()
+      )
+    );
+  });
+
+  const employeeNotifications =
+    notifications.filter(
+      (notification) =>
+        notification.employeeName
+          ?.trim()
+          .toLowerCase()
+          .includes(loggedUser || "")
+    );
+
+  console.log(
+    "Filtered Notifications:",
+    employeeNotifications
+  );
+
+  console.log(
+    "Logged User:",
+    loggedUser
+  );
+
+  console.log(
+    "Employee Notifications:",
+    employeeNotifications
+  );
+
+  employeeNotifications.forEach((item) => {
+    console.log(
+      "TITLE:",
+      item.title,
+      "CATEGORY:",
+      item.category
+    );
+  });
+
+  const visibleNotifications =
+    employeeNotifications.filter(
+      (item) => {
+        if (filter === "read")
+          return item.read;
+
+        if (filter === "unread")
+          return !item.read;
+
+        return true;
+      }
+    );
+
+  const unreadCount =
+    employeeNotifications.filter(
+      (item) => !item.read
+    ).length;
 
   const getNotificationLink = (
     item: {
@@ -50,32 +131,27 @@ export default function EmployeeNotificationsPage() {
       category?: string;
     }
   ) => {
-    const title = item.title.toLowerCase();
 
-    if (title.includes("invoice")) {
-      return "/employee/invoices";
+    switch (item.category) {
+
+      case "Invoice":
+        return "/employee/invoices";
+
+      case "Payroll":
+        return "/employee/payslips";
+
+      case "Attendance":
+        return "/employee/attendance";
+
+      case "Leave":
+        return "/employee/leave";
+
+      case "Task":
+        return "/employee/tasks";
+
+      default:
+        return "/employee/notifications";
     }
-
-    if (title.includes("leave")) {
-      return "/employee/leave";
-    }
-
-    if (title.includes("attendance")) {
-      return "/employee/attendance";
-    }
-
-    if (title.includes("task")) {
-      return "/employee/tasks";
-    }
-
-    if (
-      title.includes("pay") ||
-      title.includes("salary")
-    ) {
-      return "/employee/payslips";
-    }
-
-    return "/employee/notifications";
   };
 
   return (
@@ -113,33 +189,30 @@ export default function EmployeeNotificationsPage() {
       <div className="flex gap-3">
         <button
           onClick={() => setFilter("all")}
-          className={`rounded-lg px-4 py-2 transition ${
-            filter === "all"
-              ? "bg-cyan-600 text-white"
-              : "bg-slate-800 text-slate-300"
-          }`}
+          className={`rounded-lg px-4 py-2 transition ${filter === "all"
+            ? "bg-cyan-600 text-white"
+            : "bg-slate-800 text-slate-300"
+            }`}
         >
           All
         </button>
 
         <button
           onClick={() => setFilter("unread")}
-          className={`rounded-lg px-4 py-2 transition ${
-            filter === "unread"
-              ? "bg-cyan-600 text-white"
-              : "bg-slate-800 text-slate-300"
-          }`}
+          className={`rounded-lg px-4 py-2 transition ${filter === "unread"
+            ? "bg-cyan-600 text-white"
+            : "bg-slate-800 text-slate-300"
+            }`}
         >
           Unread
         </button>
 
         <button
           onClick={() => setFilter("read")}
-          className={`rounded-lg px-4 py-2 transition ${
-            filter === "read"
-              ? "bg-cyan-600 text-white"
-              : "bg-slate-800 text-slate-300"
-          }`}
+          className={`rounded-lg px-4 py-2 transition ${filter === "read"
+            ? "bg-cyan-600 text-white"
+            : "bg-slate-800 text-slate-300"
+            }`}
         >
           Read
         </button>
@@ -204,11 +277,10 @@ export default function EmployeeNotificationsPage() {
           return (
             <div
               key={item.id}
-              className={`rounded-xl border p-4 transition ${
-                isRead
-                  ? "border-slate-700 bg-slate-900/40 opacity-75"
-                  : "border-cyan-500/30 bg-cyan-500/5"
-              }`}
+              className={`rounded-xl border p-4 transition ${isRead
+                ? "border-slate-700 bg-slate-900/40 opacity-75"
+                : "border-cyan-500/30 bg-cyan-500/5"
+                }`}
             >
               <div className="flex items-start justify-between">
 
@@ -227,9 +299,9 @@ export default function EmployeeNotificationsPage() {
                 </div>
 
                 <div className="ml-4 flex flex-wrap gap-2">
-
                   <Link
                     href={getNotificationLink(item)}
+                    onClick={() => markAsRead(item.id)}
                     className="rounded-lg bg-cyan-600 px-3 py-2 text-sm text-white transition hover:bg-cyan-500"
                   >
                     Open

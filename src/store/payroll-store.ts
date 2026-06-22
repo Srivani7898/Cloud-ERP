@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { payrollApprovals, payrollEmployees, payrollHistory, payrollPayslips, payrollRuns, taxRecords } from "@/services/payroll-service";
 import type { PayrollApproval, PayrollEmployee, PayrollHistoryItem, PayrollPayslip, PayrollRun, TaxRecord } from "@/types/payroll";
+import { useHrNotificationStore } from "@/store/notification-store";
 
 type PayrollState = {
   employees: PayrollEmployee[];
@@ -82,8 +83,31 @@ export const usePayrollStore = create<PayrollState>()(
         set((state) => ({
           payslips: [
             ...state.employees.map((employee) => {
+
               const deductions = Math.round(
                 employee.baseSalary * 0.17
+              );
+
+              const tax = Math.round(
+                employee.baseSalary * 0.09
+              );
+
+              console.log(
+                "ADDING PAYSLIP NOTIFICATION FOR:",
+                employee.name
+              );
+              // Notification
+              useHrNotificationStore
+                .getState()
+                .addNotification(
+                  employee.name,
+                  "Payslip Generated",
+                  `Your salary slip for ${period} has been generated and is ready for download.`,
+                  "Payroll"
+                );
+              console.log(
+                "Notification Added For:",
+                employee.name
               );
 
               return {
@@ -103,9 +127,7 @@ export const usePayrollStore = create<PayrollState>()(
 
                 grossPay: employee.baseSalary,
 
-                tax: Math.round(
-                  employee.baseSalary * 0.09
-                ),
+                tax,
 
                 deductions,
 

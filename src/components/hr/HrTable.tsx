@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function HrTable({ title, description, headers, rows }: { title: string; description: string; headers: string[]; rows: React.ReactNode[][] }) {
+  {console.log("TABLE ROWS:", rows)}
   return (
     <Card className="border-slate-200 dark:border-white/10 dark:bg-white/[0.06]">
       <CardHeader><CardTitle>{title}</CardTitle><CardDescription>{description}</CardDescription></CardHeader>
@@ -23,11 +24,10 @@ export function HrTable({ title, description, headers, rows }: { title: string; 
                 {row.map((cell, cellIndex) => (
                   <td
                     key={cellIndex}
-                    className={`px-3 py-4 ${
-                      headers[cellIndex] === "Actions"
+                    className={`px-3 py-4 ${headers[cellIndex] === "Actions"
                         ? "text-center"
                         : ""
-                    }`}
+                      }`}
                   >
                     {cell}
                   </td>

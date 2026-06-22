@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useHrNotificationStore } from "@/store/notification-store";
 import {
   BadgeDollarSign,
   CheckCircle2,
@@ -44,11 +45,24 @@ const emptyPayslip = {
   deductions: "",
 };
 
-const statusStyles: Record<string, string> = {
-  Generated: "bg-blue-500/15 text-blue-200 ring-blue-400/25",
-  Released: "bg-emerald-500/15 text-emerald-200 ring-emerald-400/25",
-  Draft: "bg-slate-500/15 text-slate-200 ring-slate-400/25",
-  Hold: "bg-amber-500/15 text-amber-200 ring-amber-400/25",
+const statusStyles: Record<
+  string,
+  string
+> = {
+  "Pending Release":
+    "bg-amber-500/15 text-amber-200 ring-amber-400/25",
+
+  Generated:
+    "bg-blue-500/15 text-blue-200 ring-blue-400/25",
+
+  Released:
+    "bg-emerald-500/15 text-emerald-200 ring-emerald-400/25",
+
+  Draft:
+    "bg-slate-500/15 text-slate-200 ring-slate-400/25",
+
+  Hold:
+    "bg-red-500/15 text-red-200 ring-red-400/25",
 };
 
 function money(value?: number) {
@@ -124,6 +138,10 @@ function downloadPayslip(payslip: Payslip) {
 
 export default function PayrollPayslipsPage() {
   const [payslips, setPayslips] = useState<Payslip[]>([]);
+  const addNotification =
+    useHrNotificationStore(
+      (state) => state.addNotification
+    );
   const [form, setForm] = useState(emptyPayslip);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -175,7 +193,7 @@ export default function PayrollPayslipsPage() {
           gross,
           deductions,
           net: gross - deductions,
-          status: "Generated",
+          status: "Pending Release",
         }),
       });
       const payload = await response.json();
@@ -185,7 +203,35 @@ export default function PayrollPayslipsPage() {
       }
 
       setForm(emptyPayslip);
-      setMessage("Payslip generated and synced with the payroll backend API.");
+      setForm(emptyPayslip);
+
+      const existingNotification =
+        useHrNotificationStore
+          .getState()
+          .notifications.find(
+            (item) =>
+              item.employeeName === form.employee &&
+              item.title === "Payslip Generated"
+          );
+
+      if (!existingNotification) {
+        addNotification(
+          form.employee,
+          "Payslip Generated",
+          `Your payslip for ${form.period} has been generated and is available for download.`,
+          "Payroll"
+        );
+      }
+      
+      console.log(
+        "NOTIFICATION CREATED:",
+        form.employee
+      );
+
+      setMessage(
+        "Payslip generated and synced with the payroll backend API."
+      );
+
       await loadPayslips();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Unable to create payslip.");
@@ -253,7 +299,7 @@ export default function PayrollPayslipsPage() {
           </h1>
           <p className="mt-2 max-w-2xl text-base text-slate-300">
             Generate, release, download, and manage payslips through the live
-            `/api/payroll/payslips` backend.
+            {/* `/api/payroll/payslips` backend. */}
           </p>
         </div>
 
@@ -305,9 +351,14 @@ export default function PayrollPayslipsPage() {
             <input
               required
               value={form.employee}
-              onChange={(event) => setForm((current) => ({ ...current, employee: event.target.value }))}
-              className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
-              placeholder="Select Employee"
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  employee: event.target.value,
+                }))
+              }
+              className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white"
+              placeholder="Enter Employee Name"
             />
           </label>
 
@@ -318,6 +369,7 @@ export default function PayrollPayslipsPage() {
               value={form.period}
               onChange={(event) => setForm((current) => ({ ...current, period: event.target.value }))}
               className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
+              placeholder="Enter the Period"
             />
           </label>
 
@@ -377,7 +429,7 @@ export default function PayrollPayslipsPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[980px] text-left">
+            <table className="w-full min-w-[1200px]">
               <thead>
                 <tr className="border-b border-white/10 text-xs uppercase tracking-[0.24em] text-blue-200">
                   <th className="px-4 py-4 text-center whitespace-nowrap">
@@ -437,8 +489,8 @@ export default function PayrollPayslipsPage() {
                           {payslip.status}
                         </span>
                       </td>
-                      <td className="w-[330px] px-4 py-5">
-                        <div className="flex flex-nowrap justify-end gap-2">
+                      <td className="w-[330px] px-4 py-5 text-center whitespace-nowrap">
+                        <div className="flex flex-nowrap justify-center gap-2">
                           <button
                             type="button"
                             onClick={() => updatePayslip(payslip.id, { status: "Released" })}

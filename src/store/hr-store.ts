@@ -190,7 +190,8 @@ export const useHrStore = create<HrState>()(
             .addNotification(
               record.employeeName,
               "Attendance Approved",
-              `Your attendance for ${record.date} has been approved.`
+              `Your attendance for ${record.date} has been approved.`,
+              "Attendance"
             );
 
           return {
@@ -219,7 +220,8 @@ export const useHrStore = create<HrState>()(
             .addNotification(
               record.employeeName,
               "Attendance Rejected",
-              `Your attendance for ${record.date} has been rejected.`
+              `Your attendance for ${record.date} has been rejected.`,
+              "Attendance"
             );
 
           return {
@@ -262,7 +264,8 @@ export const useHrStore = create<HrState>()(
             .addNotification(
               leave.employeeName,
               "Leave Approved",
-              `Your ${leave.type} leave request from ${leave.from} to ${leave.to} has been approved.`
+              `Your ${leave.type} leave request from ${leave.from} to ${leave.to} has been approved.`,
+              "Leave"
             );
 
           return {
@@ -306,9 +309,9 @@ export const useHrStore = create<HrState>()(
             .addNotification(
               leave.employeeName,
               "Leave Rejected",
-              `Your ${leave.type} leave request from ${leave.from} to ${leave.to} has been rejected.`
+              `Your ${leave.type} leave request from ${leave.from} to ${leave.to} has been rejected.`,
+              "Leave"
             );
-
           return {
             leaveRequests: [
               { ...leave, status: "rejected" },
