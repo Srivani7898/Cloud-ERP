@@ -16,7 +16,6 @@ import {
   Scale,
   Settings,
   ShieldCheck,
-  ShieldEllipsis,
   UserCheck,
 } from "lucide-react";
 
@@ -65,9 +64,8 @@ export function AuditShell({ children }: { children: ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 rounded-lg px-4 py-2.5 font-semibold transition ${
-                  active ? "bg-blue-600 text-white" : "text-slate-300 hover:bg-slate-900 hover:text-white"
-                }`}
+                className={`flex items-center gap-3 rounded-lg px-4 py-2.5 font-semibold transition ${active ? "bg-blue-600 text-white" : "text-slate-300 hover:bg-slate-900 hover:text-white"
+                  }`}
               >
                 <Icon className="h-5 w-5" /> {item.label}
               </Link>
@@ -83,9 +81,6 @@ export function AuditShell({ children }: { children: ReactNode }) {
             <h1 className="mt-1 text-2xl font-semibold">Enterprise security evidence center</h1>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/admin/compliance" className="hidden rounded-lg border border-slate-700 px-4 py-2 font-semibold transition hover:border-cyan-400 md:inline-flex">
-              Admin Compliance
-            </Link>
             <button onClick={() => router.push("/auth/logout")} className="inline-flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 font-semibold transition hover:border-blue-400">
               <LogOut className="h-5 w-5" /> Sign out
             </button>

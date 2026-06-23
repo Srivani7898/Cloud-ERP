@@ -115,11 +115,10 @@ function AuditSelect({
                   onChange(option);
                   setOpen(false);
                 }}
-                className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${
-                  selected
-                    ? "bg-gradient-to-r from-violet-500 to-pink-500 text-white shadow-lg shadow-pink-500/20"
-                    : "text-slate-100 hover:bg-white/10 hover:text-white"
-                }`}
+                className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${selected
+                  ? "bg-gradient-to-r from-violet-500 to-pink-500 text-white shadow-lg shadow-pink-500/20"
+                  : "text-slate-100 hover:bg-white/10 hover:text-white"
+                  }`}
               >
                 <span>{option}</span>
                 {selected ? <CheckCircle2 className="h-4 w-4 shrink-0 text-white" /> : null}
@@ -138,6 +137,7 @@ export default function AuditLogsPage() {
   const [message, setMessage] = useState("Latest immutable logs loaded from the audit API.");
   const [busy, setBusy] = useState(false);
   const [buttonState, setButtonState] = useState<Record<string, string>>({});
+  const [darkMode, setDarkMode] = useState(true);
 
   const summary = useMemo(() => {
     const verified = logs.filter((log) => log.state === "Verified").length;
@@ -192,7 +192,12 @@ export default function AuditLogsPage() {
           : normalizeLog(cleanForm);
 
       setLogs((current) => [saved, ...current]);
-      setForm(initialForm);
+      setForm({
+        actor: "",
+        action: "",
+        module: "Finance",
+        severity: "Medium",
+      });
       setMessage("Audit event recorded. Create fields cleared and hash evidence generated.");
     } catch {
       setMessage("Audit event could not be recorded.");
@@ -234,10 +239,26 @@ export default function AuditLogsPage() {
 
         <div className="grid gap-4 md:grid-cols-4">
           {[
-            ["Audit events", summary.total, "Stored evidence records"],
-            ["Verified", summary.verified, "Hash chain confirmed"],
-            ["High risk", summary.highRisk, "Elevated severity events"],
-            ["Modules", summary.modules, "ERP areas covered"],
+            [
+              "Audit Events",
+              summary.total,
+              "Stored Evidence",
+            ],
+            [
+              "Verified",
+              summary.verified,
+              "Verified Records",
+            ],
+            [
+              "High Risk",
+              summary.highRisk,
+              "Requires Review",
+            ],
+            [
+              "Modules",
+              summary.modules,
+              "Covered Systems",
+            ],
           ].map(([label, value, caption]) => (
             <div key={label} className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
               <p className="text-slate-300">{label}</p>
@@ -248,10 +269,10 @@ export default function AuditLogsPage() {
         </div>
       </section>
 
-    <form
-    onSubmit={recordAuditEvent}
-    className="relative z-50 overflow-visible rounded-[28px] border border-white/10 bg-white/[0.04] p-8 shadow-2xl shadow-violet-950/30 backdrop-blur-xl"
-    >
+      <form
+        onSubmit={recordAuditEvent}
+        className="relative z-50 overflow-visible rounded-[28px] border border-white/10 bg-white/[0.04] p-8 shadow-2xl shadow-violet-950/30 backdrop-blur-xl"
+      >
         <div className="mb-8 flex items-start justify-between">
           <div>
             <h2 className="text-3xl font-bold text-white">Create audit event</h2>
@@ -266,7 +287,8 @@ export default function AuditLogsPage() {
             <input
               value={form.actor}
               onChange={(event) => setForm((current) => ({ ...current, actor: event.target.value }))}
-              placeholder="Test Admin"
+              placeholder="Enter actor"
+              autoComplete="off"
               className="h-16 w-full rounded-2xl border border-white/10 bg-white/10 px-5 text-lg text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-400"
             />
           </label>
@@ -276,7 +298,8 @@ export default function AuditLogsPage() {
             <input
               value={form.action}
               onChange={(event) => setForm((current) => ({ ...current, action: event.target.value }))}
-              placeholder="Updated payroll approval threshold"
+              placeholder="Enter audit action"
+              autoComplete="off"
               className="h-16 w-full rounded-2xl border border-white/10 bg-white/10 px-5 text-lg text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-400"
             />
           </label>
@@ -322,9 +345,13 @@ export default function AuditLogsPage() {
                 <th className="px-3 py-4">Actor</th>
                 <th className="px-3 py-4">Module</th>
                 <th className="px-3 py-4">Severity</th>
-                <th className="px-3 py-4">Hash evidence</th>
+                <th className="px-3 py-4 whitespace-nowrap">
+                  Hash Evidence
+                </th>
                 <th className="px-3 py-4">State</th>
-                <th className="px-3 py-4">Actions</th>
+                <th className="px-3 py-4 text-center">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -334,9 +361,13 @@ export default function AuditLogsPage() {
 
                 return (
                   <tr key={log.id} className="border-b border-white/10 text-white">
-                    <td className="px-3 py-6">
-                      <p className="max-w-[260px] font-semibold">{log.action}</p>
-                      <p className="mt-1 font-mono text-xs text-slate-400">{log.id}</p>
+                    <td className="px-3 py-6 whitespace-nowrap">
+                      <div className="flex items-center gap-3">
+                        <span className="font-semibold">{log.action}</span>
+                        <span className="font-mono text-xs text-slate-400">
+                          {log.id}
+                        </span>
+                      </div>
                     </td>
                     <td className="px-3 py-6">{log.actor}</td>
                     <td className="px-3 py-6">{log.module}</td>
@@ -356,7 +387,7 @@ export default function AuditLogsPage() {
                       </span>
                     </td>
                     <td className="px-3 py-6">
-                      <div className="flex flex-nowrap items-center gap-3">
+                      <div className="flex justify-center items-center gap-3">
                         <button
                           type="button"
                           onClick={() => updateRowAction(log.id, "Verified")}
