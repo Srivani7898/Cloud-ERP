@@ -26,7 +26,13 @@ const emptyForm = {
   model: "LSTM",
 };
 
-const reportTypes = ["Demand Forecast", "Forecast Accuracy", "SKU Comparison", "Inventory Forecast", "Model Monitoring"];
+const reportTypes = [
+  "Demand Forecast",
+  "Forecast Accuracy",
+  "Inventory Forecast",
+  "Model Monitoring",
+  "Executive Summary"
+];
 const models = ["LSTM", "Prophet", "Ensemble", "XGBoost"];
 
 function valueOf(report: ForecastReport, key: keyof ForecastReport, fallback = "Not set") {
@@ -44,7 +50,161 @@ function reportHtml(report: ForecastReport) {
   const accuracy = Number(report.accuracy ?? 92);
   const demand = Number(report.forecastDemand ?? 1240);
   const confidence = Number(report.confidence ?? 91);
+  const reportType =
+    report.type ?? "Demand Forecast";
 
+  let reportContent = "";
+
+  switch (reportType) {
+    case "Demand Forecast":
+      reportContent = `
+    <section class="section">
+      <h2>Demand Forecast Report</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Product</th>
+            <th>Current Demand</th>
+            <th>Forecast Demand</th>
+            <th>Growth</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ERP-AI-CHIP</td>
+            <td>AI Edge Controller</td>
+            <td>950</td>
+            <td>${demand}</td>
+            <td>+18%</td>
+          </tr>
+
+          <tr>
+            <td>ERP-SENSOR-X</td>
+            <td>Industrial Sensor X</td>
+            <td>720</td>
+            <td>${Math.round(demand * 0.8)}</td>
+            <td>+9%</td>
+          </tr>
+
+          <tr>
+            <td>ERP-ROUTER-PRO</td>
+            <td>Plant Network Router</td>
+            <td>540</td>
+            <td>${Math.round(demand * 0.6)}</td>
+            <td>+14%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="note">
+        Demand is expected to increase during the next planning cycle.
+        Reorder planning is recommended for high-growth SKUs.
+      </p>
+    </section>
+  `;
+      break;
+
+    case "Forecast Accuracy":
+      reportContent = `
+      <section class="section">
+        <h2>Forecast Accuracy Report</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Accuracy</th>
+              <th>MAPE</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>${model}</td>
+              <td>${accuracy}%</td>
+              <td>${(100 - accuracy).toFixed(1)}%</td>
+              <td>Healthy</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    `;
+      break;
+
+    case "Inventory Forecast":
+      reportContent = `
+      <section class="section">
+        <h2>Inventory Planning Report</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Warehouse</th>
+              <th>Projected Demand</th>
+              <th>Stock Level</th>
+              <th>Recommendation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Bengaluru DC</td>
+              <td>${demand}</td>
+              <td>Low</td>
+              <td>Create Replenishment Order</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    `;
+      break;
+
+    case "Model Monitoring":
+      reportContent = `
+      <section class="section">
+        <h2>Model Monitoring Report</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Accuracy</th>
+              <th>Confidence</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>${model}</td>
+              <td>${accuracy}%</td>
+              <td>${confidence}%</td>
+              <td>Healthy</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    `;
+      break;
+
+    case "Executive Summary":
+      reportContent = `
+      <section class="section">
+        <h2>Executive Summary</h2>
+        <p>
+          Forecast demand increased by 14.2% across strategic products.
+        </p>
+        <p>
+          Recommended action is inventory expansion and vendor capacity review.
+        </p>
+      </section>
+    `;
+      break;
+
+    default:
+      reportContent = `
+      <section class="section">
+        <h2>Forecast Report</h2>
+      </section>
+    `;
+  }
   return `<!doctype html>
 <html>
 <head>
@@ -93,31 +253,8 @@ function reportHtml(report: ForecastReport) {
       <div class="metric"><span>AI Model</span><strong>${model}</strong></div>
       <div class="metric"><span>Accuracy</span><strong>${accuracy}%</strong></div>
     </section>
-    <section class="section">
-      <h2>Forecast Executive Summary</h2>
-      <table>
-        <thead><tr><th>Forecast Area</th><th>Current Signal</th><th>AI Forecast</th><th>Confidence</th><th>Decision Guidance</th></tr></thead>
-        <tbody>
-          <tr><td>Industrial Battery Pack</td><td>420 units demand</td><td>${demand} units</td><td>${confidence}%</td><td>Increase safety stock and secure vendor capacity.</td></tr>
-          <tr><td>AI Edge Controller</td><td>APAC demand spike</td><td>780 units</td><td>87%</td><td>Prioritize Bengaluru DC replenishment.</td></tr>
-          <tr><td>Plant Network Router</td><td>Stockout risk</td><td>360 units</td><td>84%</td><td>Trigger emergency procurement review.</td></tr>
-          <tr><td>Seasonal variance</td><td>Above baseline</td><td>+14.2%</td><td>89%</td><td>Monitor weekly model drift.</td></tr>
-        </tbody>
-      </table>
-    </section>
-    <section class="section">
-      <h2>Model Monitoring and Risk Controls</h2>
-      <table>
-        <thead><tr><th>Control</th><th>Value</th><th>Status</th><th>Notes</th></tr></thead>
-        <tbody>
-          <tr><td>Forecast accuracy</td><td>${accuracy}%</td><td>Healthy</td><td>Above enterprise model threshold.</td></tr>
-          <tr><td>Model drift</td><td>2.8%</td><td>Controlled</td><td>No retraining required this cycle.</td></tr>
-          <tr><td>Data freshness</td><td>Daily ERP sync</td><td>Healthy</td><td>Inventory and sales history are current.</td></tr>
-          <tr><td>Recommendation priority</td><td>High</td><td>Open</td><td>Safety stock adjustment pending SCM approval.</td></tr>
-        </tbody>
-      </table>
-      <p class="note">AI recommendation: Increase safety stock for high-confidence demand spikes while monitoring model drift weekly. Reorder recommendations should be reviewed with SCM before purchase order release.</p>
-    </section>
+   <section class="section">
+      ${reportContent}
     <div class="signatures">
       <div class="signature"><strong>${owner}</strong><br />Prepared by</div>
       <div class="signature"><strong>Supply Chain Analytics Lead</strong><br />Reviewed by</div>
@@ -237,7 +374,7 @@ export default function ForecastReportsPage() {
         <div className="mt-7 grid gap-5 lg:grid-cols-[1.2fr_1fr_1fr_1fr_1fr_auto]">
           <label className="space-y-2">
             <span className="font-semibold text-white">Report name</span>
-            <input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} placeholder="AI Demand Forecast Report" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
+            <input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} placeholder="Enter Report Name" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
           </label>
           <label className="space-y-2">
             <span className="font-semibold text-white">Type</span>
@@ -253,11 +390,11 @@ export default function ForecastReportsPage() {
           </label>
           <label className="space-y-2">
             <span className="font-semibold text-white">Period</span>
-            <input value={form.period} onChange={(event) => setForm((current) => ({ ...current, period: event.target.value }))} placeholder="July 2026" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
+            <input value={form.period} onChange={(event) => setForm((current) => ({ ...current, period: event.target.value }))} placeholder="Enter Period" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
           </label>
           <label className="space-y-2">
             <span className="font-semibold text-white">Owner</span>
-            <input value={form.owner} onChange={(event) => setForm((current) => ({ ...current, owner: event.target.value }))} placeholder="AI Forecast CoE" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
+            <input value={form.owner} onChange={(event) => setForm((current) => ({ ...current, owner: event.target.value }))} placeholder="Enter Owner" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
           </label>
           <button onClick={createReport} disabled={loading} className="mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 px-8 font-bold text-white shadow-[0_0_35px_rgba(236,72,153,0.35)] transition hover:scale-[1.02] disabled:opacity-60">
             <Send className="h-5 w-5" />
@@ -280,7 +417,7 @@ export default function ForecastReportsPage() {
                 <th className="px-4 py-4">Period</th>
                 <th className="px-4 py-4">Owner</th>
                 <th className="px-4 py-4">Status</th>
-                <th className="w-[360px] px-4 py-4 text-right">Actions</th>
+                <th className="w-[360px] px-4 py-4 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>

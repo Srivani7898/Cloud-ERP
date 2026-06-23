@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useForecastStore } from "@/store/forecast-store";
 import {
   BrainCircuit,
   CheckCircle2,
@@ -42,9 +43,9 @@ const emptyPrediction = {
   sku: "",
   product: "",
   model: "LSTM",
-  forecastDemand: "1240",
-  confidence: "91",
-  period: "July 2026",
+  forecastDemand: "",
+  confidence: "",
+  period: "",
 };
 
 const statusStyles: Record<string, string> = {
@@ -58,7 +59,32 @@ function getDemand(prediction: Prediction) {
   return prediction.forecastDemand ?? prediction.forecastQty ?? 0;
 }
 
+
 export default function ForecastPredictionsPage() {
+  const addSku = useForecastStore(
+    (state) => state.addSku
+  );
+
+  const addProduct = useForecastStore(
+    (state) => state.addProduct
+  );
+
+  const addTrend = useForecastStore(
+    (state) => state.addTrend
+  );
+
+  const addRecommendation =
+    useForecastStore(
+      (state) =>
+        state.addRecommendation
+    );
+
+  const updateModelMetrics =
+    useForecastStore(
+      (state) =>
+        state.updateModelMetrics
+    );
+
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [form, setForm] = useState(emptyPrediction);
   const [loading, setLoading] = useState(true);
@@ -117,12 +143,57 @@ export default function ForecastPredictionsPage() {
       const payload = await response.json();
 
       if (!response.ok || !payload.success) {
-        throw new Error(payload.error || "Unable to create prediction.");
+        throw new Error(
+          payload.error ||
+          "Unable to create prediction."
+        );
       }
 
+      addSku({
+        id: `sku-${Date.now()}`,
+        sku: form.sku,
+        productName: form.product,
+        category: "Forecast Product",
+        warehouse: "Main Warehouse",
+        currentStock: 0,
+        avgDemand: Number(
+          form.forecastDemand
+        ),
+      });
+
+      addProduct({
+        id: `prd-${Date.now()}`,
+        name: form.product,
+        category: "Forecast Product",
+        revenueImpact:
+          Number(form.forecastDemand) *
+          100,
+        serviceLevel:
+          Number(form.confidence),
+      });
+
+      addTrend(
+        Number(
+          form.forecastDemand
+        )
+      );
+
+      addRecommendation(
+        form.sku,
+        Number(
+          form.forecastDemand
+        )
+      );
+      updateModelMetrics();
+
       setForm(emptyPrediction);
-      setMessage("Forecast prediction generated and synced with the forecast backend API.");
+
+      setMessage(
+        "Forecast prediction generated and synced with the forecast backend API."
+      );
+
       await loadPredictions();
+
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Unable to create prediction.");
     } finally {
@@ -222,6 +293,7 @@ export default function ForecastPredictionsPage() {
       </section>
 
       <form
+        autoComplete="off"
         onSubmit={createPrediction}
         className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-[0_0_50px_rgba(124,58,237,0.14)] backdrop-blur-2xl"
       >
@@ -240,10 +312,11 @@ export default function ForecastPredictionsPage() {
             <span className="text-sm font-semibold text-white">SKU</span>
             <input
               required
+              autoComplete="off"
               value={form.sku}
               onChange={(event) => setForm((current) => ({ ...current, sku: event.target.value }))}
               className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
-              placeholder="ERP-BATTERY-X"
+              placeholder="Enter SKU"
             />
           </label>
 
@@ -251,10 +324,11 @@ export default function ForecastPredictionsPage() {
             <span className="text-sm font-semibold text-white">Product</span>
             <input
               required
+              autoComplete="off"
               value={form.product}
               onChange={(event) => setForm((current) => ({ ...current, product: event.target.value }))}
               className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
-              placeholder="Industrial Battery Pack"
+              placeholder="Enter Product"
             />
           </label>
 
@@ -279,6 +353,8 @@ export default function ForecastPredictionsPage() {
               min="0"
               type="number"
               value={form.forecastDemand}
+              placeholder="Enter Forecast Demand"
+              autoComplete="off"
               onChange={(event) => setForm((current) => ({ ...current, forecastDemand: event.target.value }))}
               className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition focus:border-cyan-300/70"
             />
@@ -292,8 +368,28 @@ export default function ForecastPredictionsPage() {
               max="100"
               type="number"
               value={form.confidence}
+              placeholder="Enter Confidence %"
+              autoComplete="off"
               onChange={(event) => setForm((current) => ({ ...current, confidence: event.target.value }))}
               className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition focus:border-cyan-300/70"
+            />
+          </label>
+          <label className="space-y-2">
+            <span className="text-sm font-semibold text-white">
+              Period
+            </span>
+
+            <input
+              required
+              value={form.period}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  period: event.target.value,
+                }))
+              }
+              placeholder="Enter the days"
+              className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none"
             />
           </label>
 
@@ -339,7 +435,7 @@ export default function ForecastPredictionsPage() {
                   <th className="px-4 py-4">Confidence</th>
                   <th className="px-4 py-4">Period</th>
                   <th className="px-4 py-4">Status</th>
-                  <th className="w-[330px] px-4 py-4 text-right">Actions</th>
+                  <th className="w-[330px] px-4 py-4 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -352,15 +448,26 @@ export default function ForecastPredictionsPage() {
                       key={prediction.id}
                       className={`border-b border-white/10 text-white ${index % 2 ? "bg-white/[0.03]" : ""}`}
                     >
-                      <td className="px-4 py-5">
-                        <div className="font-semibold">{prediction.sku}</div>
-                        <div className="text-xs text-slate-400">{prediction.id}</div>
+                      <td className="px-4 py-5 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold">
+                            {prediction.sku}
+                          </span>
+                          <span className="text-xs text-slate-400">
+                            ({prediction.id})
+                          </span>
+                        </div>
                       </td>
-                      <td className="px-4 py-5">{prediction.product ?? "Inventory SKU"}</td>
+
+                      <td className="px-4 py-5 whitespace-nowrap">
+                        {prediction.product ?? "Inventory SKU"}
+                      </td>
                       <td className="px-4 py-5">{prediction.model ?? "Prophet"}</td>
                       <td className="px-4 py-5">{getDemand(prediction).toLocaleString()}</td>
                       <td className="px-4 py-5">{prediction.confidence}%</td>
-                      <td className="px-4 py-5">{prediction.period ?? prediction.horizon ?? "30d"}</td>
+                      <td className="px-4 py-5">
+                        {prediction.period || "Not Set"}
+                      </td>
                       <td className="px-4 py-5">
                         <span className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold ring-1 ${style}`}>
                           {status}

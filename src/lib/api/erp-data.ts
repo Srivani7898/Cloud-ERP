@@ -183,10 +183,25 @@ const seed: ErpDatabase = {
       { id: "SKU-1001", sku: "ERP-BATTERY-X", demand: 420, forecast: 510, accuracy: 91 },
     ],
     products: [
-      { id: "FPR-1001", name: "Industrial Battery Pack", predictedDemand: 510, confidence: 91 },
+      {
+        id: "FPR-1001",
+        name: "Industrial Battery Pack",
+        category: "Batteries",
+        revenueImpact: 125000,
+        serviceLevel: 91,
+      },
     ],
     predictions: [
-      { id: "PRED-1001", sku: "ERP-BATTERY-X", horizon: "30d", forecastQty: 510, confidence: 91 },
+      {
+        id: "PRED-1001",
+        sku: "ERP-BATTERY-X",
+        product: "Industrial Battery Pack",
+        model: "LSTM",
+        period: "July 2026",
+        forecastDemand: 510,
+        confidence: 91,
+        status: "Approved",
+      },
     ],
     trends: [
       { id: "TREND-1", label: "APAC demand spike", impact: "High", confidence: 87 },
@@ -401,11 +416,85 @@ export function filterRecords(records: ErpRecord[], searchParams: URLSearchParam
   return filtered.slice(offset, offset + limit);
 }
 
-export function createRecord(module: string, resource: string, payload: Record<string, unknown>) {
-  const collection = ensureCollection(module, resource);
-  const id = String(payload.id ?? `${module.slice(0, 3).toUpperCase()}-${resource.slice(0, 3).toUpperCase()}-${Date.now()}`);
-  const record: ErpRecord = { id, ...payload, createdAt: payload.createdAt ?? now(), updatedAt: now() };
+export function createRecord(
+  module: string,
+  resource: string,
+  payload: Record<string, unknown>
+) {
+  const collection = ensureCollection(
+    module,
+    resource
+  );
+
+  const id = String(
+    payload.id ??
+    `${module
+      .slice(0, 3)
+      .toUpperCase()}-${resource
+        .slice(0, 3)
+        .toUpperCase()}-${Date.now()}`
+  );
+
+  const record: ErpRecord = {
+    id,
+    ...payload,
+    createdAt:
+      payload.createdAt ??
+      now(),
+    updatedAt: now(),
+  };
+
   collection.unshift(record);
+
+  // ==========================
+  // FORECAST AUTO SYNC
+  // ==========================
+
+  if (
+    module === "forecast" &&
+    resource === "predictions"
+  ) {
+    const skuCollection =
+      ensureCollection(
+        "forecast",
+        "skus"
+      );
+
+    skuCollection.unshift({
+      id: `SKU-${Date.now()}`,
+      sku: payload.sku,
+      demand:
+        payload.forecastDemand,
+      forecast:
+        payload.forecastDemand,
+      accuracy:
+        payload.confidence,
+      createdAt: now(),
+      updatedAt: now(),
+    });
+
+    const productCollection =
+      ensureCollection(
+        "forecast",
+        "products"
+      );
+
+    productCollection.unshift({
+      id: `PRD-${Date.now()}`,
+      name: payload.product,
+      category:
+        "Forecast Product",
+      revenueImpact:
+        Number(
+          payload.forecastDemand
+        ) * 100,
+      serviceLevel:
+        payload.confidence,
+      createdAt: now(),
+      updatedAt: now(),
+    });
+  }
+
   return record;
 }
 

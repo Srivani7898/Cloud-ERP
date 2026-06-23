@@ -32,9 +32,11 @@ export function ForecastShell({ children }: { children: React.ReactNode }) {
           <span>AI Forecast Dashboard</span>
         </Link>
         <div className="mt-5 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-white/[0.06]">
-          <p className="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">ML pipeline</p>
-          <p className="mt-2 font-semibold">Prophet + LSTM Hybrid</p>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Redis/Postgres results</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">AI FORCASTING</p>
+          <p className="mt-2 font-semibold">Demand Intelligence Platform</p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">AI-powered demand forecasting,
+            inventory planning, trend analysis,
+            and replenishment recommendations.</p>
         </div>
         <nav className="mt-6 space-y-1">
           {nav.map((item) => {
