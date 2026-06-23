@@ -1,5 +1,12 @@
 export type InventoryStatus = "healthy" | "low_stock" | "out_of_stock" | "overstock";
-export type POStatus = "draft" | "sent" | "approved" | "received" | "cancelled";
+export type POStatus =
+  | "draft"
+  | "sent"
+  | "approved"
+  | "received"
+  | "cancelled"
+  | "open"
+  | "closed";
 export type ReceiptStatus = "pending_qc" | "accepted" | "rejected";
 export type TransferStatus = "scheduled" | "in_transit" | "completed";
 

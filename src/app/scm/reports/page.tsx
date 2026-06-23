@@ -38,6 +38,161 @@ function money(value?: number) {
 function reportHtml(report: ScmReport) {
   const name = valueOf(report, "name", "SCM Inventory Report");
   const type = valueOf(report, "type", "Inventory Position");
+  let reportContent = "";
+
+  switch (type) {
+    case "Inventory Position":
+      reportContent = `
+      <h2>Inventory Control Summary</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Product</th>
+            <th>Warehouse</th>
+            <th>Stock</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ERP-AI-CHIP</td>
+            <td>AI Edge Controller</td>
+            <td>Bengaluru DC</td>
+            <td>42</td>
+            <td>Low Stock</td>
+          </tr>
+          <tr>
+            <td>ERP-SENSOR-X</td>
+            <td>Industrial Sensor X</td>
+            <td>Dallas DC</td>
+            <td>480</td>
+            <td>Healthy</td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+      break;
+
+    case "Vendor Performance":
+      reportContent = `
+      <h2>Vendor Performance Analysis</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Vendor</th>
+            <th>Rating</th>
+            <th>On-Time Delivery</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Atlas Components</td>
+            <td>94%</td>
+            <td>98%</td>
+            <td>Preferred</td>
+          </tr>
+          <tr>
+            <td>BluePeak Electronics</td>
+            <td>88%</td>
+            <td>95%</td>
+            <td>Approved</td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+      break;
+
+    case "Purchase Order Aging":
+      reportContent = `
+      <h2>Purchase Order Aging Report</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>PO</th>
+            <th>Vendor</th>
+            <th>Amount</th>
+            <th>Days Open</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>PO-5001</td>
+            <td>BluePeak Electronics</td>
+            <td>$50,400</td>
+            <td>12</td>
+          </tr>
+          <tr>
+            <td>PO-5002</td>
+            <td>Atlas Components</td>
+            <td>$51,600</td>
+            <td>6</td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+      break;
+
+    case "Stock Movement":
+      reportContent = `
+      <h2>Stock Transfer Activity</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Transfer ID</th>
+            <th>SKU</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Qty</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ST-3001</td>
+            <td>ERP-SENSOR-X</td>
+            <td>Dallas DC</td>
+            <td>Bengaluru DC</td>
+            <td>80</td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+      break;
+
+    case "Warehouse Utilization":
+      reportContent = `
+      <h2>Warehouse Capacity Report</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Warehouse</th>
+            <th>Region</th>
+            <th>Capacity</th>
+            <th>Utilization</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Bengaluru DC</td>
+            <td>India</td>
+            <td>1200</td>
+            <td>72%</td>
+          </tr>
+          <tr>
+            <td>Dallas DC</td>
+            <td>USA</td>
+            <td>1800</td>
+            <td>64%</td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+      break;
+
+    default:
+      reportContent = "<h2>No Report Data Available</h2>";
+  }
   const period = valueOf(report, "period", "June 2026");
   const owner = valueOf(report, "owner", "SCM CoE");
   const status = valueOf(report, "status", "Ready");
@@ -93,31 +248,11 @@ function reportHtml(report: ScmReport) {
       <div class="metric"><span>Inventory Value</span><strong>${money(inventoryValue)}</strong></div>
       <div class="metric"><span>Open POs</span><strong>${openPOs}</strong></div>
     </section>
-    <section class="section">
-      <h2>Inventory Control Summary</h2>
-      <table>
-        <thead><tr><th>Control Area</th><th>Current</th><th>Target</th><th>Status</th><th>Business Note</th></tr></thead>
-        <tbody>
-          <tr><td>Total inventory value</td><td>${money(inventoryValue)}</td><td>${money(4500000)}</td><td>Healthy</td><td>Inventory remains within approved working capital range.</td></tr>
-          <tr><td>Low stock items</td><td>${lowStockItems}</td><td>5</td><td>Watch</td><td>Battery and network router stock require replenishment attention.</td></tr>
-          <tr><td>Open purchase orders</td><td>${openPOs}</td><td>20</td><td>Controlled</td><td>Open PO volume is within procurement capacity.</td></tr>
-          <tr><td>Warehouse utilization</td><td>82%</td><td>85%</td><td>On Track</td><td>Bengaluru DC has sufficient short-term capacity.</td></tr>
-        </tbody>
-      </table>
-    </section>
-    <section class="section">
-      <h2>Warehouse and Vendor Snapshot</h2>
-      <table>
-        <thead><tr><th>Location / Vendor</th><th>Category</th><th>Metric</th><th>Status</th><th>Action</th></tr></thead>
-        <tbody>
-          <tr><td>Bengaluru DC</td><td>Warehouse</td><td>82% capacity</td><td>Operational</td><td>Monitor inbound PO volume.</td></tr>
-          <tr><td>Singapore Hub</td><td>Warehouse</td><td>Router stockout</td><td>Critical</td><td>Prioritize transfer or vendor replenishment.</td></tr>
-          <tr><td>VoltEdge Supplies</td><td>Vendor</td><td>4.7 rating</td><td>Preferred</td><td>Continue preferred sourcing.</td></tr>
-          <tr><td>Test Global Vendor</td><td>Vendor</td><td>New supplier</td><td>Active</td><td>Complete first-delivery performance review.</td></tr>
-        </tbody>
-      </table>
-      <p class="note">SCM control status is stable. Reorder automation has open purchase order coverage for critical low-stock SKUs, preventing duplicate PO creation.</p>
-    </section>
+   
+  <section class="section">
+    ${reportContent}
+  </section>
+
     <div class="signatures">
       <div class="signature"><strong>${owner}</strong><br />Prepared by</div>
       <div class="signature"><strong>Supply Chain Director</strong><br />Reviewed by</div>
@@ -167,7 +302,7 @@ export default function ScmReportsPage() {
       const response = await fetch("/api/scm/reports", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, status: "Draft", inventoryValue: 4280000, openPOs: 18, lowStockItems: 7 }),
+        body: JSON.stringify({ ...form, status: "Created", inventoryValue: 4280000, openPOs: 18, lowStockItems: 7 }),
       });
       const json = await response.json();
       if (json?.success) {
@@ -237,7 +372,7 @@ export default function ScmReportsPage() {
         <div className="mt-7 grid gap-5 lg:grid-cols-[1.2fr_1fr_1fr_1fr_auto]">
           <label className="space-y-2">
             <span className="font-semibold text-white">Report name</span>
-            <input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} placeholder="Inventory Health Report" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
+            <input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} placeholder="Enter Report Name" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
           </label>
           <label className="space-y-2">
             <span className="font-semibold text-white">Type</span>
@@ -247,11 +382,11 @@ export default function ScmReportsPage() {
           </label>
           <label className="space-y-2">
             <span className="font-semibold text-white">Period</span>
-            <input value={form.period} onChange={(event) => setForm((current) => ({ ...current, period: event.target.value }))} placeholder="June 2026" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
+            <input value={form.period} onChange={(event) => setForm((current) => ({ ...current, period: event.target.value }))} placeholder="Enter Period" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
           </label>
           <label className="space-y-2">
             <span className="font-semibold text-white">Owner</span>
-            <input value={form.owner} onChange={(event) => setForm((current) => ({ ...current, owner: event.target.value }))} placeholder="SCM CoE" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
+            <input value={form.owner} onChange={(event) => setForm((current) => ({ ...current, owner: event.target.value }))} placeholder="Owner Name" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
           </label>
           <button onClick={createReport} disabled={loading} className="mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 px-8 font-bold text-white shadow-[0_0_35px_rgba(236,72,153,0.35)] transition hover:scale-[1.02] disabled:opacity-60">
             <Send className="h-5 w-5" />
@@ -273,7 +408,7 @@ export default function ScmReportsPage() {
                 <th className="px-4 py-4">Period</th>
                 <th className="px-4 py-4">Owner</th>
                 <th className="px-4 py-4">Status</th>
-                <th className="w-[360px] px-4 py-4 text-right">Actions</th>
+                <th className="w-[360px] px-4 py-4 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>

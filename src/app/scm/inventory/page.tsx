@@ -42,7 +42,7 @@ const emptyItem = {
   product: "",
   warehouse: "Bengaluru DC",
   qty: "0",
-  reorder: "50",
+  reorder: "0",
 };
 
 const statusStyles: Record<string, string> = {
@@ -251,7 +251,7 @@ export default function SCMInventoryPage() {
               value={form.sku}
               onChange={(event) => setForm((current) => ({ ...current, sku: event.target.value }))}
               className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
-              placeholder="ERP-ROUTER-PRO"
+              placeholder="Enter SKU"
             />
           </label>
 
@@ -262,7 +262,7 @@ export default function SCMInventoryPage() {
               value={form.product}
               onChange={(event) => setForm((current) => ({ ...current, product: event.target.value }))}
               className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
-              placeholder="Plant Network Router"
+              placeholder="Enter Product"
             />
           </label>
 
@@ -345,7 +345,7 @@ export default function SCMInventoryPage() {
                   <th className="px-4 py-4">Qty</th>
                   <th className="px-4 py-4">Reorder</th>
                   <th className="px-4 py-4">Status</th>
-                  <th className="w-[360px] px-4 py-4 text-right">Actions</th>
+                  <th className="w-[360px] px-4 py-4 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -359,15 +359,25 @@ export default function SCMInventoryPage() {
                       key={item.id}
                       className={`border-b border-white/10 text-white ${index % 2 ? "bg-white/[0.03]" : ""}`}
                     >
-                      <td className="px-4 py-5">
-                        <div className="font-semibold">{item.sku ?? item.id}</div>
-                        <div className="text-xs text-slate-400">{item.id}</div>
+                      <td className="px-4 py-5 whitespace-nowrap">
+                        {item.sku ?? item.id}
                       </td>
-                      <td className="px-4 py-5">{item.product}</td>
-                      <td className="px-4 py-5">{item.warehouse}</td>
-                      <td className="px-4 py-5">{qty}</td>
-                      <td className="px-4 py-5">{reorder}</td>
-                      <td className="px-4 py-5">
+                      <td className="px-4 py-5 whitespace-nowrap">
+                        {item.product}
+                      </td>
+
+                      <td className="px-4 py-5 whitespace-nowrap">
+                        {item.warehouse}
+                      </td>
+
+                      <td className="px-4 py-5 whitespace-nowrap">
+                        {qty}
+                      </td>
+
+                      <td className="px-4 py-5 whitespace-nowrap">
+                        {reorder}
+                      </td>
+                      <td className="px-4 py-5 whitespace-nowrap">
                         <span className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold ring-1 ${style}`}>
                           {item.status}
                         </span>
