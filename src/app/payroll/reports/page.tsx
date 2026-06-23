@@ -36,6 +36,8 @@ function money(value?: number) {
 }
 
 function reportHtml(report: PayrollReport) {
+  console.log("DOWNLOADED REPORT:", report);
+  console.log("TYPE:", report.type);
   const name = valueOf(report, "name", "Monthly Payroll Report");
   const type = valueOf(report, "type", "Payroll Register");
   const period = valueOf(report, "period", "June 2026");
@@ -44,6 +46,128 @@ function reportHtml(report: PayrollReport) {
   const gross = Number(report.grossPayroll ?? 6240000);
   const deductions = Number(report.deductions ?? 912000);
   const net = Number(report.netPayroll ?? gross - deductions);
+
+  let reportContent = "";
+  switch (type) {
+    case "Payroll Register":
+      reportContent = `
+  <h2>Payroll Register</h2>
+  <p>Employee salary details for the selected payroll period.</p>
+
+  <table>
+    <tr>
+      <th>Employee</th>
+      <th>Department</th>
+      <th>Designation</th>
+      <th>Gross Salary</th>
+    </tr>
+
+    <tr>
+      <td>Anika Rao</td>
+      <td>HR</td>
+      <td>Manager</td>
+      <td>$8,400</td>
+    </tr>
+
+    <tr>
+      <td>Ethan Clarke</td>
+      <td>Finance</td>
+      <td>Controller</td>
+      <td>$11,200</td>
+    </tr>
+
+    <tr>
+      <td>Maya Chen</td>
+      <td>Engineering</td>
+      <td>Architect</td>
+      <td>$12,800</td>
+    </tr>
+  </table>
+  `;
+      break;
+
+    case "Tax Summary":
+      reportContent = `
+      <h2>Tax Summary</h2>
+      <p>Tax deduction and compliance overview.</p>
+
+      <table>
+        <tr>
+          <th>Taxable Income</th>
+          <th>Total Tax</th>
+        </tr>
+        <tr>
+          <td>${money(gross)}</td>
+          <td>${money(deductions)}</td>
+        </tr>
+      </table>
+    `;
+      break;
+
+    case "Deduction Register":
+      reportContent = `
+      <h2>Deduction Register</h2>
+      <p>Employee deduction breakdown.</p>
+
+      <table>
+        <tr>
+          <th>Deduction Type</th>
+          <th>Amount</th>
+        </tr>
+        <tr>
+          <td>Tax</td>
+          <td>${money(deductions)}</td>
+        </tr>
+      </table>
+    `;
+      break;
+
+    case "Bank Transfer File":
+      reportContent = `
+      <h2>Bank Transfer File</h2>
+      <p>Salary transfer details for banking operations.</p>
+
+      <table>
+        <tr>
+          <th>Transfer Batch</th>
+          <th>Amount</th>
+        </tr>
+        <tr>
+          <td>PAY-${period}</td>
+          <td>${money(net)}</td>
+        </tr>
+      </table>
+    `;
+      break;
+
+    case "Variance Analysis":
+      reportContent = `
+      <h2>Variance Analysis</h2>
+      <p>Comparison of payroll costs and deductions.</p>
+
+      <table>
+        <tr>
+          <th>Gross Payroll</th>
+          <th>Deductions</th>
+          <th>Net Payroll</th>
+        </tr>
+        <tr>
+          <td>${money(gross)}</td>
+          <td>${money(deductions)}</td>
+          <td>${money(net)}</td>
+        </tr>
+      </table>
+    `;
+      break;
+
+    default:
+      reportContent = `
+      <h2>Payroll Report</h2>
+      <p>General payroll report.</p>
+    `;
+  }
+
+
 
   return `<!doctype html>
 <html>
@@ -94,30 +218,9 @@ function reportHtml(report: PayrollReport) {
       <div class="metric"><span>Net Payable</span><strong>${money(net)}</strong></div>
     </section>
     <section class="section">
-      <h2>Payroll Control Summary</h2>
-      <table>
-        <thead><tr><th>Control</th><th>Amount</th><th>Status</th><th>Reviewer Note</th></tr></thead>
-        <tbody>
-          <tr><td>Gross earnings</td><td>${money(gross)}</td><td>Balanced</td><td>Matches active employee payroll population.</td></tr>
-          <tr><td>Employee deductions</td><td>${money(deductions)}</td><td>Validated</td><td>Includes tax, insurance, and retirement deductions.</td></tr>
-          <tr><td>Net salary payable</td><td>${money(net)}</td><td>Ready</td><td>Prepared for bank transfer approval.</td></tr>
-          <tr><td>Variance vs prior month</td><td>${money(84200)}</td><td>Reviewed</td><td>Variance driven by new hires and incentives.</td></tr>
-        </tbody>
-      </table>
+      ${reportContent}
     </section>
-    <section class="section">
-      <h2>Department Payroll Breakdown</h2>
-      <table>
-        <thead><tr><th>Department</th><th>Employees</th><th>Gross</th><th>Deductions</th><th>Net Pay</th></tr></thead>
-        <tbody>
-          <tr><td>Finance</td><td>42</td><td>${money(512400)}</td><td>${money(74400)}</td><td>${money(438000)}</td></tr>
-          <tr><td>Human Resources</td><td>18</td><td>${money(214800)}</td><td>${money(31800)}</td><td>${money(183000)}</td></tr>
-          <tr><td>Engineering</td><td>112</td><td>${money(1624000)}</td><td>${money(244000)}</td><td>${money(1380000)}</td></tr>
-          <tr><td>Operations</td><td>64</td><td>${money(768000)}</td><td>${money(112000)}</td><td>${money(656000)}</td></tr>
-        </tbody>
-      </table>
-      <p class="note">Payroll controls are ready for final finance approval. No duplicate bank accounts, inactive employees, or negative net pay exceptions were detected for this cycle.</p>
-    </section>
+
     <div class="signatures">
       <div class="signature"><strong>${owner}</strong><br />Prepared by</div>
       <div class="signature"><strong>Finance Controller</strong><br />Approved by</div>
@@ -167,7 +270,16 @@ export default function PayrollReportsPage() {
       const response = await fetch("/api/payroll/reports", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, status: "Draft", grossPayroll: 6240000, deductions: 912000, netPayroll: 5328000 }),
+        body: JSON.stringify({
+          name: form.name,
+          type: form.type,
+          period: form.period,
+          owner: form.owner,
+          status: "Draft",
+          grossPayroll: 6240000,
+          deductions: 912000,
+          netPayroll: 5328000
+        }),
       });
       const json = await response.json();
       if (json?.success) {
@@ -197,11 +309,26 @@ export default function PayrollReportsPage() {
   }
 
   function downloadPdf(report: PayrollReport) {
-    const blob = new Blob([reportHtml(report)], { type: "text/html;charset=utf-8" });
+    console.log("================================");
+    console.log("FULL REPORT:", report);
+    console.log("REPORT TYPE:", report.type);
+    console.log("REPORT NAME:", report.name);
+    console.log("================================");
+
+    const blob = new Blob(
+      [reportHtml(report)],
+      { type: "text/html;charset=utf-8" }
+    );
+
     const url = URL.createObjectURL(blob);
+
     window.open(url, "_blank", "noopener,noreferrer");
+
     setTimeout(() => URL.revokeObjectURL(url), 15000);
-    setMessage("Payroll PDF preview opened. Choose Save as PDF in the print dialog.");
+
+    setMessage(
+      "Payroll PDF preview opened. Choose Save as PDF in the print dialog."
+    );
   }
 
   return (
@@ -237,7 +364,7 @@ export default function PayrollReportsPage() {
         <div className="mt-7 grid gap-5 lg:grid-cols-[1.2fr_1fr_1fr_1fr_auto]">
           <label className="space-y-2">
             <span className="font-semibold text-white">Report name</span>
-            <input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} placeholder="Monthly Payroll Register" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
+            <input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} placeholder="Enter Report Name" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
           </label>
           <label className="space-y-2">
             <span className="font-semibold text-white">Type</span>
@@ -247,11 +374,11 @@ export default function PayrollReportsPage() {
           </label>
           <label className="space-y-2">
             <span className="font-semibold text-white">Period</span>
-            <input value={form.period} onChange={(event) => setForm((current) => ({ ...current, period: event.target.value }))} placeholder="June 2026" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
+            <input value={form.period} onChange={(event) => setForm((current) => ({ ...current, period: event.target.value }))} placeholder="Enter Period" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
           </label>
           <label className="space-y-2">
             <span className="font-semibold text-white">Owner</span>
-            <input value={form.owner} onChange={(event) => setForm((current) => ({ ...current, owner: event.target.value }))} placeholder="Payroll CoE" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
+            <input value={form.owner} onChange={(event) => setForm((current) => ({ ...current, owner: event.target.value }))} placeholder="Enter Owner" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
           </label>
           <button onClick={createReport} disabled={loading} className="mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 px-8 font-bold text-white shadow-[0_0_35px_rgba(236,72,153,0.35)] transition hover:scale-[1.02] disabled:opacity-60">
             <Send className="h-5 w-5" />
@@ -273,19 +400,33 @@ export default function PayrollReportsPage() {
                 <th className="px-4 py-4">Period</th>
                 <th className="px-4 py-4">Owner</th>
                 <th className="px-4 py-4">Status</th>
-                <th className="w-[360px] px-4 py-4 text-right">Actions</th>
+                <th className="w-[360px] px-4 py-4 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
               {reports.map((report) => (
                 <tr key={report.id} className="border-b border-white/10 text-white even:bg-white/[0.03]">
-                  <td className="px-4 py-5"><div className="font-semibold">{valueOf(report, "name", "Payroll report")}</div><div className="text-sm text-slate-400">{report.id}</div></td>
-                  <td className="px-4 py-5">{valueOf(report, "type", "Payroll Register")}</td>
-                  <td className="px-4 py-5">{valueOf(report, "period", "June 2026")}</td>
-                  <td className="px-4 py-5">{valueOf(report, "owner", "Payroll CoE")}</td>
-                  <td className="px-4 py-5"><span className="inline-flex min-w-[92px] justify-center whitespace-nowrap rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-sm font-semibold text-cyan-100">{valueOf(report, "status", "Ready")}</span></td>
-                  <td className="px-4 py-5">
-                    <div className="flex min-w-[320px] flex-nowrap justify-end gap-3">
+                  <td className="px-4 py-5 whitespace-nowrap">
+                    {valueOf(report, "name", "Payroll report")}
+                  </td>
+                  <td className="px-4 py-5 whitespace-nowrap">
+                    {valueOf(report, "type", "Payroll Register")}
+                  </td>
+                  <td className="px-4 py-5 whitespace-nowrap">
+                    {valueOf(report, "period", "June 2026")}
+                  </td>
+                  <td className="px-4 py-5 whitespace-nowrap">
+                    {valueOf(report, "owner", "Payroll CoE")}
+                  </td>
+                  <td className="px-4 py-5 whitespace-nowrap"><span className="inline-flex min-w-[92px] justify-center whitespace-nowrap rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-sm font-semibold text-cyan-100">{valueOf(report, "status", "Ready")}</span></td>
+                  <td className="px-4 py-5 whitespace-nowrap">
+                    <div className="flex min-w-[420px] flex-nowrap justify-center gap-3">
+                      <button
+                        onClick={() => updateStatus(report, "Draft")}
+                        className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-amber-300/20 bg-amber-400/15 px-4 py-3 font-semibold text-amber-100"
+                      >
+                        Draft
+                      </button>
                       <button onClick={() => updateStatus(report, "Approved")} className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-emerald-300/20 bg-emerald-400/15 px-4 py-3 font-semibold text-emerald-100"><CheckCircle2 className="h-4 w-4" />Approve</button>
                       <button onClick={() => downloadPdf(report)} className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-violet-300/20 bg-violet-400/15 px-4 py-3 font-semibold text-violet-100"><Download className="h-4 w-4" />PDF</button>
                       <button onClick={() => deleteReport(report)} className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-rose-300/20 bg-rose-400/15 px-4 py-3 font-semibold text-rose-100"><Trash2 className="h-4 w-4" />Delete</button>

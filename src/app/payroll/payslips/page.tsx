@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useHrNotificationStore } from "@/store/notification-store";
+import { usePayrollStore } from "@/store/payroll-store";
 import {
   BadgeDollarSign,
   CheckCircle2,
@@ -142,6 +143,9 @@ export default function PayrollPayslipsPage() {
     useHrNotificationStore(
       (state) => state.addNotification
     );
+  const generatePayslips = usePayrollStore(
+    (state) => state.generatePayslips
+  );
   const [form, setForm] = useState(emptyPayslip);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -222,7 +226,7 @@ export default function PayrollPayslipsPage() {
           "Payroll"
         );
       }
-      
+
       console.log(
         "NOTIFICATION CREATED:",
         form.employee
@@ -231,6 +235,8 @@ export default function PayrollPayslipsPage() {
       setMessage(
         "Payslip generated and synced with the payroll backend API."
       );
+
+      generatePayslips(form.period);
 
       await loadPayslips();
     } catch (error) {

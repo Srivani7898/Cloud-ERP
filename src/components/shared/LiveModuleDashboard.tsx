@@ -156,6 +156,12 @@ export function LiveModuleDashboard({ eyebrow, title, description, moduleKey, re
   }
   useEffect(() => {
     loadDashboard();
+
+    const interval = setInterval(() => {
+      loadDashboard();
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const summary = useMemo(() => {

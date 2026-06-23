@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { CheckCircle2, Trash2, UserPlus } from "lucide-react";
+import { usePayrollStore } from "@/store/payroll-store";
 
 type PayrollEmployee = {
   id: string;
@@ -41,6 +42,9 @@ export default function PayrollEmployeesPage() {
   const [form, setForm] = useState(defaultForm);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("Employees are connected to /api/payroll/employees.");
+  const addPayrollEmployee = usePayrollStore(
+    (state) => state.addEmployee
+  );
 
   const summary = useMemo(() => {
     const totalPayroll = employees.reduce((sum, employee) => sum + Number(employee.baseSalary ?? employee.salary ?? 0), 0);
@@ -86,7 +90,7 @@ export default function PayrollEmployeesPage() {
         taxRegion: form.taxRegion,
         taxCode: form.taxRegion === "India" ? "IN-NEW" : form.taxRegion,
         bank: "Verified",
-        status: "Active",
+        status: "Employee Added",
       };
 
       const response = await fetch("/api/payroll/employees", {
@@ -96,8 +100,22 @@ export default function PayrollEmployeesPage() {
       });
       const json = await response.json();
       if (json?.success) {
-        setMessage(`${form.name} added to payroll and synced with the API.`);
+        console.log("FORM DATA", form);
+        addPayrollEmployee({
+          employeeCode: form.code,
+          name: form.name,
+          department: form.department,
+          designation: form.designation,
+          baseSalary: Number(form.baseSalary),
+          taxRegion: form.taxRegion,
+        });
+
+        setMessage(
+          `${form.name} added to payroll and synced with the API.`
+        );
+
         setForm(defaultForm);
+
         await loadEmployees();
       } else {
         setMessage("Employee was not saved. Check the API response.");
@@ -171,27 +189,99 @@ export default function PayrollEmployeesPage() {
         <div className="mt-7 grid gap-5 lg:grid-cols-3">
           <label className="space-y-2">
             <span className="font-semibold text-white">Code</span>
-            <input value={form.code} onChange={(event) => setForm((current) => ({ ...current, code: event.target.value }))} placeholder="NG-2003" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
+            <input
+              autoComplete="off"
+              spellCheck={false}
+              value={form.code}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  code: event.target.value,
+                }))
+              }
+              placeholder="Enter Employee Code"
+              className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300"
+            />
           </label>
           <label className="space-y-2">
             <span className="font-semibold text-white">Name</span>
-            <input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} placeholder="Test Payroll Employee" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
+            <input
+              autoComplete="off"
+              spellCheck={false}
+              value={form.name}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  name: event.target.value,
+                }))
+              }
+              placeholder="Enter Employee Name"
+              className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300"
+            />
           </label>
           <label className="space-y-2">
             <span className="font-semibold text-white">Department</span>
-            <input value={form.department} onChange={(event) => setForm((current) => ({ ...current, department: event.target.value }))} placeholder="Finance" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
+            <input
+              autoComplete="off"
+              spellCheck={false}
+              value={form.department}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  department: event.target.value,
+                }))
+              }
+              placeholder="Enter Department"
+              className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300"
+            />
           </label>
           <label className="space-y-2">
             <span className="font-semibold text-white">Designation</span>
-            <input value={form.designation} onChange={(event) => setForm((current) => ({ ...current, designation: event.target.value }))} placeholder="Finance Analyst" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
+            <input
+              autoComplete="off"
+              spellCheck={false}
+              value={form.designation}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  designation: event.target.value,
+                }))
+              }
+              placeholder="Enter Designation"
+              className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300"
+            />
           </label>
           <label className="space-y-2">
             <span className="font-semibold text-white">Base salary</span>
-            <input type="number" value={form.baseSalary} onChange={(event) => setForm((current) => ({ ...current, baseSalary: event.target.value }))} placeholder="8400" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
+            <input
+              type="number"
+              autoComplete="off"
+              value={form.baseSalary}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  baseSalary: event.target.value,
+                }))
+              }
+              placeholder="Enter Base Salary"
+              className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300"
+            />
           </label>
           <label className="space-y-2">
             <span className="font-semibold text-white">Tax region</span>
-            <input value={form.taxRegion} onChange={(event) => setForm((current) => ({ ...current, taxRegion: event.target.value }))} placeholder="India" className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300" />
+            <input
+              autoComplete="off"
+              spellCheck={false}
+              value={form.taxRegion}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  taxRegion: event.target.value,
+                }))
+              }
+              placeholder="Enter Tax Region"
+              className="h-14 w-full rounded-xl border border-white/10 bg-white/10 px-5 text-white outline-none placeholder:text-slate-500 focus:border-cyan-300"
+            />
           </label>
         </div>
 
@@ -211,50 +301,65 @@ export default function PayrollEmployeesPage() {
         <p className="mt-2 text-slate-300">Employees enrolled in payroll.</p>
 
         <div className="mt-8 overflow-x-auto">
-          <table className="w-full min-w-[1320px] text-left">
+          <table className="w-full min-w-[1500px] text-left">
             <thead>
-              <tr className="border-b border-white/10 text-sm uppercase tracking-[0.28em] text-cyan-300">
-                <th className="px-4 py-4">Code</th>
-                <th className="px-4 py-4">Name</th>
-                <th className="px-4 py-4">Department</th>
-                <th className="px-4 py-4">Designation</th>
-                <th className="px-4 py-4">Pay type</th>
-                <th className="px-4 py-4">Base salary</th>
-                <th className="px-4 py-4">Tax region</th>
-                <th className="px-4 py-4">Bank</th>
-                <th className="w-[150px] px-4 py-4">Status</th>
-                <th className="w-[400px] px-4 py-4 text-right">Actions</th>
+              <tr className="border-b border-white/10 text-sm uppercase tracking-[0.18em] text-cyan-300">
+                <th className="px-4 py-4 whitespace-nowrap">Employee</th>
+                <th className="px-4 py-4 whitespace-nowrap">Department</th>
+                <th className="px-4 py-4 whitespace-nowrap">Designation</th>
+                <th className="px-4 py-4 whitespace-nowrap">Pay Type</th>
+                <th className="px-4 py-4 whitespace-nowrap">Basic Salary</th>
+                <th className="px-4 py-4 whitespace-nowrap">Tax Region</th>
+                <th className="px-4 py-4 whitespace-nowrap">Bank</th>
+                <th className="px-4 py-4 whitespace-nowrap text-center">Status</th>
+                <th className="w-[320px] px-4 py-4 text-center whitespace-nowrap">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
               {employees.map((employee) => (
                 <tr key={employee.id} className="border-b border-white/10 text-white even:bg-white/[0.03]">
-                  <td className="px-4 py-5">{employee.code ?? employee.id}</td>
-                  <td className="px-4 py-5 font-semibold">{valueOf(employee, "name")}</td>
-                  <td className="px-4 py-5">{valueOf(employee, "department")}</td>
-                  <td className="px-4 py-5">{valueOf(employee, "designation", "Payroll Employee")}</td>
-                  <td className="px-4 py-5">{valueOf(employee, "payType", "Monthly")}</td>
-                  <td className="px-4 py-5">{money(employee.baseSalary ?? employee.salary)}</td>
-                  <td className="px-4 py-5">{employee.taxRegion ?? employee.taxCode ?? "India"}</td>
-                  <td className="px-4 py-5">
+                  <td className="px-4 py-5 font-semibold whitespace-nowrap">
+                    <span className="text-cyan-300">
+                      {employee.code ?? employee.id}
+                    </span>
+                    {" - "}
+                    <span>
+                      {valueOf(employee, "name")}
+                    </span>
+                  </td>
+                  <td className="px-4 py-5 text-center">{valueOf(employee, "department")}</td>
+                  <td className="px-4 py-5 text-center">{valueOf(employee, "designation", "Payroll Employee")}</td>
+                  <td className="px-4 py-5 text-center">{valueOf(employee, "payType", "Monthly")}</td>
+                  <td className="px-4 py-5 text-center">{money(employee.baseSalary ?? employee.salary)}</td>
+                  <td className="px-4 py-5 text-center">{employee.taxRegion ?? employee.taxCode ?? "India"}</td>
+                  <td className="px-4 py-5 text-center">
                     <span className="rounded-full border border-emerald-300/20 bg-emerald-400/15 px-3 py-1 text-sm font-semibold text-emerald-100">
                       {valueOf(employee, "bank", "Verified")}
                     </span>
                   </td>
-                  <td className="px-4 py-5">
-                    <span className={`inline-flex min-w-[92px] items-center justify-center whitespace-nowrap rounded-full border px-3 py-1 text-sm font-semibold ${
-                      valueOf(employee, "status", "Active") === "Active"
-                        ? "border-emerald-300/20 bg-emerald-400/15 text-emerald-100"
-                        : "border-amber-300/20 bg-amber-400/15 text-amber-100"
-                    }`}>
+                  <td className="px-4 py-5 text-center">
+                    <span
+                      className={`inline-flex min-w-[120px] items-center justify-center whitespace-nowrap rounded-full border px-3 py-1 text-sm font-semibold ${valueOf(employee, "status") === "Employee Added"
+                        ? "border-cyan-300/20 bg-cyan-400/15 text-cyan-100"
+                        : valueOf(employee, "status") === "Active"
+                          ? "border-emerald-300/20 bg-emerald-400/15 text-emerald-100"
+                          : "border-amber-300/20 bg-amber-400/15 text-amber-100"
+                        }`}
+                    >
                       {valueOf(employee, "status", "Active")}
                     </span>
                   </td>
                   <td className="px-4 py-5">
-                    <div className="flex min-w-[360px] flex-nowrap justify-end gap-3">
-                      <button onClick={() => updateStatus(employee, "Active")} className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-emerald-300/20 bg-emerald-400/15 px-4 py-3 font-semibold text-emerald-100">
+                    <div className="flex items-center justify-center gap-2">
+                      <button
+                        onClick={() => updateStatus(employee, "Active")}
+                        disabled={employee.status === "Active"}
+                        className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-emerald-300/20 bg-emerald-400/15 px-4 py-3 font-semibold text-emerald-100 disabled:opacity-50"
+                      >
                         <CheckCircle2 className="h-4 w-4" />
-                        Active
+                        Activate
                       </button>
                       <button onClick={() => updateStatus(employee, "On Hold")} className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-amber-300/20 bg-amber-400/15 px-4 py-3 font-semibold text-amber-100">
                         On hold
