@@ -40,7 +40,7 @@ const emptyProject = {
   name: "",
   methodology: "Agile",
   owner: "",
-  budget: "250000",
+  budget: "",
 };
 
 const statusStyles: Record<string, string> = {
@@ -110,7 +110,7 @@ export default function ProjectsPage() {
           name: form.name.trim(),
           methodology: form.methodology,
           owner: form.owner.trim() || "Program Office",
-          status: "Active",
+          status: "Created",
           progress: 5,
           budget: Number(form.budget),
           risk: "Medium",
@@ -190,8 +190,7 @@ export default function ProjectsPage() {
             Project portfolio
           </h1>
           <p className="mt-2 max-w-2xl text-base text-slate-300">
-            Create and monitor enterprise delivery programs through the live
-            `/api/projects/projects` backend.
+            Create and monitor enterprise delivery programs through the live.
           </p>
         </div>
 
@@ -245,7 +244,7 @@ export default function ProjectsPage() {
               value={form.name}
               onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
               className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
-              placeholder="ERP Finance Modernization"
+              placeholder="Enter Project Name"
             />
           </label>
 
@@ -268,7 +267,7 @@ export default function ProjectsPage() {
               value={form.owner}
               onChange={(event) => setForm((current) => ({ ...current, owner: event.target.value }))}
               className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
-              placeholder="Anika Rao"
+              placeholder="Owner Name"
             />
           </label>
 
@@ -326,7 +325,7 @@ export default function ProjectsPage() {
                   <th className="px-4 py-4">Budget</th>
                   <th className="px-4 py-4">Status</th>
                   <th className="px-4 py-4">Risk</th>
-                  <th className="w-[330px] px-4 py-4 text-right">Actions</th>
+                  <th className="w-[330px] px-4 py-4 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -339,13 +338,29 @@ export default function ProjectsPage() {
                       className={`border-b border-white/10 text-white ${index % 2 ? "bg-white/[0.03]" : ""}`}
                     >
                       <td className="px-4 py-5">
-                        <div className="font-semibold">{project.name}</div>
-                        <div className="text-xs text-slate-400">{project.id}</div>
+                        <div className="font-semibold whitespace-nowrap">
+                          {project.name}
+                        </div>
+
+                        <div className="text-xs text-slate-400 whitespace-nowrap">
+                          {project.id}
+                        </div>
                       </td>
-                      <td className="px-4 py-5">{project.owner ?? "Program Office"}</td>
-                      <td className="px-4 py-5">{project.methodology ?? "Hybrid"}</td>
-                      <td className="px-4 py-5">{project.progress ?? 0}%</td>
-                      <td className="px-4 py-5">{money(project.budget)}</td>
+
+                      <td className="px-4 py-5 whitespace-nowrap">
+                        {project.owner ?? "Program Office"}
+                      </td>
+
+                      <td className="px-4 py-5">
+                        {project.methodology ?? "Hybrid"}
+                      </td>
+                      <td className="px-4 py-5">
+                        {project.progress ?? 0}%
+                      </td>
+                      
+                      <td className="px-4 py-5">
+                        {money(project.budget)}
+                      </td>
                       <td className="px-4 py-5">
                         <span className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold ring-1 ${style}`}>
                           {project.status}

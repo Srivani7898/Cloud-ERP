@@ -1,9 +1,47 @@
 import type { Milestone, Project, ProjectResource, ProjectRisk, ProjectTask, TimeEntry } from "@/types/projects";
 
 export const projects: Project[] = [
-  { id: "proj-1001", name: "ERP Finance Modernization", client: "Northstar Manufacturing", methodology: "Agile", owner: "Avery Stone", startDate: "2026-04-01", endDate: "2026-09-30", budget: 1250000, actual: 684000, progress: 54, status: "active" },
-  { id: "proj-1002", name: "Global Inventory Rollout", client: "Northstar Manufacturing", methodology: "Hybrid", owner: "Maya Chen", startDate: "2026-03-15", endDate: "2026-08-15", budget: 980000, actual: 812000, progress: 72, status: "at_risk" },
-  { id: "proj-1003", name: "AI Forecasting Pilot", client: "Northstar Manufacturing", methodology: "Agile", owner: "Ravi Kumar", startDate: "2026-05-01", endDate: "2026-07-31", budget: 420000, actual: 188000, progress: 46, status: "planning" }
+  {
+    id: "proj-1001",
+    name: "ERP Finance Modernization",
+    client: "Northstar Manufacturing",
+    methodology: "Agile",
+    owner: "Avery Stone",
+    startDate: "2026-04-01",
+    endDate: "2026-09-30",
+    budget: 1250000,
+    actual: 684000,
+    progress: 35,
+    status: "active",
+  },
+
+  {
+    id: "proj-1002",
+    name: "Global Inventory Rollout",
+    client: "Northstar Manufacturing",
+    methodology: "Hybrid",
+    owner: "Maya Chen",
+    startDate: "2026-03-15",
+    endDate: "2026-08-15",
+    budget: 980000,
+    actual: 812000,
+    progress: 30,
+    status: "at_risk",
+  },
+
+  {
+    id: "proj-1003",
+    name: "AI Forecasting Pilot",
+    client: "Northstar Manufacturing",
+    methodology: "Agile",
+    owner: "Ravi Kumar",
+    startDate: "2026-05-01",
+    endDate: "2026-07-31",
+    budget: 420000,
+    actual: 188000,
+    progress: 0,
+    status: "planning",
+  },
 ];
 
 export const projectTasks: ProjectTask[] = [
