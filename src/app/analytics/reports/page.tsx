@@ -1,8 +1,15 @@
 "use client";
 
-import { Download, FileSpreadsheet, FileText, RefreshCw, ShieldCheck } from "lucide-react";
+import { useState } from "react";
+import {
+  Download,
+  FileSpreadsheet,
+  FileText,
+  RefreshCw,
+  ShieldCheck,
+} from "lucide-react";
 
-const reports = [
+const initialReports = [
   {
     id: "BI-RPT-1",
     name: "Executive ERP Performance",
@@ -32,7 +39,7 @@ const reports = [
   },
 ];
 
-function openPdf(report: (typeof reports)[number]) {
+function openPdf(report: (typeof initialReports)[number]) {
   const html = `
     <html>
       <head>
@@ -100,7 +107,7 @@ function openPdf(report: (typeof reports)[number]) {
   printWindow.print();
 }
 
-function exportCsv(report: (typeof reports)[number]) {
+function exportCsv(report: (typeof initialReports)[number]) {
   const rows = [
     ["Report", "Owner", "Period", "Domain", "KPI", "Current", "Trend", "Action"],
     [report.name, report.owner, report.period, "Finance", "Revenue close", "$48.2M", "+12.4%", "Monitor APAC margin variance"],
@@ -119,6 +126,49 @@ function exportCsv(report: (typeof reports)[number]) {
 }
 
 export default function AnalyticsReportsPage() {
+  const [reports, setReports] = useState(initialReports);
+
+  function refreshReports() {
+    setReports((current) =>
+      current.map((report) => ({
+        ...report,
+        status:
+          report.status === "Ready"
+            ? "Updated"
+            : "Ready",
+      }))
+    );
+  }
+
+  function addReport() {
+    const nextId = reports.length + 1;
+
+    const reportTypes = [
+      "Board Pack",
+      "Variance Analysis",
+      "Operational Review",
+    ];
+
+    const randomType =
+      reportTypes[
+      Math.floor(
+        Math.random() * reportTypes.length
+      )
+      ];
+
+    setReports((current) => [
+      ...current,
+      {
+        id: `BI-RPT-${nextId}`,
+        name: `${randomType} Report`,
+        owner: "Analytics Team",
+        period: "June 2026",
+        status: "Ready",
+        type: randomType,
+        pages: Math.floor(Math.random() * 20) + 5,
+      },
+    ]);
+  }
   return (
     <div className="space-y-8">
       <section className="flex flex-wrap items-end justify-between gap-4">
@@ -128,18 +178,47 @@ export default function AnalyticsReportsPage() {
             Board-ready BI reports with cross-module KPIs, executive summaries, and export-ready detail tables.
           </p>
         </div>
-        <button className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-5 py-3 font-semibold text-white">
+        <button
+          onClick={refreshReports}
+          className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-5 py-3 font-semibold text-white">
           <RefreshCw className="h-5 w-5" />
           Refresh reports
+        </button>
+        <button
+          onClick={addReport}
+          className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white"
+        >
+          <Download className="h-5 w-5" />
+          Add Report
         </button>
       </section>
 
       <section className="grid gap-4 md:grid-cols-4">
         {[
-          ["Published reports", "24", "Executive-ready"],
-          ["Data domains", "8", "Finance to Audit"],
-          ["Avg refresh", "5m", "Real-time feeds"],
-          ["AI insights", "42", "This period"],
+          [
+            "Published Reports",
+            reports.length,
+            "Available",
+          ],
+          [
+            "Ready Reports",
+            reports.filter(
+              (r) => r.status === "Ready"
+            ).length,
+            "Production Ready",
+          ],
+          [
+            "Updated Reports",
+            reports.filter(
+              (r) => r.status === "Updated"
+            ).length,
+            "Recently Refreshed",
+          ],
+          [
+            "Data Domains",
+            "8",
+            "Finance to Audit",
+          ],
         ].map(([label, value, note]) => (
           <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
             <p className="text-sm text-slate-300">{label}</p>

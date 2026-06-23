@@ -10,6 +10,39 @@ type BuilderWidget = {
   type: "revenue" | "health" | "insights" | "kpi";
 };
 
+const widgetTemplates: Omit<BuilderWidget, "id">[] = [
+  {
+    eyebrow: "Finance Widget",
+    title: "Revenue Trend",
+    type: "revenue",
+  },
+  {
+    eyebrow: "Health Widget",
+    title: "Module Health",
+    type: "health",
+  },
+  {
+    eyebrow: "Insights Widget",
+    title: "AI Insights",
+    type: "insights",
+  },
+  {
+    eyebrow: "KPI Widget",
+    title: "Executive KPI Panel",
+    type: "kpi",
+  },
+  {
+    eyebrow: "Finance Widget",
+    title: "Profit Analysis",
+    type: "revenue",
+  },
+  {
+    eyebrow: "Health Widget",
+    title: "System Performance",
+    type: "health",
+  },
+];
+
 const starterWidgets: BuilderWidget[] = [
   { id: 1, eyebrow: "Widget 1", title: "Revenue trend", type: "revenue" },
   { id: 2, eyebrow: "Widget 2", title: "Module health", type: "health" },
@@ -100,19 +133,45 @@ export default function AnalyticsBuilderPage() {
   const [message, setMessage] = useState("Builder draft is ready.");
 
   function addWidget() {
-    const nextId = widgets.length ? Math.max(...widgets.map((widget) => widget.id)) + 1 : 1;
+    const nextId =
+      widgets.length
+        ? Math.max(...widgets.map((widget) => widget.id)) + 1
+        : 1;
+
+    const availableWidgets = widgetTemplates.filter(
+      (template) =>
+        !widgets.some(
+          (widget) =>
+            widget.title === template.title
+        )
+    );
+
+    const selectedWidget =
+      availableWidgets.length > 0
+        ? availableWidgets[
+        Math.floor(
+          Math.random() * availableWidgets.length
+        )
+        ]
+        : widgetTemplates[
+        Math.floor(
+          Math.random() * widgetTemplates.length
+        )
+        ];
+
     setWidgets((current) => [
       ...current,
       {
         id: nextId,
-        eyebrow: `Widget ${nextId}`,
-        title: "Executive KPI panel",
-        type: "kpi",
+        ...selectedWidget,
       },
     ]);
-    setMessage("New analytics widget added to the dashboard.");
-  }
 
+    setMessage(
+      `${selectedWidget.title} widget added successfully.`
+    );
+  }
+  
   function removeWidget(id: number) {
     setWidgets((current) => current.filter((widget) => widget.id !== id));
     setMessage("Widget removed from the builder canvas.");
