@@ -238,7 +238,7 @@ export default function NotificationsInboxPage() {
               value={form.title}
               onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
               className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
-              placeholder="Finance approval alert"
+              placeholder="Enter Title"
             />
           </label>
 
@@ -276,7 +276,7 @@ export default function NotificationsInboxPage() {
               value={form.message}
               onChange={(event) => setForm((current) => ({ ...current, message: event.target.value }))}
               className="h-12 w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70"
-              placeholder="Finance approval requires action."
+              placeholder="Enter Message."
             />
           </label>
 
@@ -320,7 +320,7 @@ export default function NotificationsInboxPage() {
                   <th className="px-4 py-4">Severity</th>
                   <th className="px-4 py-4">Status</th>
                   <th className="px-4 py-4">Message</th>
-                  <th className="w-[330px] px-4 py-4 text-right">Actions</th>
+                  <th className="w-[330px] px-4 py-4 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -334,9 +334,10 @@ export default function NotificationsInboxPage() {
                       key={item.id}
                       className={`border-b border-white/10 text-white ${index % 2 ? "bg-white/[0.03]" : ""}`}
                     >
-                      <td className="px-4 py-5">
-                        <div className="font-semibold">{item.title}</div>
-                        <div className="text-xs text-slate-400">{item.id}</div>
+                      <td className="px-4 py-5 whitespace-nowrap">
+                        <span className="font-semibold">
+                          {item.title}
+                        </span>
                       </td>
                       <td className="px-4 py-5">{item.channel ?? "In-App"}</td>
                       <td className="px-4 py-5">
@@ -349,24 +350,46 @@ export default function NotificationsInboxPage() {
                           {item.status}
                         </span>
                       </td>
-                      <td className="max-w-[320px] px-4 py-5 text-slate-200">{item.message ?? "ERP event notification."}</td>
+                      <td className="px-4 py-5 whitespace-nowrap text-slate-200">
+                        {item.message ?? "ERP event notification."}
+                      </td>
                       <td className="w-[330px] px-4 py-5">
-                        <div className="flex flex-nowrap justify-end gap-2">
+                        <div className="flex flex-nowrap justify-center gap-2">
                           <button
                             type="button"
-                            onClick={() => updateNotification(item.id, { status: "Read", severity: "Normal" })}
+                            onClick={() =>
+                              updateNotification(item.id, {
+                                status:
+                                  item.status === "Read"
+                                    ? "Unread"
+                                    : "Read",
+                                severity: "Normal",
+                              })
+                            }
                             className="inline-flex whitespace-nowrap items-center gap-2 rounded-lg border border-emerald-300/20 bg-emerald-500/15 px-3 py-2 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-500/25"
                           >
                             <CheckCircle2 className="h-4 w-4" />
-                            Mark read
+                            {item.status === "Read"
+                              ? "Mark Unread"
+                              : "Mark Read"}
                           </button>
                           <button
                             type="button"
-                            onClick={() => updateNotification(item.id, { status: "Retrying", severity: "High" })}
+                            onClick={() =>
+                              updateNotification(item.id, {
+                                status:
+                                  item.status === "Retrying"
+                                    ? "Failed"
+                                    : "Retrying",
+                                severity: "High",
+                              })
+                            }
                             className="inline-flex whitespace-nowrap items-center gap-2 rounded-lg border border-amber-300/20 bg-amber-500/15 px-3 py-2 text-sm font-semibold text-amber-100 transition hover:bg-amber-500/25"
                           >
                             <TriangleAlert className="h-4 w-4" />
-                            Retry
+                            {item.status === "Retrying"
+                              ? "Fail"
+                              : "Retry"}
                           </button>
                           <button
                             type="button"

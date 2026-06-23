@@ -36,6 +36,8 @@ type HrNotificationState = {
   markAllAsRead: () => void;
 
   deleteNotification: (id: string) => void;
+
+  clearNotifications: () => void;
 };
 
 export const useHrNotificationStore =
@@ -49,28 +51,26 @@ export const useHrNotificationStore =
           title,
           message,
           category
-        ) => {
-          console.log(
-            "NOTIFICATION STORE CALLED:",
-            employeeName,
-            title
-          );
-
+        ) =>
           set((state) => {
-            const newNotification = {
-              id: Date.now().toString(),
-              employeeName: employeeName.trim(),
-              title,
-              message,
-              category,
-              createdAt: new Date().toLocaleString(),
-              read: false,
-            };
-
-            console.log(
-              "ADDING NOTIFICATION:",
-              newNotification
-            );
+            const newNotification: HrNotification =
+              {
+                id: `NOT-${Date.now()}`,
+                employeeName:
+                  employeeName.trim(),
+                title,
+                message,
+                category,
+                createdAt:
+                  new Date().toLocaleString(
+                    "en-IN",
+                    {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    }
+                  ),
+                read: false,
+              };
 
             return {
               notifications: [
@@ -78,8 +78,7 @@ export const useHrNotificationStore =
                 ...state.notifications,
               ],
             };
-          });
-        },
+          }),
 
         markAsRead: (id) =>
           set((state) => ({
@@ -89,7 +88,8 @@ export const useHrNotificationStore =
                   notification.id === id
                     ? {
                         ...notification,
-                        read: true,
+                        read:
+                          !notification.read,
                       }
                     : notification
               ),
@@ -114,10 +114,64 @@ export const useHrNotificationStore =
                   notification.id !== id
               ),
           })),
+
+        clearNotifications: () =>
+          set({
+            notifications: [],
+          }),
       }),
       {
         name: "hr-notification-store",
-        version: 2,
+        version: 3,
       }
     )
   );
+
+/* ------------------------------
+   Dashboard Helper Selectors
+-------------------------------- */
+
+export const getNotificationStats = (
+  notifications: HrNotification[]
+) => {
+  const total = notifications.length;
+
+  const unread =
+    notifications.filter(
+      (item) => !item.read
+    ).length;
+
+  const read =
+    notifications.filter(
+      (item) => item.read
+    ).length;
+
+  const attendance =
+    notifications.filter(
+      (item) =>
+        item.category ===
+        "Attendance"
+    ).length;
+
+  const leave =
+    notifications.filter(
+      (item) =>
+        item.category === "Leave"
+    ).length;
+
+  const payroll =
+    notifications.filter(
+      (item) =>
+        item.category ===
+        "Payroll"
+    ).length;
+
+  return {
+    total,
+    unread,
+    read,
+    attendance,
+    leave,
+    payroll,
+  };
+};
