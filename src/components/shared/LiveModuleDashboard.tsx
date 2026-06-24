@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useHrStore } from "@/store/hr-store";
 import Link from "next/link";
+import { api } from "@/lib/api";
 import {
   Activity,
   BarChart3,
@@ -115,20 +116,33 @@ export function LiveModuleDashboard({ eyebrow, title, description, moduleKey, re
     setLoading(true);
     setMessage("");
 
+    const getBackendResource = (mod: string, res: string) => {
+      if (mod === "hr" && res === "leave") return "leaves";
+      if (mod === "finance" && res === "currency") return "rates";
+      return res;
+    };
+
     const loaded = await Promise.all(
       resources.map(async (resource) => {
         try {
-          const response = await fetch(`/api/${moduleKey}/${resource.resource}`, { cache: "no-store" });
-          const payload = (await response.json()) as ApiEnvelope;
-
-          if (!response.ok || !payload.success) {
-            throw new Error(payload.error || `Unable to load ${resource.label}.`);
+          let rows: any[] = [];
+          if (moduleKey === "hr" || moduleKey === "finance" || moduleKey === "payroll") {
+            const backendRes = getBackendResource(moduleKey, resource.resource);
+            const response = await api.get(`/${moduleKey}/${backendRes}`);
+            rows = Array.isArray(response.data) ? response.data : (response.data?.data ?? []);
+          } else {
+            const response = await fetch(`/api/${moduleKey}/${resource.resource}`, { cache: "no-store" });
+            const payload = (await response.json()) as ApiEnvelope;
+            if (!response.ok || !payload.success) {
+              throw new Error(payload.error || `Unable to load ${resource.label}.`);
+            }
+            rows = payload.data?.data ?? [];
           }
 
           return {
             ...resource,
-            rows: payload.data?.data ?? [],
-            count: payload.data?.count ?? 0,
+            rows,
+            count: rows.length,
           };
         } catch (error) {
           return {

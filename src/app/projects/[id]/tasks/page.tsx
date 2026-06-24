@@ -10,8 +10,8 @@ import type { TaskStatus } from "@/types/projects";
 
 export default function ProjectTasksPage() {
   const { id } = useParams<{ id: string }>();
-  const { tasks, updateTaskStatus } = useProjectsStore();
+  const { tasks, updateTask } = useProjectsStore();
   const projectTasks = tasks.filter((task) => task.projectId === id);
   const nextStatus: Record<TaskStatus, TaskStatus> = { todo: "in_progress", in_progress: "review", review: "done", done: "done" };
-  return <div className="space-y-6"><TaskForm projectId={id} /><ProjectTable title="Tasks" description="Project task management and assignments." headers={["Task", "Assignee", "Status", "Priority", "Due", "Hours", "Action"]} rows={projectTasks.map((task) => [task.title, task.assignee, <ProjectBadge key="status" value={task.status} />, <ProjectBadge key="priority" value={task.priority} />, task.dueDate, `${task.loggedHours}/${task.estimateHours}`, <Button key="action" size="sm" disabled={task.status === "done"} onClick={() => updateTaskStatus(task.id, nextStatus[task.status])}>Move next</Button>])} /></div>;
+  return <div className="space-y-6"><TaskForm projectId={id} /><ProjectTable title="Tasks" description="Project task management and assignments." headers={["Task", "Assignee", "Status", "Priority", "Due", "Hours", "Action"]} rows={projectTasks.map((task) => [task.title, task.assignee, <ProjectBadge key="status" value={task.status} />, <ProjectBadge key="priority" value={task.priority} />, task.dueDate, `${task.loggedHours}/${task.estimateHours}`, <Button key="action" size="sm" disabled={task.status === "done"} onClick={() => updateTask(task.id, { status: nextStatus[task.status] })}>Move next</Button>])} /></div>;
 }

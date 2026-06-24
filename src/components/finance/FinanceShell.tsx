@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -35,7 +36,11 @@ const nav = [
 
 export function FinanceShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { entity, period, currency } = useFinanceStore();
+  const { entity, period, currency, fetchInitialData } = useFinanceStore();
+
+  useEffect(() => {
+    fetchInitialData();
+  }, [fetchInitialData]);
 
   return (
     <div className="min-h-screen bg-slate-100 text-slate-950 dark:bg-slate-950 dark:text-slate-50">

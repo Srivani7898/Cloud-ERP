@@ -20,12 +20,12 @@ type LoginValues = z.infer<typeof loginSchema>;
 export function LoginForm() {
   const login = useLogin();
   const form = useForm<LoginValues>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginSchema) as any,
     defaultValues: { email: "", password: "", tenantSlug: "", portal: "employee", remember: false }
   });
 
   return (
-    <form className="space-y-5" onSubmit={form.handleSubmit((values) => login.mutate(values))}>
+    <form className="space-y-5" onSubmit={form.handleSubmit((values) => login.mutate(values as any))}>
       <FormField id="tenantSlug" label="Tenant workspace" error={form.formState.errors.tenantSlug}>
         <div className="relative">
           <Network className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-400" />

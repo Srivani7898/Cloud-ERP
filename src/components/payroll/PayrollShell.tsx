@@ -1,11 +1,13 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Banknote, ClipboardCheck, FileClock, FileText, History, LayoutDashboard, LogOut, ReceiptText, Settings, ShieldCheck, UsersRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { cn } from "@/lib/utils";
+import { usePayrollStore } from "@/store/payroll-store";
 
 const nav = [
   { href: "/payroll/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -21,6 +23,11 @@ const nav = [
 
 export function PayrollShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const fetchInitialData = usePayrollStore((state) => state.fetchInitialData);
+
+  useEffect(() => {
+    fetchInitialData();
+  }, [fetchInitialData]);
 
   return (
     <div className="min-h-screen bg-slate-100 text-slate-950 dark:bg-slate-950 dark:text-slate-50">

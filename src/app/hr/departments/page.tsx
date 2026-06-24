@@ -32,7 +32,7 @@ export default function HRDepartmentsPage() {
           name: String(record.name),
           head: String(record.head),
           employees: Number(record.employees),
-          budget: Number(record.budget),
+          budget: String(record.budget),
           status: "Created",
         });
       }}

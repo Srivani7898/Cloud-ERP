@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import type { ComponentType } from "react";
 import {
   ArrowRight,
   BarChart3,
@@ -42,14 +43,18 @@ const modules = [
   ["Asset Management", Cloud],
 ];
 
-const aiCards = [
-  ["Predictive Analytics", "Forecast revenue, demand, margin, and operational risk before they affect boardroom decisions.", BrainCircuit],
-  ["Demand Forecasting", "Predict SKU, region, channel, and seasonal demand using live enterprise signals.", Radar],
-  ["Smart Inventory Optimization", "Balance reorder points, warehouses, vendors, and working capital automatically.", Boxes],
-  ["Automated Decision Support", "Recommend approvals, escalations, and workflow actions with explainable AI.", Workflow],
-  ["AI Chat Assistant", "Ask questions across Finance, HR, SCM, Payroll, Projects, Audit, and Analytics.", Bot],
-  ["Fraud Detection", "Detect unusual access, payments, payroll, and procurement behavior with anomaly scoring.", Fingerprint],
-];
+const aiCards: [
+  string,
+  string,
+  ComponentType<{ className?: string }>
+][] = [
+    ["Predictive Analytics", "Forecast revenue, demand, margin, and operational risk before they affect boardroom decisions.", BrainCircuit],
+    ["Demand Forecasting", "Predict SKU, region, channel, and seasonal demand using live enterprise signals.", Radar],
+    ["Smart Inventory Optimization", "Balance reorder points, warehouses, vendors, and working capital automatically.", Boxes],
+    ["Automated Decision Support", "Recommend approvals, escalations, and workflow actions with explainable AI.", Workflow],
+    ["AI Chat Assistant", "Ask questions across Finance, HR, SCM, Payroll, Projects, Audit, and Analytics.", Bot],
+    ["Fraud Detection", "Detect unusual access, payments, payroll, and procurement behavior with anomaly scoring.", Fingerprint],
+  ];
 
 const dashboards = {
   Finance: ["Finance Control Tower", "$48.2M", "Revenue YTD", ["Cashflow forecast +9.2%", "Close cycle 3.4 days faster", "Invoice risk reduced 18%"]],
@@ -219,20 +224,20 @@ export default function LandingPage() {
         <SectionHeading eyebrow="Features" title="Enterprise workflows that feel intelligent from day one" />
         <div className="mt-16 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {[
-             ["Unified Command Center", "One operating layer for every ERP module.", Gauge],
-             ["Real-Time Event Fabric", "Every mutation can trigger workflows, alerts, AI, and audit events.", Zap],
-             ["Workflow Automation", "Approval chains, escalations, exceptions, and cross-module actions.", Workflow],
-             ["Executive Reporting", "Board-ready PDFs, analytics packs, and operational snapshots.", FileCheck2],
+            ["Unified Command Center", "One operating layer for every ERP module.", Gauge],
+            ["Real-Time Event Fabric", "Every mutation can trigger workflows, alerts, AI, and audit events.", Zap],
+            ["Workflow Automation", "Approval chains, escalations, exceptions, and cross-module actions.", Workflow],
+            ["Executive Reporting", "Board-ready PDFs, analytics packs, and operational snapshots.", FileCheck2],
             ["Tenant Security", "RBAC, SSO, MFA, session governance, and audit trails.", ShieldCheck],
             ["Cloud Scale", "High-volume transactions for global enterprise teams.", Cloud],
-            ].map(([cardTitle, description, Icon]: any) => (
+          ].map(([cardTitle, description, Icon]: any) => (
             <FeatureCard
-            key={cardTitle}
-            title={cardTitle}
-            description={description}
-            Icon={Icon}
+              key={cardTitle}
+              title={cardTitle}
+              description={description}
+              Icon={Icon}
             />
-        ))}
+          ))}
         </div>
       </section>
 
@@ -254,14 +259,14 @@ export default function LandingPage() {
         <SectionHeading eyebrow="AI Engine" title="The AI Brain Behind Your Business" />
         <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {aiCards.map(([cardTitle, description, Icon]: any) => (
-           <FeatureCard
-            key={cardTitle}
-            title={cardTitle}
-            description={description}
-            Icon={Icon}
+            <FeatureCard
+              key={cardTitle}
+              title={cardTitle}
+              description={description}
+              Icon={Icon}
             />
-        ))}
-      </div>
+          ))}
+        </div>
       </section>
 
       <section className="relative bg-[#F8F4E3]/[0.035] py-24">

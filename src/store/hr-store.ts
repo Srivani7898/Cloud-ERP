@@ -1,11 +1,30 @@
 "use client";
 
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { attendance, departments, employees, leaveRequests, onboardingTasks } from "@/services/hr-service";
-import type { AttendanceRecord, Employee, LeaveRequest, OnboardingTask } from "@/types/hr";
-import { useHrNotificationStore }
-  from "@/store/notification-store";
+import {
+  fetchEmployees,
+  createEmployee,
+  updateEmployee,
+  fetchDepartments,
+  createDepartment,
+  fetchAttendance,
+  createAttendance,
+  updateAttendanceStatus,
+  fetchLeaves,
+  applyLeave,
+  updateLeaveStatus,
+  fetchOnboardingTasks,
+  toggleOnboardingTask,
+  triggerSeed
+} from "@/services/hr-service";
+import type {
+  AttendanceRecord,
+  Department,
+  Employee,
+  LeaveRequest,
+  OnboardingTask
+} from "@/types/hr";
+import { useHrNotificationStore } from "@/store/notification-store";
 
 type HrState = {
   employees: Employee[];
@@ -14,332 +33,283 @@ type HrState = {
   leaveRequests: LeaveRequest[];
   pendingLeaveRequests: LeaveRequest[];
   onboardingTasks: OnboardingTask[];
-  departments: any[];
+  departments: Department[];
+  isLoading: boolean;
+
+  fetchInitialData: () => Promise<void>;
 
   addEmployee: (
-    employee: Omit<Employee, "id" | "employeeCode" | "status" | "performanceScore">
-  ) => Employee;
+    employee: Omit<Employee, "id" | "employeeCode" | "status" | "performanceScore" | "annualLeaveBalance" | "sickLeaveBalance">
+  ) => Promise<Employee>;
 
   updateEmployee: (
     id: string,
     employee: Partial<Employee>
-  ) => void;
+  ) => Promise<void>;
 
   addAttendance: (
     record: Omit<AttendanceRecord, "id" | "employeeId">
-  ) => void;
+  ) => Promise<void>;
 
-  approveAttendance: (id: string) => void;
+  approveAttendance: (id: string) => Promise<void>;
 
-  rejectAttendance: (id: string) => void;
+  rejectAttendance: (id: string) => Promise<void>;
 
   applyLeave: (
     request: Omit<LeaveRequest, "id" | "employeeId" | "status">
-  ) => void;
+  ) => Promise<void>;
 
-  approveLeave: (id: string) => void;
+  approveLeave: (id: string) => Promise<void>;
 
-  rejectLeave: (id: string) => void;
+  rejectLeave: (id: string) => Promise<void>;
 
   updateLeaveStatus: (
     id: string,
     status: LeaveRequest["status"]
-  ) => void;
+  ) => Promise<void>;
 
-  toggleTask: (id: string) => void;
+  toggleTask: (id: string) => Promise<void>;
 
   addDepartment: (department: {
     name: string;
     head: string;
     employees: number;
-    budget: number;
+    budget: string;
     status?: string;
-  }) => void;
+  }) => Promise<void>;
 };
 
-export const useHrStore = create<HrState>()(
-  persist(
-    (set, get) => ({
-      employees,
-      attendance,
-      pendingAttendance: [],
-      leaveRequests,
-      pendingLeaveRequests: [],
-      onboardingTasks,
-      departments,
+export const useHrStore = create<HrState>((set, get) => ({
+  employees: [],
+  attendance: [],
+  pendingAttendance: [],
+  leaveRequests: [],
+  pendingLeaveRequests: [],
+  onboardingTasks: [],
+  departments: [],
+  isLoading: false,
 
-      addDepartment: (department) =>
-        set((state) => ({
-          departments: [
-            {
-              id: `HR-DEP-${Date.now()}`,
-              name: department.name,
-              head: department.head,
-              employees: department.employees,
-              budget: department.budget,
-              status: department.status ?? "Created",
-            },
-            ...state.departments,
-          ],
-        })),
+  fetchInitialData: async () => {
+    set({ isLoading: true });
+    try {
+      let employees = await fetchEmployees();
+      if (employees.length === 0) {
+        await triggerSeed();
+        employees = await fetchEmployees();
+      }
 
-      addEmployee: (input) => {
-        const employee: Employee = {
-          ...input,
-          id: `emp-${Math.floor(2000 + Math.random() * 7000)}`,
-          employeeCode: `NS-${Math.floor(2000 + Math.random() * 7000)}`,
-          status: "onboarding",
-          performanceScore: 82,
-          manager: input.manager,
-        };
+      const departments = await fetchDepartments();
+      const allAttendance = await fetchAttendance();
+      const attendance = allAttendance.filter(a => (a.status as string) !== "pending");
+      const pendingAttendance = allAttendance.filter(a => (a.status as string) === "pending");
+      
+      const allLeaves = await fetchLeaves();
+      const leaveRequests = allLeaves.filter(l => l.status !== "pending");
+      const pendingLeaveRequests = allLeaves.filter(l => l.status === "pending");
+      
+      const onboardingTasks = await fetchOnboardingTasks();
 
-        set((state) => ({
-          employees: [employee, ...state.employees],
-          onboardingTasks: [
-            {
-              id: `onb-${Date.now()}-1`,
-              employeeName: employee.name,
-              task: "Create Employee ID",
-              owner: "HR",
-              dueDate: employee.joinedAt,
-              completed: false
-            },
-            {
-              id: `onb-${Date.now()}-2`,
-              employeeName: employee.name,
-              task: "Issue Laptop",
-              owner: "IT",
-              dueDate: employee.joinedAt,
-              completed: false
-            },
-            {
-              id: `onb-${Date.now()}-3`,
-              employeeName: employee.name,
-              task: "Create Email Account",
-              owner: "IT",
-              dueDate: employee.joinedAt,
-              completed: false
-            },
-            {
-              id: `onb-${Date.now()}-4`,
-              employeeName: employee.name,
-              task: "Payroll Registration",
-              owner: "Payroll",
-              dueDate: employee.joinedAt,
-              completed: false
-            },
-            {
-              id: `onb-${Date.now()}-5`,
-              employeeName: employee.name,
-              task: "Compliance Training",
-              owner: "Compliance",
-              dueDate: employee.joinedAt,
-              completed: false
-            },
-            ...state.onboardingTasks
-          ]
-        }));
-        return employee;
-      },
-      updateEmployee: (id, employee) =>
-        set((state) => ({
-          employees: state.employees.map((item) => (item.id === id ? { ...item, ...employee } : item))
-        })),
-
-      addAttendance: (record) =>
-        set((state) => {
-
-          const alreadyExists =
-            state.pendingAttendance.some(
-              (item) =>
-                item.employeeName === record.employeeName &&
-                item.date === record.date
-            ) ||
-            state.attendance.some(
-              (item) =>
-                item.employeeName === record.employeeName &&
-                item.date === record.date
-            );
-
-          if (alreadyExists) {
-            return state;
-          }
-
-          return {
-            pendingAttendance: [
-              {
-                ...record,
-                id: `att-${Date.now()}`,
-                employeeId: "manual",
-              },
-              ...state.pendingAttendance,
-            ],
-          };
-        }),
-
-      approveAttendance: (id) =>
-        set((state) => {
-          const record = state.pendingAttendance.find(
-            (item) => item.id === id
-          );
-
-          if (!record) return state;
-
-          useHrNotificationStore
-            .getState()
-            .addNotification(
-              record.employeeName,
-              "Attendance Approved",
-              `Your attendance for ${record.date} has been approved.`,
-              "Attendance"
-            );
-
-          return {
-            attendance: [
-              record,
-              ...state.attendance,
-            ],
-
-            pendingAttendance:
-              state.pendingAttendance.filter(
-                (item) => item.id !== id
-              ),
-          };
-        }),
-
-      rejectAttendance: (id) =>
-        set((state) => {
-          const record = state.pendingAttendance.find(
-            (item) => item.id === id
-          );
-
-          if (!record) return state;
-
-          useHrNotificationStore
-            .getState()
-            .addNotification(
-              record.employeeName,
-              "Attendance Rejected",
-              `Your attendance for ${record.date} has been rejected.`,
-              "Attendance"
-            );
-
-          return {
-            pendingAttendance:
-              state.pendingAttendance.filter(
-                (item) => item.id !== id
-              ),
-          };
-        }),
-
-      applyLeave: (request) =>
-        set((state) => {
-          console.log("Leave Added:", request);
-
-          return {
-            pendingLeaveRequests: [
-              {
-                ...request,
-                id: `LV-${Math.floor(800 + Math.random() * 500)}`,
-                employeeId: "manual",
-                status: "pending",
-              },
-              ...state.pendingLeaveRequests,
-            ],
-          };
-        }),
-
-      approveLeave: (id) =>
-        set((state) => {
-          const leave = state.pendingLeaveRequests.find(
-            (item) => item.id === id
-          );
-          const employee = state.employees.find(
-            (emp) => emp.name === leave?.employeeName
-          );
-
-          if (!leave) return state;
-          useHrNotificationStore
-            .getState()
-            .addNotification(
-              leave.employeeName,
-              "Leave Approved",
-              `Your ${leave.type} leave request from ${leave.from} to ${leave.to} has been approved.`,
-              "Leave"
-            );
-
-          return {
-            leaveRequests: [
-              { ...leave, status: "approved" },
-              ...state.leaveRequests,
-            ],
-
-            pendingLeaveRequests: state.pendingLeaveRequests.filter(
-              (item) => item.id !== id
-            ),
-
-            employees: state.employees.map((emp) =>
-              emp.name === leave.employeeName
-                ? {
-                  ...emp,
-                  annualLeaveBalance:
-                    leave.type === "Annual"
-                      ? Math.max(0, emp.annualLeaveBalance - leave.days)
-                      : emp.annualLeaveBalance,
-
-                  sickLeaveBalance:
-                    leave.type === "Sick"
-                      ? Math.max(0, emp.sickLeaveBalance - leave.days)
-                      : emp.sickLeaveBalance,
-                }
-                : emp
-            ),
-          };
-        }),
-
-      rejectLeave: (id) =>
-        set((state) => {
-          const leave = state.pendingLeaveRequests.find(
-            (item) => item.id === id
-          );
-
-          if (!leave) return state;
-          useHrNotificationStore
-            .getState()
-            .addNotification(
-              leave.employeeName,
-              "Leave Rejected",
-              `Your ${leave.type} leave request from ${leave.from} to ${leave.to} has been rejected.`,
-              "Leave"
-            );
-          return {
-            leaveRequests: [
-              { ...leave, status: "rejected" },
-              ...state.leaveRequests,
-            ],
-            pendingLeaveRequests: state.pendingLeaveRequests.filter(
-              (item) => item.id !== id
-            ),
-          };
-        }),
-
-      updateLeaveStatus: (id, status) =>
-        set((state) => ({
-          leaveRequests: state.leaveRequests.map((item) =>
-            item.id === id ? { ...item, status } : item
-          )
-        })),
-      toggleTask: (id) =>
-        set((state) => ({
-          onboardingTasks: state.onboardingTasks.map((item) =>
-            item.id === id
-              ? { ...item, completed: !item.completed }
-              : item
-          )
-        }))
-    }),
-    {
-      name: "cloud-erp-hr",
+      set({
+        employees,
+        departments,
+        attendance,
+        pendingAttendance,
+        leaveRequests,
+        pendingLeaveRequests,
+        onboardingTasks,
+      });
+    } catch (e) {
+      console.error("Failed to load HR data:", e);
+    } finally {
+      set({ isLoading: false });
     }
-  )
-);
+  },
+
+  addDepartment: async (dept) => {
+    try {
+      await createDepartment({
+        name: dept.name,
+        head: dept.head,
+        employees: dept.employees,
+        budget: dept.budget
+      });
+      const departments = await fetchDepartments();
+      set({ departments });
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  addEmployee: async (input) => {
+    try {
+      const created = await createEmployee(input as any);
+      const employees = await fetchEmployees();
+      const onboardingTasks = await fetchOnboardingTasks();
+      set({ employees, onboardingTasks });
+      return created;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  },
+
+  updateEmployee: async (id, data) => {
+    try {
+      await updateEmployee(id, data);
+      const employees = await fetchEmployees();
+      set({ employees });
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  addAttendance: async (record) => {
+    try {
+      await createAttendance(record);
+      const allAttendance = await fetchAttendance();
+      const pendingAttendance = allAttendance.filter(a => (a.status as string) === "pending");
+      set({ pendingAttendance });
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  approveAttendance: async (id) => {
+    const record = get().pendingAttendance.find((item) => item.id === id);
+    if (!record) return;
+
+    try {
+      await updateAttendanceStatus(id, "approved");
+      const allAttendance = await fetchAttendance();
+      set({
+        attendance: allAttendance.filter(a => (a.status as string) !== "pending"),
+        pendingAttendance: allAttendance.filter(a => (a.status as string) === "pending")
+      });
+
+      useHrNotificationStore
+        .getState()
+        .addNotification(
+          record.employeeName,
+          "Attendance Approved",
+          `Your attendance for ${record.date} has been approved.`,
+          "Attendance"
+        );
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  rejectAttendance: async (id) => {
+    const record = get().pendingAttendance.find((item) => item.id === id);
+    if (!record) return;
+
+    try {
+      await updateAttendanceStatus(id, "rejected");
+      const allAttendance = await fetchAttendance();
+      set({
+        attendance: allAttendance.filter(a => (a.status as string) !== "pending"),
+        pendingAttendance: allAttendance.filter(a => (a.status as string) === "pending")
+      });
+
+      useHrNotificationStore
+        .getState()
+        .addNotification(
+          record.employeeName,
+          "Attendance Rejected",
+          `Your attendance for ${record.date} has been rejected.`,
+          "Attendance"
+        );
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  applyLeave: async (request) => {
+    try {
+      await applyLeave(request);
+      const allLeaves = await fetchLeaves();
+      set({
+        pendingLeaveRequests: allLeaves.filter(l => l.status === "pending")
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  approveLeave: async (id) => {
+    const leave = get().pendingLeaveRequests.find((item) => item.id === id);
+    if (!leave) return;
+
+    try {
+      await updateLeaveStatus(id, "approved");
+      const allLeaves = await fetchLeaves();
+      const employees = await fetchEmployees();
+
+      set({
+        leaveRequests: allLeaves.filter(l => l.status !== "pending"),
+        pendingLeaveRequests: allLeaves.filter(l => l.status === "pending"),
+        employees
+      });
+
+      useHrNotificationStore
+        .getState()
+        .addNotification(
+          leave.employeeName,
+          "Leave Approved",
+          `Your ${leave.type} leave request from ${leave.from} to ${leave.to} has been approved.`,
+          "Leave"
+        );
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  rejectLeave: async (id) => {
+    const leave = get().pendingLeaveRequests.find((item) => item.id === id);
+    if (!leave) return;
+
+    try {
+      await updateLeaveStatus(id, "rejected");
+      const allLeaves = await fetchLeaves();
+
+      set({
+        leaveRequests: allLeaves.filter(l => l.status !== "pending"),
+        pendingLeaveRequests: allLeaves.filter(l => l.status === "pending")
+      });
+
+      useHrNotificationStore
+        .getState()
+        .addNotification(
+          leave.employeeName,
+          "Leave Rejected",
+          `Your ${leave.type} leave request from ${leave.from} to ${leave.to} has been rejected.`,
+          "Leave"
+        );
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  updateLeaveStatus: async (id, status) => {
+    try {
+      await updateLeaveStatus(id, status);
+      const allLeaves = await fetchLeaves();
+      set({
+        leaveRequests: allLeaves.filter(l => l.status !== "pending"),
+        pendingLeaveRequests: allLeaves.filter(l => l.status === "pending")
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  toggleTask: async (id) => {
+    try {
+      await toggleOnboardingTask(id);
+      const onboardingTasks = await fetchOnboardingTasks();
+      set({ onboardingTasks });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+}));

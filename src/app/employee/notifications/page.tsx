@@ -267,7 +267,7 @@ export default function EmployeeNotificationsPage() {
           </p>
 
           <p className="mt-2 text-sm text-slate-500">
-            You're all caught up.
+            You are all caught up.
           </p>
         </div>
       ) : (

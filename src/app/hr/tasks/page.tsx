@@ -55,7 +55,8 @@ export default function HrTasksPage() {
             `Task: ${form.title}\n
             Priority: ${form.priority}\n
             Due Date: ${form.dueDate}\n
-            Assigned To: ${form.assignedTo}`
+            Assigned To: ${form.assignedTo}`,
+            "Task"
         );
 
         console.log(

@@ -24,12 +24,12 @@ export function EmployeeForm({ employee }: { employee?: Employee }) {
   });
 
   return (
-    <form className="grid gap-4 rounded-lg border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-white/[0.06] md:grid-cols-2" onSubmit={form.handleSubmit((values) => {
+    <form className="grid gap-4 rounded-lg border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-white/[0.06] md:grid-cols-2" onSubmit={form.handleSubmit(async (values) => {
       if (employee) {
-        updateEmployee(employee.id, values);
+        await updateEmployee(employee.id, values);
         router.push(`/hr/employees/${employee.id}`);
       } else {
-        const created = addEmployee(values);
+        const created = await addEmployee(values as any);
         router.push(`/hr/employees/${created.id}`);
       }
     })}>

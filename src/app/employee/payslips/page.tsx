@@ -18,6 +18,26 @@ export default function EmployeePayslipsPage() {
   const employeeName =
     user?.name ?? "Employee";
 
+  type Payslip = {
+    id: string;
+
+    employee?: string;
+    employeeName?: string;
+
+    employeeCode?: string;
+    department?: string;
+    designation?: string;
+
+    period: string;
+
+    gross: number;
+    deductions: number;
+    net: number;
+
+    createdAt: string;
+
+    status?: string;
+  };
   const [allPayslips, setAllPayslips] =
     useState<any[]>([]);
 
