@@ -1,100 +1,146 @@
-AI-Powered Cloud ERP Suite
+# 🚀 AI-Powered Cloud ERP Suite
 
-Enterprise Resource Planning (ERP) System with AI Integration
+An enterprise-grade **AI-Powered Cloud ERP Suite** built using modern web technologies to streamline and automate business operations across multiple departments. The platform integrates Human Resources, Employee Management, Payroll, Finance, Project Management, Supply Chain, Inventory, Business Intelligence, Notifications, and Audit modules into one centralized system with secure authentication and role-based access control.
 
-A scalable, enterprise-grade Cloud ERP solution developed using modern web technologies. The system integrates multiple business functions into a single platform, enabling seamless communication between departments, real-time business insights, workflow automation, and AI-powered decision-making.
+---
 
-Table of Contents
-Project Overview
-Project Objectives
-Features
-Technology Stack
-System Architecture
-Modules
-Complete Project Flow
-Module Connectivity
-Database Flow
-Authentication & Authorization
-API Architecture
-Folder Structure
-Installation
-Future Enhancements
-Contributors
-Project Overview
+# 📖 Table of Contents
 
-The AI-Powered Cloud ERP Suite is a centralized enterprise application designed to automate and manage business operations. Instead of maintaining separate software for HR, Payroll, Finance, Inventory, Projects, and Supply Chain, the ERP integrates all departments into one unified platform.
+- Overview
+- Features
+- Technology Stack
+- System Architecture
+- Module Overview
+- Complete Project Workflow
+- Module Connectivity
+- Folder Structure
+- Installation
+- Future Enhancements
+- Contributors
 
-Every module communicates with others through secured REST APIs, ensuring consistent data flow, improved productivity, and better decision-making.
+---
 
-Project Objectives
-Centralize business operations.
-Eliminate duplicate data entry.
-Automate business workflows.
-Improve employee productivity.
-Provide real-time business analytics.
-Implement enterprise-level security.
-Support scalable multi-module architecture.
-Enable AI-powered business forecasting.
-Technology Stack
-Frontend
-Next.js 15
-React 19
-TypeScript
-Tailwind CSS
-shadcn/ui
-Zustand
-React Query
-Backend
-Node.js
-NestJS
-TypeScript
-Prisma ORM
-PostgreSQL
-Redis
-JWT Authentication
-Passport.js
-BullMQ
-AI
-Python
-FastAPI
-Prophet
-Scikit-Learn
-DevOps
-Docker
-GitHub
-Swagger
-Kubernetes (Future)
-AWS (Future)
-Overall System Architecture
-                         USERS
-                              │
-        ┌─────────────────────┼─────────────────────┐
-        │                     │                     │
-        ▼                     ▼                     ▼
+# 📌 Project Overview
 
-   Employee               HR Manager         Finance Manager
+The AI-Powered Cloud ERP Suite is designed to eliminate disconnected business systems by integrating every department into a single application.
 
-                              │
+Instead of using different software for HR, Payroll, Finance, Inventory, Projects, and Procurement, this ERP allows all departments to work together through one secure platform.
 
-                    Authentication Module
+The system follows a modular architecture where every module communicates through secure REST APIs and shares a centralized database.
 
-                              │
+---
 
-                      API Gateway
+# 🎯 Objectives
 
-                              │
+- Centralize business operations
+- Automate business workflows
+- Eliminate duplicate data entry
+- Improve employee productivity
+- Enable real-time reporting
+- Provide enterprise-level security
+- Support scalable modular architecture
+- Integrate AI-powered forecasting
+- Deliver business insights through dashboards
 
- ┌────────────┬────────────┬────────────┬────────────┐
+---
+
+# ✨ Features
+
+- Multi-Tenant ERP Architecture
+- Secure JWT Authentication
+- Role-Based Access Control (RBAC)
+- Employee Self-Service Portal
+- HR Management
+- Attendance & Leave Management
+- Payroll Processing
+- Finance Management
+- Project Management
+- Supply Chain Management
+- Inventory Management
+- AI Demand Forecasting
+- Notification System
+- Audit & Compliance
+- Business Intelligence Dashboard
+- Responsive UI
+- REST API Architecture
+
+---
+
+# 🛠 Technology Stack
+
+## Frontend
+
+- Next.js 15
+- React 19
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+- Zustand
+- React Query
+
+## Backend
+
+- Node.js
+- NestJS
+- TypeScript
+- Prisma ORM
+- PostgreSQL
+- Redis
+- JWT Authentication
+- Passport.js
+
+## AI Services
+
+- Python
+- FastAPI
+- Prophet
+- Scikit-Learn
+
+## Tools
+
+- Git
+- GitHub
+- Docker
+- Swagger
+- Postman
+- VS Code
+
+---
+
+# 🏗 System Architecture
+
+```text
+                                USERS
+                                   │
+         ┌─────────────────────────┼─────────────────────────┐
+         │                         │                         │
+
+     Employee                  HR Manager             Finance Manager
+         │                         │                         │
+         └─────────────────────────┼─────────────────────────┘
+                                   │
+                                   ▼
+
+                    Authentication & Authorization
+                       (JWT + RBAC + Roles)
+
+                                   │
+                                   ▼
+
+                             API Gateway
+
+                                   │
+ ┌────────────┬────────────┬────────────┬────────────┬────────────┐
  │            │            │            │            │
 
-Employee      HR       Payroll     Finance     Project
-Module      Module     Module      Module      Module
+Employee      HR       Payroll     Finance      Projects
+Module      Module      Module      Module       Module
  │            │            │            │            │
  └────────────┴────────────┼────────────┴────────────┘
                            │
                            ▼
 
-                   Supply Chain Module
+                  Supply Chain Module
                            │
                            ▼
 
@@ -102,441 +148,373 @@ Module      Module     Module      Module      Module
                            │
                            ▼
 
-                    AI Forecasting Module
+                   AI Forecasting Module
                            │
                            ▼
 
-                 Business Intelligence
+                Business Intelligence Dashboard
 
-──────────────────────────────────────────────
+--------------------------------------------------------------
 
-Every Module
-      │
-      ├── Notification Module
-      ├── Audit Module
-      └── Reports
-Modules
-1. Authentication Module
-Purpose
+All Modules
 
-Provides secure access to the ERP.
+│
+├── Notification Module
+├── Audit Module
+└── Reports & Analytics
+```
 
-Features
-Login
-Logout
-JWT Authentication
-Refresh Tokens
-Role-Based Access Control
-Multi-Tenant Support
-Connected Modules
-Employee
-HR
-Payroll
-Finance
-Projects
-Supply Chain
-Inventory
-AI
-Notifications
-Audit
-2. Employee Module
-Purpose
+---
+
+# 📦 Project Modules
+
+## 🔐 Authentication Module
+
+Responsible for secure user authentication and authorization.
+
+### Features
+
+- Login
+- Logout
+- JWT Authentication
+- Refresh Token
+- RBAC
+- Multi-Tenant Support
+
+Connected To
+
+- Employee
+- HR
+- Payroll
+- Finance
+- Projects
+- Inventory
+- Supply Chain
+- BI Dashboard
+- Notifications
+- Audit
+
+---
+
+## 👨‍💼 Employee Module
 
 Employee Self-Service Portal.
 
-Features
-View Profile
-Attendance
-Leave Requests
-Payslips
-Assigned Tasks
-Notifications
+### Features
+
+- View Profile
+- Attendance
+- Apply Leave
+- View Payslip
+- Assigned Tasks
+- Notifications
+
 Connected To
-HR
-Payroll
-Projects
-Notifications
-3. HR Module
-Purpose
 
-Manages employee lifecycle.
+- HR Module
+- Payroll Module
+- Project Module
+- Notification Module
 
-Features
-Employee Management
-Departments
-Designations
-Leave Approval
-Attendance Monitoring
-Employee Onboarding
+---
+
+## 👩‍💼 HR Module
+
+Manages the employee lifecycle.
+
+### Features
+
+- Employee Management
+- Departments
+- Attendance Review
+- Leave Approval
+- Employee Onboarding
+
 Connected To
-Employee
-Payroll
-Projects
-Notifications
-4. Payroll Module
-Purpose
 
-Automates salary processing.
+- Employee
+- Payroll
+- Projects
+- Notifications
 
-Features
-Salary Calculation
-Tax Calculation
-Payslip Generation
-Payroll Runs
-Salary Reports
+---
+
+## 💰 Payroll Module
+
+Processes employee salaries.
+
+### Features
+
+- Salary Calculation
+- Tax Calculation
+- Payslip Generation
+- Payroll Reports
+
 Receives Data From
-Employee
-HR
-Attendance
-Leave
+
+- Employee
+- HR
+- Attendance
+- Leave
+
 Sends Data To
-Finance
-Employee
-5. Finance Module
-Purpose
 
-Handles financial operations.
+- Finance
+- Employee
 
-Features
-General Ledger
-Accounts Payable
-Accounts Receivable
-Expense Management
-Financial Reports
+---
+
+## 💳 Finance Module
+
+Handles company financial operations.
+
+### Features
+
+- General Ledger
+- Accounts Payable
+- Accounts Receivable
+- Financial Reports
+- Expense Management
+
 Connected To
-Payroll
-Supply Chain
-Inventory
-Projects
-6. Project Management Module
-Purpose
 
-Tracks organizational projects.
+- Payroll
+- Supply Chain
+- Inventory
+- Projects
 
-Features
-Project Creation
-Task Assignment
-Milestones
-Budget Tracking
-Resource Allocation
+---
+
+## 📋 Project Management Module
+
+Manages organizational projects.
+
+### Features
+
+- Projects
+- Tasks
+- Milestones
+- Resource Allocation
+- Budget Tracking
+
 Connected To
-Employee
-HR
-Finance
-7. Supply Chain Module
-Purpose
 
-Manages procurement.
+- Employee
+- HR
+- Finance
 
-Features
-Vendors
-Purchase Requests
-Purchase Orders
-Goods Receipt
-Procurement Workflow
+---
+
+## 🚚 Supply Chain Module
+
+Handles procurement.
+
+### Features
+
+- Purchase Requests
+- Purchase Orders
+- Vendor Management
+- Goods Receipt
+
 Connected To
-Inventory
-Finance
-AI
-8. Inventory Module
-Purpose
 
-Maintains stock information.
+- Inventory
+- Finance
+- AI Forecasting
 
-Features
-Warehouse
-Stock Levels
-Goods Receipt
-Stock Transfers
-Reorder Levels
+---
+
+## 📦 Inventory Module
+
+Maintains inventory and warehouse operations.
+
+### Features
+
+- Warehouse
+- Stock Levels
+- Goods Receipt
+- Stock Transfers
+- Reorder Management
+
 Connected To
-Supply Chain
-Finance
-AI
-9. AI Forecasting Module
-Purpose
 
-Predicts inventory demand.
+- Supply Chain
+- Finance
+- AI Forecasting
 
-Features
-Demand Forecasting
-Stock Prediction
-Reorder Suggestions
-Uses Data From
-Inventory
-Finance
-Supply Chain
-10. Notification Module
-Purpose
+---
 
-Sends system notifications.
+## 🤖 AI Forecasting Module
 
-Features
-Email
-SMS
-In-App Notifications
-Webhooks
-Receives Events From
+Predicts future inventory demand.
 
-Every ERP module.
+### Features
 
-11. Audit Module
-Purpose
+- Demand Forecasting
+- Inventory Prediction
+- Reorder Suggestions
 
-Maintains activity logs.
+Connected To
 
-Tracks
-Login
-Payroll
-Finance
-Inventory
-Projects
-User Activities
-12. Business Intelligence Dashboard
-Purpose
+- Inventory
+- Finance
+- Supply Chain
+- BI Dashboard
 
-Provides reports and analytics.
+---
 
-Shows
-Revenue
-Expenses
-Payroll
-Employee Statistics
-Inventory Status
-Project Progress
-AI Forecast Reports
-Complete Project Working
-Step 1 — User Login
-User
- ↓
-Authentication
- ↓
-JWT Generated
- ↓
-Dashboard
-Step 2 — Employee Onboarding
-HR
- ↓
-Create Employee
- ↓
-Employee Module
- ↓
-User Account Created
- ↓
-Employee Login Enabled
-Step 3 — Daily Employee Activities
-Employee
- ↓
-Attendance
- ↓
-Leave Request
- ↓
-Task Updates
- ↓
+## 🔔 Notification Module
+
+Sends notifications for business events.
+
+### Features
+
+- Email Notifications
+- In-App Notifications
+- SMS
+- Webhooks
+
+Receives events from all ERP modules.
+
+---
+
+## 📜 Audit Module
+
+Maintains immutable activity logs.
+
+### Tracks
+
+- Login
+- Payroll
+- Finance
+- Inventory
+- User Activities
+- System Changes
+
+---
+
+## 📊 Business Intelligence Dashboard
+
+Provides business insights.
+
+### Displays
+
+- Revenue
+- Expenses
+- Payroll Cost
+- Employee Statistics
+- Inventory Reports
+- Project Status
+- Forecast Reports
+
+---
+
+# 🔄 Complete Project Workflow
+
+```text
+User Login
+      │
+      ▼
+Authentication Module
+      │
+      ▼
+Employee Dashboard
+      │
+      ▼
+Attendance & Leave
+      │
+      ▼
 HR Module
-Step 4 — Attendance Processing
-Attendance
- ↓
-HR Verification
- ↓
-Payroll Module
-Step 5 — Leave Workflow
-Employee
- ↓
-Leave Request
- ↓
-Manager Approval
- ↓
-Payroll Updated
-Step 6 — Payroll Processing
-Attendance
-+
-Leave
-+
-Salary
- ↓
-Payroll Engine
- ↓
-Payslip
- ↓
-Finance
-Step 7 — Project Workflow
-Manager
- ↓
-Create Project
- ↓
-Assign Employees
- ↓
-Employees Complete Tasks
- ↓
-Project Progress Updated
-Step 8 — Procurement Workflow
-Project
- ↓
-Purchase Request
- ↓
+      │
+      ▼
+Payroll Processing
+      │
+      ▼
+Finance Module
+      │
+      ▼
+Project Management
+      │
+      ▼
 Supply Chain
- ↓
-Vendor
- ↓
-Purchase Order
-Step 9 — Inventory Workflow
-Vendor
- ↓
-Goods Receipt
- ↓
-Inventory Updated
- ↓
-Warehouse Updated
-Step 10 — Finance Workflow
-Payroll
- ↓
-Salary Expense
+      │
+      ▼
+Inventory Management
+      │
+      ▼
+AI Forecasting
+      │
+      ▼
+Business Intelligence Dashboard
 
-Purchase Order
- ↓
-Accounts Payable
+────────────────────────────────────
 
-Customer Payment
- ↓
-Accounts Receivable
-Step 11 — AI Forecasting
-Inventory
-+
-Purchase History
-+
-Finance
+Every Module
 
-↓
+│
+├── Notification Module
+├── Audit Module
+└── Reports
+```
 
-AI Engine
+---
 
-↓
+# 🔗 Module Connectivity
 
-Demand Forecast
-
-↓
-
-Reorder Suggestion
-Step 12 — Notifications
-Payroll Completed
- ↓
-Notification
-
-Leave Approved
- ↓
-Notification
-
-Project Assigned
- ↓
-Notification
-Step 13 — Audit Logging
-Every User Action
- ↓
-Audit Module
- ↓
-Database
-Step 14 — BI Dashboard
-Finance
-HR
-Payroll
-Inventory
-Projects
-AI
-
-↓
-
-Business Intelligence
-
-↓
-
-Charts
-Reports
-KPIs
-Complete Module Connectivity
+```text
 Authentication
-       │
-       ▼
+      │
+      ▼
 
 Employee Module
-       │
-       ├────────────► HR
-       │                 │
-       ▼                 ▼
+      │
+      ├────────► HR Module
+      │               │
+      ▼               ▼
 
-Attendance         Leave Approval
-       │                 │
-       └────────────► Payroll
-                           │
-                           ▼
+Attendance      Leave Approval
+      │               │
+      └────────► Payroll Module
+                      │
+                      ▼
 
-                      Finance Module
+                Finance Module
 
 Project Module ─────────────┘
 
 Project Module
-       │
-       ▼
+      │
+      ▼
 
 Supply Chain
-       │
-       ▼
+      │
+      ▼
 
 Inventory
-       │
-       ▼
+      │
+      ▼
 
 AI Forecasting
-       │
-       ▼
+      │
+      ▼
 
 Business Intelligence
 
 ──────────────────────────────
 
-ALL MODULES
+All Modules
 
-       │
-       ├── Notifications
-       ├── Audit Logs
-       └── Reports
-End-to-End Business Flow
-User Login
-      ↓
-Authentication
-      ↓
-Employee Dashboard
-      ↓
-Attendance
-      ↓
-Leave Request
-      ↓
-HR Approval
-      ↓
-Payroll Calculation
-      ↓
-Finance Entry
-      ↓
-Project Assignment
-      ↓
-Purchase Request
-      ↓
-Supply Chain
-      ↓
-Vendor
-      ↓
-Inventory Update
-      ↓
-AI Forecasting
-      ↓
-Reorder Recommendation
-      ↓
-Notifications
-      ↓
-Audit Logging
-      ↓
-Business Dashboard
-Folder Structure
+│
+├── Notification Module
+├── Audit Module
+└── Reports
+```
+
+---
+
+# 📁 Folder Structure
+
+```text
 cloud-erp/
 │
 ├── frontend/
@@ -554,49 +532,79 @@ cloud-erp/
 │   │   ├── hr/
 │   │   ├── payroll/
 │   │   ├── finance/
-│   │   ├── project/
+│   │   ├── projects/
 │   │   ├── supply-chain/
 │   │   ├── inventory/
 │   │   ├── notifications/
 │   │   ├── audit/
 │   │   ├── analytics/
 │   │   └── common/
+│   │
 │   ├── prisma/
 │   └── uploads/
 │
 └── README.md
-Installation
-# Clone the repository
-git clone https://github.com/your-username/cloud-erp.git
+```
 
-# Install frontend dependencies
+---
+
+# ⚙ Installation
+
+## Clone Repository
+
+```bash
+git clone https://github.com/your-username/cloud-erp.git
+```
+
+## Install Frontend
+
+```bash
 cd frontend
 npm install
-
-# Install backend dependencies
-cd ../backend
-npm install
-
-# Configure environment variables
-cp .env.example .env
-
-# Run database migrations
-npx prisma migrate dev
-
-# Start backend
-npm run start:dev
-
-# Start frontend
-cd ../frontend
 npm run dev
-Future Enhancements
-AI-powered Chat Assistant
-Predictive Payroll Analytics
-OCR Invoice Processing
-Mobile Application
-Multi-language Support
-Real-time Chat Between Employees
-IoT Integration for Attendance
-Advanced Machine Learning Models
-Kubernetes Deployment
-CI/CD Pipeline with GitHub Actions
+```
+
+## Install Backend
+
+```bash
+cd backend
+npm install
+```
+
+## Configure Environment Variables
+
+```bash
+cp .env.example .env
+```
+
+Update the `.env` file with your database and JWT configuration.
+
+## Run Prisma
+
+```bash
+npx prisma migrate dev
+npx prisma generate
+```
+
+## Start Backend
+
+```bash
+npm run start:dev
+```
+
+---
+
+# 🚀 Future Enhancements
+
+- AI Chat Assistant
+- OCR Invoice Processing
+- Mobile Application
+- Kubernetes Deployment
+- Multi-language Support
+- Workflow Automation
+- Predictive Payroll Analytics
+- IoT Attendance Integration
+- CI/CD Pipeline
+- Cloud Deployment (AWS/Azure)
+
+
